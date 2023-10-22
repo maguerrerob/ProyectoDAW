@@ -1,7 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
-
 # Create your models here.
 
 class Usuario(models.Model):
@@ -16,11 +14,10 @@ class Recinto(models.Model):
     nombre = models.TextField()
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
-    #--------Relaciones--------
 
 
 class Reserva(models.Model):
-    id = models.IntegerField(unique=True)
+    id = models.IntegerField(unique=True, primary_key=True)
     ESTADO = [
         ("F", "Completo"),
         ("A", "Disponible")
@@ -34,11 +31,11 @@ class Reserva(models.Model):
     n_jugadores = models.IntegerField()
     #--------Relaciones--------
     creador = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    campo = models.ForeignKey(Recinto, on_delete=models.CASCADE)
+    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
 
 
 class Partido(models.Model):
-    id = models.IntegerField(unique=True)
+    id = models.IntegerField(unique=True, primary_key=True)
     ESTILO = [
         (5, "Fútbol sala"),
         (7, "Fútbol 7"),
@@ -47,7 +44,7 @@ class Partido(models.Model):
     estilo = models.CharField(max_length=1, choices=ESTILO)
     #--------Relaciones--------
     usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugadores_partido")
-    juego = models.OneToOneField(Reserva, on_delete=models.CASCADE)
+    reserva_partido = models.OneToOneField(Reserva, on_delete=models.CASCADE)
 
 
 class Jugadores_partido(models.Model):
@@ -60,10 +57,6 @@ class Jugadores_partido(models.Model):
     ganar = models.CharField(max_length=1, choices=GANADOR)
 
 
-class Torneo(models.Model):
-    pass 
-
-
 class Equipo(models.Model):
     LOCALIA = [
         ("LO", "Local"),
@@ -72,11 +65,16 @@ class Equipo(models.Model):
     localia = models.CharField(max_length=2, choices=LOCALIA)
 
 
+class Torneo(models.Model):
+    equipos = models.ForeignKey(Equipo, on_delete=models.CASCADE)
+    partidos = models.ManyToManyField(Partido)
+
+
 class Resultado(models.Model):
     goles_local = models.IntegerField(verbose_name="Goles local", null=False)
     goles_visitante = models.IntegerField(verbose_name="Goles visitante", null=False)
     #--------Relaciones--------
-    partido = models.OneToOneField(Partido, on_delete=models.CASCADE)
+    resultado_partido = models.OneToOneField(Partido, on_delete=models.CASCADE)
 
 
 class DatosUsuario(models.Model):
@@ -87,12 +85,14 @@ class DatosUsuario(models.Model):
         ("MID","Centrocampista"),
         ("STR", "Delantero")
     ]
-    posicion = models.CharField(max_length=2, choices=POSICION)
-    partidos = models.ManyToManyField(Partido)
+    posicion = models.CharField(max_length=3, choices=POSICION)
     ubicacion = models.TextField()
     #--------Relaciones--------
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    partidos_jugados = models.ManyToManyField(Partido)
 
 
 class Posts(models.Model):
-    pass
+    contenido = models.TextField()
+    #--------Relaciones--------
+    creador_post = models.ForeignKey(Usuario, on_delete=models.CASCADE)
