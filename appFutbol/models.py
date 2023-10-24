@@ -14,6 +14,9 @@ class Recinto(models.Model):
     nombre = models.TextField()
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
+    
+    def __str__(self) -> str:
+        return self.nombre
 
 
 class Reserva(models.Model):
