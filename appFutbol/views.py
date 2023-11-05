@@ -75,9 +75,13 @@ def futbol_sala_siete(request):
     partidos = QSpartidos.filter(Q(estilo = 5) | Q(estilo = 7)).all()
     return render(request, "partidos/sala_o_siete.html", {"partidos":partidos})
 
-#10. Muestra los usuarios en orden descendente según su nivel
+#10. Muestra los datos de los 3 usuarios con más nivel
 
-
+def niveles_usuarios(request):
+    QSusuarios = Usuario.objects.prefetch_related(Prefetch("datos_usuario"),
+                                                  Prefetch("jugadores_partido"))
+    usuarios = QSusuarios.order_by("-nivel")[0:3].all()
+    return render(request, "usuarios/niveles_usuarios.html", {"usuarios":usuarios})
 
 # Errores
 

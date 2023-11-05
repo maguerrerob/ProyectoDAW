@@ -50,6 +50,9 @@ class Partido(models.Model):
     usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugador_partido", related_name="jugadores_partido")
     reserva_partido = models.OneToOneField(Reserva, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return self.id
+
 
 class Jugador_partido(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
