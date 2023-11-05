@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas del usuario</title>
+</head>
+<body>
+    <h1>Reservas del Usuario {{ usuario.id }}</h1>
+    {% for reserva in reservas %}
+        <ul>
+            <li>
+                <p>Estado: {{ reserva.estado }}</p>
+                <p>Tipo: {{ reserva.tipo }}</p>
+                <p>Número jugadores: {{ reserva.n_jugadores }}</p>
+                <p>Campo reservado: {{ reserva.campo_reservado.nombre }}</p>
+            </li>
+        </ul>
+        {% empty %}
+        <p>Lo siento el usuario aún no hizo ninguna reserva</p>
+    {% endfor %}
+</body>
+</html>
