@@ -21,3 +21,9 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", include("appFutbol.urls"))
 ]
+
+from django.conf.urls import handler400,handler404,handler403,handler500
+handler404 = "appFutbol.views.mi_error_400"
+handler503 = "appFutbol.views.mi_error_403"
+handler503 = "appFutbol.views.mi_error_404"
+handler500 = "appFutbol.views.mi_error_500"

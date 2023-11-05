@@ -9,6 +9,9 @@ class Usuario(models.Model):
     nivel = models.FloatField(default=0.0, db_column="puntos_usuario")
     telefono = models.CharField(max_length=9)
 
+    def __str__(self) -> str:
+        return self.nombre
+
 
 class Recinto(models.Model):
     nombre = models.TextField()
@@ -75,7 +78,7 @@ class Resultado(models.Model):
     goles_local = models.IntegerField(verbose_name="Goles local")
     goles_visitante = models.IntegerField(verbose_name="Goles visitante")
     #--------Relaciones--------
-    resultado_partido = models.OneToOneField(Partido, on_delete=models.CASCADE)
+    resultado_partido = models.OneToOneField(Partido, on_delete=models.CASCADE, related_name="resultado_partido")
 
 
 class DatosUsuario(models.Model):
