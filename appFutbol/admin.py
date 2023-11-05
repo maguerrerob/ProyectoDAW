@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Usuario, Recinto, Reserva, Partido, Jugadores_partido, Equipo, Torneo, Resultado, DatosUsuario, Posts
+from .models import Usuario, Recinto, Reserva, Partido, Jugador_partido, Equipo, Torneo, Resultado, DatosUsuario, Post
 
 # Register your models here.
 
@@ -8,11 +8,11 @@ misModelos = [
     Recinto, 
     Reserva, 
     Partido, 
-    Jugadores_partido,
+    Jugador_partido,
     Equipo,
     Torneo,
     Resultado,
     DatosUsuario,
-    Posts
+    Post
     ]
 admin.site.register(misModelos)
