@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
+
 # Create your models here.
 
 class Usuario(models.Model):
@@ -49,9 +51,6 @@ class Partido(models.Model):
     #--------Relaciones--------
     usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugador_partido", related_name="jugadores_partido")
     reserva_partido = models.OneToOneField(Reserva, on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return self.id
 
 
 class Jugador_partido(models.Model):
@@ -103,3 +102,23 @@ class Post(models.Model):
     contenido = models.TextField()
     #--------Relaciones--------
     creador_post = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_post")
+
+class Votacion_partido(models.Model):
+    puntuacion_numerica = models.IntegerField()
+    comentario = models.TextField()
+    fecha_votacion = models.DateTimeField(default=timezone.now)
+    #--------Relaciones--------
+    partido_votado = models.ForeignKey(Partido, on_delete=models.CASCADE, related_name="votacion_partido")
+    creador_votacion = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="votacion_usuario")
+    
+class Cuenta_bancaria(models.Model):
+    numero_cuenta = models.IntegerField()
+    BANCO = [
+        ("CA", "Caixa"),
+        ("BB", "BBVA"),
+        ("UN", "Unicaja"),
+        ("IN", "ING")
+    ]
+    banco = models.CharField(max_length=2, choices=BANCO)
+    #--------Relaciones--------
+    titular = models.OneToOneField(Usuario, on_delete=models.CASCADE, name="titular_cuenta")

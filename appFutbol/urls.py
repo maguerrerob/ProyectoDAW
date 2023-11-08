@@ -11,5 +11,10 @@ urlpatterns = [
     path("partidos_ganados_visitantes", views.ganados_visitantes, name="ganados_visitantes"),
     path("partidos_ganados_locales", views.ganados_locales, name="ganados_locales"),
     path("sala_o_siete", views.futbol_sala_siete, name="futbol_sala_siete"),
-    path("usuarios_niveles", views.niveles_usuarios, name="niveles_usuarios")
+    path("usuarios_niveles", views.niveles_usuarios, name="niveles_usuarios"),
+    path("ultima_votacion/<int:id_partido>", views.ultima_votacion, name="ultima_votacion"),
+    path("votaciones_usuarios_3/<int:id_usuario>", views.votacion_3, name="votacion_3"),
+    path("usuarios_sin_votaciones", views.usuarios_sin_votaciones, name="usuarios_sin_votaciones"),
+    path("cuentas_bancarias/<str:nombre>", views.validar_banco, name="validar_banco"),
+    path("media_votaciones", views.media_partidos, name="media_partidos")
 ]

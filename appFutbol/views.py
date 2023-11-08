@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Usuario, Reserva, Partido, Post, Resultado
-from django.db.models import Q, Prefetch, Count, F
+from .models import Usuario, Reserva, Partido, Post, Resultado, Votacion_partido, Cuenta_bancaria
+from django.db.models import Q, Prefetch, Count, F,Avg
 
 # Create your views here.
 
@@ -82,6 +82,49 @@ def niveles_usuarios(request):
                                                   Prefetch("jugadores_partido"))
     usuarios = QSusuarios.order_by("-nivel")[0:3].all()
     return render(request, "usuarios/niveles_usuarios.html", {"usuarios":usuarios})
+
+#1.E El último voto que se realizó en un modelo principal en concreto, y mostrar el comentario, la votación e información del usuario o cliente que lo realizó.
+
+def ultima_votacion(request, id_partido):
+    tarea_mostrar = Partido.objects.get(id=id_partido)
+    QSvotaciones = Votacion_partido.objects.select_related("creador_votacion")
+    votacion = QSvotaciones.filter(partido_votado=id_partido)[0:1].get()
+    return render(request, "votaciones/ultima_votacion.html", {"tarea":tarea_mostrar,"votacion":votacion})
+
+#2.E Todos los modelos principales que tengan votos con una puntuación numérica igual a 3 y que realizó un usuario o cliente en concreto.
+
+def votacion_3(request,id_usuario):
+    usuario_mostrar = Usuario.objects.get(id=id_usuario)
+    QSpartidos = Partido.objects.select_related("reserva_partido").prefetch_related("usuarios_jugadores")
+    partidos = (QSpartidos.filter(votacion_partido__puntuacion_numerica=3)).filter(votacion_partido__creador_votacion=id_usuario)
+    return render(request, "votaciones/votacion_3.html", {"usuario":usuario_mostrar, "partidos":partidos})
+
+#3.E Todos los usuarios o clientes que no han votado nunca y mostrar información sobre estos usuarios y clientes al completo.
+
+def usuarios_sin_votaciones(request):
+    QSvotaciones = Votacion_partido.objects.select_related("creador_votacion")
+    votaciones = QSvotaciones.filter(creador_votacion=None).all()
+    return render(request, "votaciones/usuarios_sin_votar.html", {"votaciones":votaciones})
+    
+    QSusuarios = Usuario.objects.prefetch_related(Prefetch("creador_post"))
+    usuarios = QSusuarios.exclude(votacion_usuario__creador_votacion=None).all()
+    #usuarios = QSusuarios.filter(votacion_usuario__creador_votacion__ne=id)
+    return render(request, "votaciones/usuarios_sin_votar.html", {"usuarios":usuarios})
+
+#4.E Obtener las cuentas bancarias que sean de la Caixa o de Unicaja y que el propietario tenga un nombre que contenga un texto en concreto, por ejemplo “Juan”.
+
+def validar_banco(request, nombre):
+    QScuentas = Cuenta_bancaria.objects.select_related("titular_cuenta")
+    cuentas = (QScuentas.filter(Q(banco="CA") | Q(banco="UN"))).filter(titular_cuenta__nombre__contains=nombre).all()
+    return render(request, "votaciones/datos_bancos.html", {"cuentas":cuentas})
+
+#5.E Obtener todos los modelos principales que tengan una media de votaciones mayor del 2,5.
+
+def media_partidos(request):
+    QSvotaciones = Votacion_partido.objects.select_related("partido_votado")
+    votaciones = QSvotaciones.aggregate(media=Avg('puntuacion_numerica'))
+    mayores  = Votacion_partido.objects.filter(puntuacion_numerica__gt=2.5)
+    return render(request, "votaciones/media_votaciones.html", {"mayores":mayores})
 
 # Errores
 
