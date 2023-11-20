@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala o siete</title>
-</head>
-<body>
-    <h1>Partidos de fútbol sala o 7</h1>
+{% extends "principal.html" %}
+{% block cabecera %}
+    <h1>Disponibles</h1>
+{% endblock %}
+
+{% block contenido %}
     {% for partido in partidos %}
         <ul>
             <li>
-                <p>Estilo: {{ partido.estilo }}</p>
+                <h2>Estilo: {{ partido.estilo }}</h2>
                 <h3>Jugadores del partido</h3>
                     {% for usu in partido.usuarios_jugadores.all %}
                         <p>Nombre: {{ usu.nombre }}</p>
                     {% endfor %}
 
                 <h3>Reserva del partido</h3>
-                    {% for res in partido.reserva_partido.all %}
-                        <p>Estado: {{ res.estado }}</p>
-                        <p>Tipo: {{ res.tipo }}</p>
-                        <p>Número de jugadores: {{ res.n_jugadores }}</p>
-                    {% endfor %}
+                    <p>Estado: {{ partido.reserva_partido.estado }}</p>
+                    <p>Tipo: {{ partido.reserva_partido.tipo }}</p>
+                    <p>Número de jugadores: {{ partido.reserva_partido.n_jugadores }}</p>
             </li>
         </ul>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

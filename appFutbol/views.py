@@ -72,7 +72,7 @@ def ganados_locales(request):
 
 def futbol_sala_siete(request):
     QSpartidos = Partido.objects.prefetch_related("usuarios_jugadores").select_related("reserva_partido")
-    partidos = QSpartidos.filter(Q(estilo = 5) | Q(estilo = 7)).all()
+    partidos = (QSpartidos.filter(Q(estilo = 5) | Q(estilo = 7))).filter(reserva_partido__estado="A").all()
     return render(request, "partidos/sala_o_siete.html", {"partidos":partidos})
 
 #10. Muestra los datos de los 3 usuarios con más nivel

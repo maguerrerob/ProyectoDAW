@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
-</head>
-<body>
+{% extends "principal.html" %}
+{% block cabecera %}
     <h1>Lista de usuarios</h1>
+{% endblock %}
+
+{% block contenido %}
     {% for usuario in usuarios %}
         <ul>
             <li>
@@ -44,5 +41,4 @@
             </li>
         </ul>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

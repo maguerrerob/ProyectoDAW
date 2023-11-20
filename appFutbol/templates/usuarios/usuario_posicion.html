@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filtro de usuarios</title>
-</head>
-<body>
+{% extends "principal.html" %}
+{% block cabecera %}
     <h1>Lista de usuarios</h1>
+{% endblock %}
+
+{% block contenido %}
     {% for usuario in usuarios %}
         <ul>
             <li>
@@ -16,9 +13,9 @@
                 <p>Nivel: {{ usuario.nivel }}</p>
                 <p>Teléfono: {{ usuario.telefono }}</p>
                 <p>Descripción: {{ usuario.datos_usuario.descripcion }}</p>
-                <p>Posicion: {{ usuario.datos_usuario.get_posicion_display }}</p>
+                <p>Posicion: <strong>{{ usuario.datos_usuario.get_posicion_display }}</strong></p>
                 <p>Ubicación: {{ usuario.datos_usuario.ubicacion }}</p>
-                <h3>Posts creados del usuario</h3>
+                <h4>Posts creados del usuario</h4>
                 {% for post in usuario.creador_post.all %}
                     <ul>
                         <li>
@@ -28,21 +25,20 @@
                 {% empty %}
                 <p>Lo siento el usuario no ha creado ningún post.</p>
                 {% endfor %}
-                <h3>Reservas realizadas del usuario</h3>
-                {% for res in usuario.creador_reserva.all %}
+                <h4>Reservas realizadas del usuario</h4>
                     <ul>
                         <li>
-                            <p>Estado: {{ res.estado }}</p>
-                            <p>Tipo: {{ res.tipo }}</p>
-                            <p>Número de jugadores: {{ res.n_jugadores }}</p>
-                            <p>Campo reservado: {{ res.campo_reservado.nombre }}</p>
+                            {% for res in usuario.creador_reserva.all %}
+                                <p>Estado: {{ res.estado }}</p>
+                                <p>Tipo: {{ res.tipo }}</p>
+                                <p>Número de jugadores: {{ res.n_jugadores }}</p>
+                                <p>Campo reservado: {{ res.campo_reservado.nombre }}</p>
+                            {% empty %}
+                                <p>Lo siento el usuario no ha hecho ninguna reserva.</p>
+                            {% endfor %}
                         </li>
                     </ul>
-                {% empty %}
-                <p>Lo siento el usuario no ha hecho ninguna reserva.</p>
-                {% endfor %}
             </li>
         </ul>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

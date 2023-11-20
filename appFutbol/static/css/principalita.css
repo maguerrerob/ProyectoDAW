@@ -1,0 +1,112 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+}
+
+menu{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    font-weight: bold;
+    align-items: center;
+    position: sticky;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+
+menu > i{
+    font-size: 50px;
+}
+
+menu > div > div{
+    font-size: 18px;
+}
+
+.acceder{
+    padding: 10px;
+    background-color: #f9d423;
+    color: black;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.topbar{
+    display: flex;
+    flex-basis: 65%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.topbar > a{
+    padding: 20px;
+    color: black;
+    border-bottom: solid 4px white;
+    text-decoration: none;   
+}
+
+.topbar > a:hover{
+    color: rgb(224, 204, 72);
+    border-bottom: solid 2px rgb(224, 204, 72);
+    background-color: whitesmoke;
+}
+
+.login{
+    position: relative;
+}
+
+.login:hover > .submenu{
+    display: block;
+    animation: elementoFijo 5s; /* Duración de 3 segundos */
+}
+
+.submenu{
+    position: absolute;
+    display: none;
+    padding: 10px;
+    border: solid 1px black;
+    background-color: whitesmoke;
+    border-radius: 15px;
+    width: 200px;
+    height: 100px;
+    top: 30px;
+    left: -80%;
+}
+
+.submenu > form{
+    top: 5%;
+    left: 10%;
+    border: none;
+}
+
+.submenu > a{
+    text-decoration: none;
+    font-size: 14px;
+}
+
+
+
+
+
+
+footer{
+    background-color: rgb(221, 221, 221);
+    display: flex;
+    justify-content: space-evenly;
+    border-top: solid gray 1px;
+    padding-bottom: 35px;
+    margin-top: 20px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+footer > div > a{
+    text-decoration: none;
+    color: rgb(49, 49, 49);
+}
+
+footer > div > p{
+    color: rgb(49, 49, 49);
+}
