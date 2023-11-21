@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Usuario, Reserva, Partido, Post, Resultado, Votacion_partido, Cuenta_bancaria
 from django.db.models import Q, Prefetch, Count, F,Avg
+from .forms import *
 
 # Create your views here.
 
@@ -125,6 +126,17 @@ def media_partidos(request):
     votaciones = QSvotaciones.aggregate(media=Avg('puntuacion_numerica'))
     mayores  = Votacion_partido.objects.filter(puntuacion_numerica__gt=2.5)
     return render(request, "votaciones/media_votaciones.html", {"mayores":mayores})
+
+# FORMULARIOS
+
+def reserva_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = PartidoModelForm(datosFormulario)
+    
+    return render(request, "reservas/create.html", {"formulario":formulario})
 
 # Errores
 

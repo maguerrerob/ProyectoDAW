@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_seed",
     'debug_toolbar',
-    "appFutbol"
+    "appFutbol",
+    "bootstrap5",
+    "django_bootstrap_icons"
 ]
 
 MIDDLEWARE = [

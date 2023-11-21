@@ -56,11 +56,7 @@ class Partido(models.Model):
 class Jugador_partido(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)
-    GANADOR = [
-        ("S", "Sí"),
-        ("N","No")
-    ]
-    ganar = models.CharField(max_length=1, choices=GANADOR)
+    ganar = models.BooleanField(default=False)
 
 
 class Equipo(models.Model):
