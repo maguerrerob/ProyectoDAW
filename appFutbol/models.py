@@ -38,7 +38,7 @@ class Reserva(models.Model):
     n_jugadores = models.IntegerField()
     #--------Relaciones--------
     creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_reserva")
-    campo_reservado = models.OneToOneField(Recinto, on_delete=models.CASCADE)
+    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
 
 
 class Partido(models.Model):
@@ -59,18 +59,18 @@ class Jugador_partido(models.Model):
     ganar = models.BooleanField(default=False)
 
 
+class Torneo(models.Model):
+    partidos = models.ManyToManyField(Partido)
+
+
 class Equipo(models.Model):
     LOCALIA = [
         ("LO", "Local"),
         ("VI", "Visitante")
     ]
     localia = models.CharField(max_length=2, choices=LOCALIA)
-
-
-class Torneo(models.Model):
-    equipos = models.ForeignKey(Equipo, on_delete=models.CASCADE)
-    partidos = models.ManyToManyField(Partido)
-
+    #----Relaciones----
+    torneo_equipos = models.ForeignKey(Torneo, on_delete=models.CASCADE)
 
 class Resultado(models.Model):
     goles_local = models.IntegerField(verbose_name="Goles local")

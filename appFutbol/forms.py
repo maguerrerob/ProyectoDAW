@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from .models import *
 
-class PartidoModelForm(ModelForm):
+class ReservaModelForm(ModelForm):
     class Meta:
         model = Reserva
         fields = ["estado", "tipo", "n_jugadores", "creador", "campo_reservado"]

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Usuario, Reserva, Partido, Post, Resultado, Votacion_partido, Cuenta_bancaria
 from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
@@ -84,6 +84,11 @@ def niveles_usuarios(request):
     usuarios = QSusuarios.order_by("-nivel")[0:3].all()
     return render(request, "usuarios/niveles_usuarios.html", {"usuarios":usuarios})
 
+def reservas_realizadas(request):
+    QSreservas = Reserva.objects.select_related("creador", "campo_reservado")
+    reservas = QSreservas.all()
+    return render(request, "reservas/lista_reservas.html", {"reservas":reservas})
+
 #1.E El último voto que se realizó en un modelo principal en concreto, y mostrar el comentario, la votación e información del usuario o cliente que lo realizó.
 
 def ultima_votacion(request, id_partido):
@@ -130,11 +135,17 @@ def media_partidos(request):
 # FORMULARIOS
 
 def reserva_create(request):
-    datosFormulario = None
     if request.method == "POST":
-        datosFormulario = request.POST
-        
-    formulario = PartidoModelForm(datosFormulario)
+        formulario = ReservaModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                # Guardamos la reserva en la base de datos
+                formulario.save()
+                return redirect("reservas_realizadas")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = ReservaModelForm()
     
     return render(request, "reservas/create.html", {"formulario":formulario})
 

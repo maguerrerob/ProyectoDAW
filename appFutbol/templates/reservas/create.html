@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block contenido %}
-{% load bootstrap5 %}
-{% bootstrap_css %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
     <form action="" method="post">
         {% csrf_token %}
         {% bootstrap_form formulario %}

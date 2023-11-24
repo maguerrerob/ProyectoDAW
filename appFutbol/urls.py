@@ -13,6 +13,7 @@ urlpatterns = [
     path("sala_o_siete", views.futbol_sala_siete, name="futbol_sala_siete"),
     path("usuarios_niveles", views.niveles_usuarios, name="niveles_usuarios"),
     path("ultima_votacion/<int:id_partido>", views.ultima_votacion, name="ultima_votacion"),
+    path("reservas", views.reservas_realizadas, name="reservas_realizadas"),
     path("votaciones_usuarios_3/<int:id_usuario>", views.votacion_3, name="votacion_3"),
     path("usuarios_sin_votaciones", views.usuarios_sin_votaciones, name="usuarios_sin_votaciones"),
     path("cuentas_bancarias/<str:nombre>", views.validar_banco, name="validar_banco"),
