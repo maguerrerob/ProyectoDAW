@@ -38,12 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "django_seed",
+    'bootstrap5',
+    'django_bootstrap_icons',
+    'bootstrap_datepicker_plus',
+    'jquery',
+    'moment',
+    'appFutbol',
+    'django_seed',
     'debug_toolbar',
-    "appFutbol",
-    "bootstrap5",
-    "django_bootstrap_icons"
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
