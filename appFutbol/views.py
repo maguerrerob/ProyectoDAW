@@ -149,6 +149,21 @@ def reserva_create(request):
     
     return render(request, "reservas/create.html", {"formulario":formulario})
 
+def reserva_buscar(request):
+    formulario = BusquedaReservaForm(request.GET)
+    
+    if formulario.is_valid():
+        texto = formulario.cleaned_data.get("textoBusqueda")
+        QSreservas = Reserva.objects.select_related("creador", "campo_reservado")
+        reservas = QSreservas.filter(creador__nombre__contains=texto).all()
+        mensaje_busqueda = "Reservas realizadas por el usuario: " + texto
+        return render(request, "reservas/lista_busqueda.html", {"reservas":reservas, "texto_bsuqueda":mensaje_busqueda})
+
+    if ("HTTP_REFERER" in request.META):
+        return redirect(request.META["HTTP_REFERER"])
+    else:
+        return redirect("index")
+    
 # Errores
 
 def mi_error_400(request,exception=None):

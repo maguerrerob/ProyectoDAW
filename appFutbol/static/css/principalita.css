@@ -5,9 +5,8 @@ body{
 
 menu{
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-evenly;
-    font-weight: bold;
     align-items: center;
     position: sticky;
     left: 0;

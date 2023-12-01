@@ -3,12 +3,16 @@
 
         <div class="topbar">
             <a href="{% url 'reserva_create' %}">Crear reserva</a>
-            <a href="{% url 'lista_usuarios' %}">Usuarios</a>
+            <a href="">Buscar reservas</a>
             <a href="{% url 'buscar_usuario' 'GOA' %}">Porteros</a>
             <a href="{% url 'reservas_realizadas' %}">Reservas</a>
             <a href="{% url 'reservas_usuario' 1 %}">Reservas usuario 1</a>
-            <a href="{% url 'futbol_sala_siete' %}">Partidos de fútbol sala o 7 disponibles</a>
+            {# <a href="{% url 'futbol_sala_siete' %}">Partidos de fútbol sala o 7 disponibles</a>#}
             <a href="{% url 'ganados_locales' %}">Partidos locales ganados</a>
+            <form action="{% url 'reserva_buscar' %}" class="d-flex mt-3" role="search" method="GET">
+                <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
+            </form>
         </div>
         
         <div class="login">
