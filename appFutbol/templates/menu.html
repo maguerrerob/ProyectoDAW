@@ -1,29 +1,63 @@
-<menu>
-    <i class="fa-sharp fa-regular fa-futbol"></i>
+{% load static %}
 
-        <div class="topbar">
-            <a href="{% url 'reserva_create' %}">Crear reserva</a>
-            <a href="">Buscar reservas</a>
-            <a href="{% url 'buscar_usuario' 'GOA' %}">Porteros</a>
-            <a href="{% url 'reservas_realizadas' %}">Reservas</a>
-            <a href="{% url 'reservas_usuario' 1 %}">Reservas usuario 1</a>
-            {# <a href="{% url 'futbol_sala_siete' %}">Partidos de fútbol sala o 7 disponibles</a>#}
-            <a href="{% url 'ganados_locales' %}">Partidos locales ganados</a>
-            <form action="{% url 'reserva_buscar' %}" class="d-flex mt-3" role="search" method="GET">
-                <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
-            </form>
-        </div>
-        
-        <div class="login">
-            <a class="acceder" href="">ACCEDER</a>
-            <div class="submenu">
-                <form action="" method="post">
-                    <input type="text" placeholder="Usuario"><br>
-                    <input type="password" placeholder="Contraseña"><br>
-                    <input type="submit">
-                </form>
-                <a href="">Registrarse</a>
-            </div>
-        </div>
-</menu>
+<nav class="navbar navbar-expand-lg bg-warning p-3">
+    <a class="navbar-brand text-dark" href="#">
+        <i class="fa-sharp fa-regular fa-futbol"></i>
+    </a>
+    <button class="navbar-toggler" type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#accionesFutbol" 
+        aria-controls="navbarAccionesFutbol" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="accionesFutbol">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active link-dark" aria-current="page" href="{% url 'index' %}">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link link-dark dropdown-toggle" href="#" 
+                    id="accionesReservaLink" 
+                    role="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                    Reservas
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accionesReservaLink">
+                    <li><a class="dropdown-item" href="{% url 'reservas_realizadas' %}">Ver reservas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'reserva_create' %}">Crear reserva</a></li>
+                    <li><a class="dropdown-item" href="#">Busqueda Avanzada de reservas</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-dark active" href="{% url 'buscar_usuario' 'GOA' %}">Porteros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-dark active" href="{% url 'reservas_usuario' 1 %}">Reservas usuario 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-dark active" href="{% url 'futbol_sala_siete' %}">Partidos de fútbol sala o 7 disponibles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-dark active" href="{% url 'ganados_locales' %}">Partidos locales ganados</a>
+            </li>
+            <li class="login nav-item ms-lg-5">
+                <a class="acceder nav-link link-primary" href="#">ACCEDER</a>
+                <div class="submenu">
+                    <form action="" method="post">
+                        <input type="text" placeholder="Usuario"><br>
+                        <input type="password" placeholder="Contraseña"><br>
+                        <input type="submit">
+                    </form>
+                    <a href="">Registrarse</a>
+                </div>
+            </li>
+        </ul>
+        <form action="{% url 'reserva_buscar' %}" class="d-flex mt-3" role="search" method="GET">
+            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar reservas" aria-label="Search">
+            <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
+        </form>
+    </div>
+</nav>

@@ -19,5 +19,5 @@ urlpatterns = [
     path("cuentas_bancarias/<str:nombre>", views.validar_banco, name="validar_banco"),
     path("media_votaciones", views.media_partidos, name="media_partidos"),
     path("crear_reservas", views.reserva_create, name="reserva_create"),
-    path("reserva/buscar", views.reserva_buscar, name="reserva_buscar")
+    path("reserva/buscar/", views.reserva_buscar, name="reserva_buscar")
 ]
