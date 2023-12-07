@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'crispy_forms',
     'crispy_bootstrap5',
+    'automatic_crud',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
