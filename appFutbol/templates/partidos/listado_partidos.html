@@ -1,0 +1,21 @@
+{% extends "principal.html" %}
+
+{% block cabecera %}
+    <h1>Listado de partidos</h1>
+{% endblock %}
+
+{% block contenido %}
+    {% for partido in partidos %}
+        <ul>
+            <li>
+                <p>Estado: {{ partido.get_estado_display }}</p>
+                <p>Tipo: {{ partido.get_tipo_display }}</p>
+                <p>Número de jugadores: {{ partido.n_jugadores }}</p>
+                <p>Creador de la partido: {{ partido.creador.nombre }}</p> 
+                <p>Campo reservado: {{ campo_reservado.nombre }}</p>
+            </li>
+        </ul>
+    {% empty %}
+        <p>No existe ningún partido creado.</p>
+    {% endfor %}
+{% endblock %}

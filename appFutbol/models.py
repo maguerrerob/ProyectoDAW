@@ -25,24 +25,19 @@ class Recinto(BaseModel):
         return self.nombre
 
 
-class Reserva(BaseModel):
+class Partido(BaseModel):
     ESTADO = [
         ("F", "Completo"),
         ("A", "Disponible")
     ]
-    estado = models.CharField(max_length=1, choices=ESTADO)
+    estado = models.CharField(max_length=1, default="A" ,choices=ESTADO)
     TIPO = [
         ("Pr", "Privada"),
         ("Pu", "Pública")
     ]
     tipo = models.CharField(max_length=2, choices=TIPO)
+    # Campo para manejar con IF si un partido está completa o no dependiendo del estilo de juego
     n_jugadores = models.IntegerField()
-    #--------Relaciones--------
-    creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_reserva")
-    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
-
-
-class Partido(BaseModel):
     ESTILO = [
         (5, "Fútbol sala"),
         (7, "Fútbol 7"),
@@ -50,8 +45,9 @@ class Partido(BaseModel):
     ]
     estilo = models.CharField(max_length=1, choices=ESTILO)
     #--------Relaciones--------
+    creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_partido")
+    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
     usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugador_partido", related_name="jugadores_partido")
-    reserva_partido = models.OneToOneField(Reserva, on_delete=models.CASCADE)
 
 
 class Jugador_partido(BaseModel):
@@ -59,19 +55,6 @@ class Jugador_partido(BaseModel):
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)
     ganar = models.BooleanField(default=False)
 
-
-class Torneo(BaseModel):
-    partidos = models.ManyToManyField(Partido)
-
-
-class Equipo(BaseModel):
-    LOCALIA = [
-        ("LO", "Local"),
-        ("VI", "Visitante")
-    ]
-    localia = models.CharField(max_length=2, choices=LOCALIA)
-    #----Relaciones----
-    torneo_equipos = models.ForeignKey(Torneo, on_delete=models.CASCADE)
 
 class Resultado(BaseModel):
     goles_local = models.IntegerField(verbose_name="Goles local")
@@ -92,6 +75,7 @@ class DatosUsuario(BaseModel):
     ubicacion = models.TextField()
     #--------Relaciones--------
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name="datos_usuario")
+    # Para ver los partidos en los que ha estado el usuario
     partidos_jugados = models.ManyToManyField(Partido)
 
 
@@ -99,6 +83,7 @@ class Post(BaseModel):
     contenido = models.TextField()
     #--------Relaciones--------
     creador_post = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_post")
+
 
 class Votacion_partido(BaseModel):
     puntuacion_numerica = models.IntegerField()
@@ -108,6 +93,7 @@ class Votacion_partido(BaseModel):
     partido_votado = models.ForeignKey(Partido, on_delete=models.CASCADE, related_name="votacion_partido")
     creador_votacion = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="votacion_usuario")
     
+
 class Cuenta_bancaria(BaseModel):
     numero_cuenta = models.IntegerField()
     BANCO = [

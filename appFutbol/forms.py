@@ -2,10 +2,10 @@ from django import forms
 from django.forms import ModelForm
 from .models import *
 
-class ReservaModelForm(ModelForm):
+class PartidoModelForm(ModelForm):
     class Meta:
-        model = Reserva
-        fields = ["estado", "tipo", "n_jugadores", "creador", "campo_reservado"]
+        model = Partido
+        fields = ["estado", "tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
         labels = {
             "estado": ("Completa o disponible"),
             "tipo": ("Pública o privada")
@@ -18,14 +18,22 @@ class ReservaModelForm(ModelForm):
     def clean(self):
         super().clean()
         #Obtenemos los datos de los campos
-        n_jugadores = self.cleaned_data.get("n_jugadores")
+        estado = self.cleaned_data.get("estado")
+        tipo = self.cleaned_data.get("tipo")
+
+        creador = self.cleaned_data.get("creador")
+        campo_reservado = self.cleaned_data.get("campo_reservado")
 
         #Aplicamos las restricciones a los campos
-        if n_jugadores > 22:
-            self.add_error("n_jugadores", "Error, no se puede jugar un partido con más de 22 jugadores porrita")
+        if estado != "F":
+            self.add_error("estado", "Error, no puedes crear una reserva completa")
+
+        # Comprobamos que no sean más de 22 jugadores para una reserva
+
+
 
         #Especificamos si devuelve bien los todos los datos (si hay alguno  mal devulve False)
         return self.cleaned_data
     
-class BusquedaReservaForm(forms.Form):
+class BusquedaPartidoForm(forms.Form):
     textoBusqueda = forms.CharField(required=True)

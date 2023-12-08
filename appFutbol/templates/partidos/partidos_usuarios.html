@@ -1,0 +1,19 @@
+{% extends "principal.html" %}
+{% block cabecera %}
+    <h1>Partidos creados por el Usuario {{ usuario.id }}</h1>
+{% endblock %}
+
+{% block contenido %}
+    {% for partido in partidos %}
+        <ul>
+            <li>
+                <p>Estado: {{ partido.estado }}</p>
+                <p>Tipo: {{ partido.tipo }}</p>
+                <p>Número jugadores: {{ partido.n_jugadores }}</p>
+                <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
+            </li>
+        </ul>
+        {% empty %}
+        <p>Lo siento el usuario aún no hizo ningún partido</p>
+    {% endfor %}
+{% endblock %}

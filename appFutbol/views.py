@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Reserva, Partido, Post, Resultado, Votacion_partido, Cuenta_bancaria
+from .models import Usuario, Recinto, Partido, Jugador_partido, Resultado, DatosUsuario, Post, Votacion_partido, Cuenta_bancaria
 from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
 
@@ -13,29 +13,29 @@ def index(request):
 #2. Mostrar datos de los usuarios
 
 def usuarios(request):
-    QSusuarios = Usuario.objects.prefetch_related(Prefetch("creador_reserva"),
+    QSusuarios = Usuario.objects.prefetch_related(Prefetch("creador_partido"),
                                                   Prefetch("datos_usuario"), 
                                                   Prefetch("creador_post"),
-                                                  Prefetch("creador_reserva__campo_reservado")).all()
+                                                  Prefetch("creador_partido__campo_reservado")).all()
     return render(request, "usuarios/lista.html", {"usuarios":QSusuarios})
 
 #3. Mostrar usuarios de X posición
 
 def buscar_usuario(request, pos):
-    QSusuarios = Usuario.objects.prefetch_related(Prefetch("creador_reserva"),
+    QSusuarios = Usuario.objects.prefetch_related(Prefetch("creador_partido"),
                                                   Prefetch("datos_usuario"), 
                                                   Prefetch("creador_post"),
-                                                  Prefetch("creador_reserva__campo_reservado"))
+                                                  Prefetch("creador_partido__campo_reservado"))
     usuarios = QSusuarios.filter(datos_usuario__posicion__contains=pos).all()
     return render(request, "usuarios/usuario_posicion.html", {"usuarios":usuarios})
 
-#4. Obtener las reservas realizadas de X usuario
+#4. Obtener las partidos creados de X usuario
 
-def reservas_usuario(request, id_usuario):
+def partidos_usuario(request, id_usuario):
     usuario_mostrar = Usuario.objects.get(id=id_usuario)
-    QSreserva = Reserva.objects.select_related("creador").select_related("campo_reservado")
-    reservas = QSreserva.filter(creador=id_usuario).all()
-    return render(request, "reservas/reservas_usuarios.html", {"usuario":usuario_mostrar, "reservas":reservas})
+    QSpartido = Partido.objects.select_related("creador").select_related("campo_reservado")
+    partidos = QSpartido.filter(creador=id_usuario).all()
+    return render(request, "partidos/partidos_usuarios.html", {"usuario":usuario_mostrar, "partido":partidos})
 
 #5. Mostrar los usuarios que pertenezcan a X partido (relación ManyToMany con tabla intermedia)
 
@@ -69,11 +69,11 @@ def ganados_locales(request):
     partidos = QSpartidos.filter(resultado_partido__goles_local__gt = F("resultado_partido__goles_visitante")).all()
     return render(request, "resultados/ganados_locales.html", {"partidos":partidos})
 
-#9. Retorna todos los partidos que sean estilo futbol sala(5) o fútbol 7
+#9. Retorna todos los partidos disponibles que sean estilo futbol sala(5) o fútbol 7
 
 def futbol_sala_siete(request):
-    QSpartidos = Partido.objects.prefetch_related("usuarios_jugadores").select_related("reserva_partido")
-    partidos = (QSpartidos.filter(Q(estilo = 5) | Q(estilo = 7))).filter(reserva_partido__estado="A").all()
+    QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+    partidos = (QSpartidos.filter(Q(estilo = 5) | Q(estilo = 7))).filter(estado="A").all()
     return render(request, "partidos/sala_o_siete.html", {"partidos":partidos})
 
 #10. Muestra los datos de los 3 usuarios con más nivel
@@ -84,10 +84,6 @@ def niveles_usuarios(request):
     usuarios = QSusuarios.order_by("-nivel")[0:3].all()
     return render(request, "usuarios/niveles_usuarios.html", {"usuarios":usuarios})
 
-def reservas_realizadas(request):
-    QSreservas = Reserva.objects.select_related("creador", "campo_reservado")
-    reservas = QSreservas.all()
-    return render(request, "reservas/lista_reservas.html", {"reservas":reservas})
 
 #1.E El último voto que se realizó en un modelo principal en concreto, y mostrar el comentario, la votación e información del usuario o cliente que lo realizó.
 
@@ -101,7 +97,7 @@ def ultima_votacion(request, id_partido):
 
 def votacion_3(request,id_usuario):
     usuario_mostrar = Usuario.objects.get(id=id_usuario)
-    QSpartidos = Partido.objects.select_related("reserva_partido").prefetch_related("usuarios_jugadores")
+    QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
     partidos = (QSpartidos.filter(votacion_partido__puntuacion_numerica=3)).filter(votacion_partido__creador_votacion=id_usuario)
     return render(request, "votaciones/votacion_3.html", {"usuario":usuario_mostrar, "partidos":partidos})
 
@@ -134,30 +130,35 @@ def media_partidos(request):
 
 # FORMULARIOS
 
-def reserva_create(request):
+def partidos_realizados(request):
+    QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+    partidos = QSpartidos.all()
+    return render(request, "partidos/listado_partidos.html", {"partidos":partidos})
+
+def partido_create(request):
     if request.method == "POST":
-        formulario = ReservaModelForm(request.POST)
+        formulario = PartidoModelForm(request.POST)
         if formulario.is_valid():
             try:
-                # Guardamos la reserva en la base de datos
+                # Guardamos el partido en la base de datos
                 formulario.save()
-                return redirect("reservas_realizadas")
+                return redirect("partidos_realizados")
             except Exception as error:
                 print(error)
     else:
-        formulario = ReservaModelForm()
+        formulario = PartidoModelForm()
     
-    return render(request, "reservas/create.html", {"formulario":formulario})
+    return render(request, "partidos/create.html", {"formulario":formulario})
 
-def reserva_buscar(request):
-    formulario = BusquedaReservaForm(request.GET)
+def partido_buscar(request):
+    formulario = BusquedaPartidoForm(request.GET)
     
     if formulario.is_valid():
         texto = formulario.cleaned_data.get("textoBusqueda")
-        QSreservas = Reserva.objects.select_related("creador", "campo_reservado")
-        reservas = QSreservas.filter(creador__nombre__contains=texto).all()
-        mensaje_busqueda = "Reservas realizadas por el usuario: " + texto
-        return render(request, "reservas/lista_busqueda.html", {"reservas":reservas, "texto_bsuqueda":mensaje_busqueda})
+        QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+        partidos = QSpartidos.filter(creador__nombre__contains=texto).all()
+        mensaje_busqueda = "Partidos creados por el usuario: " + texto
+        return render(request, "partidos/lista_busqueda.html", {"partidos":partidos, "texto_bsuqueda":mensaje_busqueda})
 
     if ("HTTP_REFERER" in request.META):
         return redirect(request.META["HTTP_REFERER"])

@@ -6,36 +6,36 @@
     </a>
     <button class="navbar-toggler" type="button" 
       data-bs-toggle="collapse" 
-      data-bs-target="#accionesBiblioteca" 
-      aria-controls="navbarAccionesBiblioteca" 
+      data-bs-target="#accionesPartidos" 
+      aria-controls="navbarAccionesPartidos" 
       aria-expanded="false" 
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="accionesBiblioteca">
+    <div class="collapse navbar-collapse" id="accionesPartidos">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
                 <a class="nav-link active link-dark" aria-current="page" href="{% url 'index' %}">Inicio</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link link-dark dropdown-toggle" href="#" 
-                    id="accionesReservaLink" 
+                    id="accionesPartidosLink" 
                     role="button" 
                     data-bs-toggle="dropdown" 
                     aria-expanded="false">
-                    Reservas
+                    Partidos
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="accionesReservaLink">
-                    <li><a class="dropdown-item" href="{% url 'reservas_realizadas' %}">Ver reservas</a></li>
-                    <li><a class="dropdown-item" href="{% url 'reserva_create' %}">Crear reserva</a></li>
-                    <li><a class="dropdown-item" href="#">Busqueda Avanzada de reservas</a></li>
+                <ul class="dropdown-menu" aria-labelledby="accionesPartidosLink">
+                    <li><a class="dropdown-item" href="{% url 'partidos_realizados' %}">Ver partidos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'partido_create' %}">Crear partido</a></li>
+                    <li><a class="dropdown-item" href="#">Busqueda Avanzada de partidos</a></li>
                 </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'buscar_usuario' 'GOA' %}">Porteros</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'reservas_usuario' 1 %}">Reservas usuario 1</a>
+                <a class="nav-link link-dark active" href="{% url 'partidos_usuario' 1 %}">Partidos creados usuario 1</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'futbol_sala_siete' %}">Partidos de fútbol sala o 7 disponibles</a>
@@ -55,8 +55,8 @@
                 </div>
             </li>
         </ul>
-        <form action="{% url 'reserva_buscar' %}" class="d-flex mt-3" role="search" method="GET">
-            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar reservas" aria-label="Search">
+        <form action="{% url 'partido_buscar' %}" class="d-flex mt-3" role="search" method="GET">
+            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar partidos" aria-label="Search">
             <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
         </form>
     </div>
