@@ -37,13 +37,12 @@ class Partido(BaseModel):
     ]
     tipo = models.CharField(max_length=2, choices=TIPO)
     # Campo para manejar con IF si un partido está completa o no dependiendo del estilo de juego
-    n_jugadores = models.IntegerField()
     ESTILO = [
-        (5, "Fútbol sala"),
-        (7, "Fútbol 7"),
-        (11, "Fútbol 11"),
+        ("5", "Fútbol sala"),
+        ("7", "Fútbol 7"),
+        ("11", "Fútbol 11"),
     ]
-    estilo = models.CharField(max_length=1, choices=ESTILO)
+    estilo = models.CharField(max_length=2, choices=ESTILO)
     #--------Relaciones--------
     creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_partido")
     campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
