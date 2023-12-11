@@ -8,29 +8,18 @@
     {% for partido in partidos %}
         <ul>
             <li>
-                {% if partido.tipo == "Pr" %}
-                    <p>Tipo: {{ partido.get_tipo_display }}</p>
-                    <p>Estilo: {{ partido.get_estilo_display }}</p>
-                    <p>Creador de la partido: {{ partido.creador.nombre }}</p> 
-                    <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
-                    <h5>Jugadores:</h5>
-                    {% for usu in partido.usuarios_jugadores.all %}
-                        <p>{{ usu.nombre }}</p>
-                    {% endfor %}
-                {% else %}
-                    <p>Estado: {{ partido.get_estado_display }}</p>
-                    <p>Tipo: {{ partido.get_tipo_display }}</p>
-                    <p>Estilo: {{ partido.get_estilo_display }}</p>
-                    <p>Creador de la partido: {{ partido.creador.nombre }}</p> 
-                    <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
-                    <h5>Jugadores:</h5>
-                    {% for usu in partido.usuarios_jugadores.all %}
-                        <p>{{ usu.nombre }}</p>
-                    {% endfor %}
-                {% endif %}
+                <p>Hora:  {{ partido.hora }}</p>
+                <p>Tipo: {{ partido.get_tipo_display }}</p>
+                <p>Estilo: {{ partido.get_estilo_display }}</p>
+                <p>Creador de la campo_reservado: {{ partido.creador.nombre }}</p> 
+                <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
+                <h5>Jugadores:</h5>
+                {% for usu in partido.usuarios_jugadores.all %}
+                    <p>{{ usu.nombre }}</p>
+                {% endfor %}
             </li>
         </ul>
     {% empty %}
-        <p>No existe ningún partido creado.</p>
+        <p>No existe ningún recinto en esa ubicación mostro</p>
     {% endfor %}
 {% endblock %}

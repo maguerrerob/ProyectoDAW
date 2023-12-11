@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Usuario, Recinto, Partido, Jugador_partido, Resultado, DatosUsuario, Post, Votacion_partido, Cuenta_bancaria
 from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
+from datetime import datetime
 
 # Create your views here.
 
@@ -151,19 +152,61 @@ def partido_create(request):
     return render(request, "partidos/create.html", {"formulario":formulario})
 
 def partido_buscar(request):
-    formulario = BusquedaPartidoForm(request.GET)
+    formulario = BusquedaRecintoForm(request.GET)
     
     if formulario.is_valid():
         texto = formulario.cleaned_data.get("textoBusqueda")
-        QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
-        partidos = QSpartidos.filter(creador__nombre__contains=texto).all()
-        mensaje_busqueda = "Partidos creados por el usuario: " + texto
-        return render(request, "partidos/lista_busqueda.html", {"partidos":partidos, "texto_bsuqueda":mensaje_busqueda})
+        QSrecinto = Recinto.objects.prefetch_related(Prefetch("campo_reservadoo"))
+        recintos = QSrecinto.filter(ubicacion__contains=texto).filter(campo_reservadoo__estado="A").all()
+        mensaje_busqueda = "Partidos disponibles: " + texto
+        return render(request, "partidos/lista_busqueda.html", {"recintos":recintos, "texto_bsuqueda":mensaje_busqueda})
 
     if ("HTTP_REFERER" in request.META):
         return redirect(request.META["HTTP_REFERER"])
     else:
         return redirect("index")
+
+def partido_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaPartidoForm(request.GET)
+        
+        if formulario.is_valid():
+            
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+            
+            QSpartido = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+
+            #Obtenemos los filtros
+            hora_form = formulario.cleaned_data.get("hora_form")
+            estado_form = formulario.cleaned_data.get("estado_form")
+            estilos = formulario.cleaned_data.get("estilos")
+
+            if(not hora_form is None):
+                mensaje_busqueda += "La hora sea: " + datetime.strftime(hora_form,'%H:%M') + "\n"
+                QSpartido = QSpartido.filter(hora=hora_form)
+
+            if (not estado_form is None):
+                mensaje_busqueda += "El estado sea: " + estado_form + "\n"
+                QSpartido = QSpartido.filter(estado=estado_form)
+
+            if(len(estilos) > 0):
+                mensaje_busqueda += "El estilo sea: " + estilos[0] + "\n"
+                filtroOR = Q(estilo=estilos[0])
+                for estilo in estilos[1:]:
+                    mensaje_busqueda += " o " + estilos[1]
+                    filtroOR |= Q(estilo=estilo)
+                mensaje_busqueda += "\n"
+                QSpartido =  QSpartido.filter(filtroOR)
+            
+            partidos = QSpartido.all()
+
+            return render(request, "partido/lista_busqueda.html", {"partidos":partidos, "texto_busqueda":mensaje_busqueda})
+        else:
+            formulario = BusquedaAvanzadaPartidoForm(None)
+        
+        return render(request, "partido/busqueda_avanzada.html", {"formulario":formulario})
+            
+
     
 # Errores
 

@@ -26,6 +26,7 @@ class Recinto(BaseModel):
 
 
 class Partido(BaseModel):
+    hora = models.DateTimeField(default=timezone.now)
     ESTADO = [
         ("F", "Completo"),
         ("A", "Disponible")
@@ -36,7 +37,6 @@ class Partido(BaseModel):
         ("Pu", "Pública")
     ]
     tipo = models.CharField(max_length=2, choices=TIPO)
-    # Campo para manejar con IF si un partido está completa o no dependiendo del estilo de juego
     ESTILO = [
         ("5", "Fútbol sala"),
         ("7", "Fútbol 7"),
@@ -45,7 +45,7 @@ class Partido(BaseModel):
     estilo = models.CharField(max_length=2, choices=ESTILO)
     #--------Relaciones--------
     creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_partido")
-    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE)
+    campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE, related_name="campo_reservadoo")
     usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugador_partido", related_name="jugadores_partido")
 
 

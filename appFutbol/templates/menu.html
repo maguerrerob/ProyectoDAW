@@ -28,7 +28,7 @@
                 <ul class="dropdown-menu" aria-labelledby="accionesPartidosLink">
                     <li><a class="dropdown-item" href="{% url 'partidos_realizados' %}">Ver partidos</a></li>
                     <li><a class="dropdown-item" href="{% url 'partido_create' %}">Crear partido</a></li>
-                    <li><a class="dropdown-item" href="#">Busqueda Avanzada de partidos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'partido_buscar_avanzado' %}">Busqueda Avanzada de partidos</a></li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -56,7 +56,7 @@
             </li>
         </ul>
         <form action="{% url 'partido_buscar' %}" class="d-flex mt-3" role="search" method="GET">
-            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar partidos" aria-label="Search">
+            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar partidos (ubicación)" aria-label="Search">
             <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
         </form>
     </div>

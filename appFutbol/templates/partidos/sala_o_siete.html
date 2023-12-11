@@ -8,24 +8,13 @@
     {% for partido in partidos %}
         <ul>
             <li>
-                {% if partido.tipo == "Pr" %}
-                    <h3>Partido</h3>
-                    <p>Tipo: {{ partido.get_tipo_display }}</p>
-                    <p>Estilo: {{ partido.get_estilo_display }}</p>
-                    <h5>Jugadores del partido</h5>
-                        {% for usu in partido.usuarios_jugadores.all %}
-                            <p>Nombre: {{ usu.nombre }}</p>
-                        {% endfor %}
-                {% else %}
-                    <h3>Partido</h3>
-                    <p>Tipo: {{ partido.get_tipo_display }}</p>
-                    <p>Estado: {{ partido.get_estado_display }}</p>
-                    <p>Estilo: {{ partido.get_estilo_display }}</p>
-                    <h5>Jugadores del partido</h5>
-                        {% for usu in partido.usuarios_jugadores.all %}
-                            <p>Nombre: {{ usu.nombre }}</p>
-                        {% endfor %}
-                {% endif %}
+                <h3>Partido</h3>
+                <p>Tipo: {{ partido.get_tipo_display }}</p>
+                <p>Estilo: {{ partido.get_estilo_display }}</p>
+                <h5>Jugadores del partido</h5>
+                {% for usu in partido.usuarios_jugadores.all %}
+                    <p>Nombre: {{ usu.nombre }}</p>
+                {% endfor %}
             </li>
         </ul>
     {% endfor %}
