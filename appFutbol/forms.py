@@ -5,7 +5,7 @@ from .models import *
 class PartidoModelForm(ModelForm):
     class Meta:
         model = Partido
-        fields = ["estado", "tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
+        fields = ["tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
         labels = {
             "estado": ("Completa o disponible"),
             "tipo": ("Pública o privada")
@@ -54,5 +54,38 @@ class PartidoModelForm(ModelForm):
         #Especificamos si devuelve bien los todos los datos (si hay alguno  mal devulve False)
         return self.cleaned_data
     
-class BusquedaPartidoForm(forms.Form):
+class BusquedaRecintoForm(forms.Form):
     textoBusqueda = forms.CharField(required=True)
+
+
+class BusquedaAvanzadaPartidoForm(forms.Form):
+    hora_form = forms.DateTimeField(label="Hora partido",
+                               required=False,
+                               widget=forms.DateTimeInput()
+                               )
+    
+    estado_form = forms.CharField(required=False)
+
+    estilos_form = forms.MultipleChoiceField(choices=Partido.ESTILO,
+                                       required=False,
+                                       widget=forms.CheckboxSelectMultiple()
+                                       )
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        #Obtenemos los campos
+        hora_form = self.cleaned_data.get("hora_form")
+        estado_form = self.cleaned_data.get("estado_form")
+        estilos_form = self.cleaned_data.get("estilos_form")
+
+        if (len(estilos_form) == 0
+            and hora_form is None
+            and estado_form is None):
+            self.add_error("hora", "Debe introducir al menos un campo")
+            self.add_error("estados", "Debe introducir al menos un campo")
+            self.add_error("estilos_form", "Debe introducir al menos un campo")
+
+        return self.cleaned_data
