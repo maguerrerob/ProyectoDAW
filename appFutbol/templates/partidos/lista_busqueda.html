@@ -5,16 +5,16 @@
 {% endblock %}
 
 {% block contenido %}
-    {% for reserva in reservas %}
-    <ul>
-        <li>
-            <p>Estado: {{ reserva.get_estado_display }}</p>
-            <p>Tipo: {{ reserva.get_tipo_display }}</p>
-            <p>Número de jugadores: {{ reserva.n_jugadores }}</p>
-            <p>Creador de la reserva: {{ reserva.creador.nombre }}</p> 
-            <p>Campo reservado: {{ reserva.campo_reservado.nombre }}</p>
-        </li>
-    </ul>
+    {% for partido in partidos %}
+        <ul>
+            <li>
+                <p>Estado: {{ partido.get_estado_display }}</p>
+                <p>Tipo: {{ partido.get_tipo_display }}</p>
+                <p>Estilo: {{ partido.get_estilo_display }}</p>
+                <p>Creador de la reserva: {{ partido.creador.nombre }}</p> 
+                <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
+            </li>
+        </ul>
     {% empty %}
         <p>Lo sentimos pero no hay reservas con ese nombre de creador</p>
     {% endfor %}
