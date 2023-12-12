@@ -59,12 +59,10 @@ class BusquedaRecintoForm(forms.Form):
 
 
 class BusquedaAvanzadaPartidoForm(forms.Form):
-    hora_form = forms.DateTimeField(label="Hora partido",
-                               required=False,
-                               widget=forms.DateTimeInput()
-                               )
     
-    estado_form = forms.CharField(required=False)
+    
+    estado_form = forms.ChoiceField(choices=Partido.ESTADO,
+                                  required=False)
 
     estilos_form = forms.MultipleChoiceField(choices=Partido.ESTILO,
                                        required=False,
@@ -77,14 +75,12 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
         super().clean()
         
         #Obtenemos los campos
-        hora_form = self.cleaned_data.get("hora_form")
+
         estado_form = self.cleaned_data.get("estado_form")
         estilos_form = self.cleaned_data.get("estilos_form")
 
         if (len(estilos_form) == 0
-            and hora_form is None
             and estado_form is None):
-            self.add_error("hora", "Debe introducir al menos un campo")
             self.add_error("estados", "Debe introducir al menos un campo")
             self.add_error("estilos_form", "Debe introducir al menos un campo")
 

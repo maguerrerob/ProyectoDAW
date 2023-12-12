@@ -1,0 +1,23 @@
+{% extends "principal.html" %}
+
+{% block cabecera %}
+    {% if not texto_busqueda is None %}
+        <h1>{{ texto_busqueda }}</h1>
+    {% else %}
+        <h1>Listado de recintos</h1>
+    {% endif %}
+{% endblock %}
+
+{% block contenido %}
+    {% for recinto in recintos %}
+    <ul>
+        <li>
+            <h4>{{ recinto.nombre }}</h4>
+            <p>Ubicación {{ recinto.ubicacion }}</p>
+            <p>Teléfono: {{ recinto.telefono }}</p>
+        </li>
+    </ul>
+    {% empty %}
+        <p>Lo sentimos pero no hay reservas con ese nombre de creador</p>
+    {% endfor %}
+{% endblock %}

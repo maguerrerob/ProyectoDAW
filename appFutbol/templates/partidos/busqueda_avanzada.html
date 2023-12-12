@@ -6,7 +6,7 @@
 
 {% block contenido %}
     {% load bootstrap5 %}
-    <form action="" method="get">
+    <form action="" method="get" class="m-3">
         {% csrf_token %}
         {% bootstrap_form formulario %}
         <button type="submit">Enviar</button>
