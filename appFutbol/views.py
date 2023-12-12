@@ -131,10 +131,19 @@ def media_partidos(request):
 
 # FORMULARIOS
 
+
+
+
+
 def partidos_realizados(request):
     QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
-    partidos = QSpartidos.all()
-    return render(request, "partidos/listado_partidos.html", {"partidos":partidos})
+    object_list = QSpartidos.all()
+    return render(request, "appFutbol/partido_list.html", {"object_list":object_list})
+
+
+
+
+
 
 def partido_create(request):
     if request.method == "POST":
@@ -203,9 +212,9 @@ def partido_buscar_avanzado(request):
                 mensaje_busqueda += "\n"
                 QSpartido =  QSpartido.filter(filtroOR)
             
-            partidos = QSpartido.all()
+            object_list = QSpartido.all()
 
-            return render(request, "partidos/listado_partidos.html", {"partidos":partidos, "texto_busqueda":mensaje_busqueda})
+            return render(request, "appFutbol/partido_list.html", {"object_list":object_list, "texto_busqueda":mensaje_busqueda})
     else:
         formulario = BusquedaAvanzadaPartidoForm(None)
         
