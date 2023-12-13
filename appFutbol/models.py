@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from automatic_crud.models import BaseModel
+from django import forms
 
 # Create your models here.
 
@@ -21,8 +22,15 @@ class Recinto(BaseModel):
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
     
+    def get_create_form(self,form = None):
+        from .forms import RecintoForm
+        self.create_form = RecintoForm
+        return self.create_form
+    
     def __str__(self) -> str:
         return self.nombre
+
+
 
 
 class Partido(BaseModel):

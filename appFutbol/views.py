@@ -4,6 +4,8 @@ from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
 from datetime import datetime
 
+
+
 # Create your views here.
 
 #1. Crear un index que contenga todas las urls

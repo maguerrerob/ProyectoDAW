@@ -54,6 +54,25 @@ class PartidoModelForm(ModelForm):
         #Especificamos si devuelve bien los todos los datos (si hay alguno  mal devulve False)
         return self.cleaned_data
     
+    
+class RecintoForm(forms.ModelForm):
+    class Meta:
+        model = Recinto
+        fields = ['nombre','telefono']
+    
+    def clean(self):
+        super().clean()
+        
+        nombre = self.cleaned_data.get("nombre")
+        
+        
+        
+        if nombre == "ej":
+            self.cleaned_data("nombre", "Error, ese nombre no se puede")
+            
+        return self.cleaned_data
+    
+    
 class BusquedaRecintoForm(forms.Form):
     textoBusqueda = forms.CharField(required=True)
 
