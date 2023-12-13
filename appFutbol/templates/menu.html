@@ -32,7 +32,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'buscar_usuario' 'GOA' %}">Porteros</a>
+                <a class="nav-link link-dark active" href="{% url 'listar_recintos' %}">Ver recintos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'partidos_usuario' 1 %}">Partidos creados usuario 1</a>
@@ -42,6 +42,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'ganados_locales' %}">Partidos locales ganados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-dark active" href="{% url 'appFutbol-usuario-list' %}">lista usuarios crud-automatic</a>
             </li>
             <li class="login nav-item ms-lg-5">
                 <a class="acceder nav-link link-primary" href="#">ACCEDER</a>
@@ -55,8 +58,8 @@
                 </div>
             </li>
         </ul>
-        <form action="{% url 'partido_buscar' %}" class="d-flex mt-3" role="search" method="GET">
-            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar partidos (ubicación)" aria-label="Search">
+        <form action="{% url 'recinto_buscar' %}" class="d-flex mt-3" role="search" method="GET">
+            <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar recintos (ubicación)" aria-label="Search">
             <button class="btn btn-light btn-outline-dark" type="submit">Search</button>
         </form>
     </div>

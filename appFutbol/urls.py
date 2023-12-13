@@ -19,6 +19,7 @@ urlpatterns = [
     path("cuentas_bancarias/<str:nombre>", views.validar_banco, name="validar_banco"),
     path("media_votaciones", views.media_partidos, name="media_partidos"),
     path("crear_partidos", views.partido_create, name="partido_create"),
-    path("partido/buscar/", views.partido_buscar, name="partido_buscar"),
+    path("recintos", views.listar_recintos, name="listar_recintos"),
+    path("recinto/buscar/", views.recinto_buscar, name="recinto_buscar"),
     path("partido/buscar_avanzada", views.partido_buscar_avanzado, name="partido_buscar_avanzado")
 ]
