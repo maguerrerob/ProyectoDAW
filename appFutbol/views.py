@@ -200,11 +200,11 @@ def partido_buscar_avanzado(request):
             
             partidos = QSpartido.all()
 
-            return render(request, "partido/lista_busqueda.html", {"partidos":partidos, "texto_busqueda":mensaje_busqueda})
-        else:
-            formulario = BusquedaAvanzadaPartidoForm(None)
+            return render(request, "partidos/lista_busqueda.html", {"partidos":partidos, "texto_busqueda":mensaje_busqueda})
+    else:
+        formulario = BusquedaAvanzadaPartidoForm(None)
         
-        return render(request, "partido/busqueda_avanzada.html", {"formulario":formulario})
+    return render(request, "partidos/busqueda_avanzada.html", {"formulario":formulario})
             
 
     

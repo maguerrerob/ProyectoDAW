@@ -64,7 +64,8 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
                                widget=forms.DateTimeInput()
                                )
     
-    estado_form = forms.CharField(required=False)
+    estado_form = forms.ChoiceField(choices=Partido.ESTADO,
+                                    required=False)
 
     estilos_form = forms.MultipleChoiceField(choices=Partido.ESTILO,
                                        required=False,
