@@ -102,3 +102,30 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
             self.add_error("estilos_form", "Debe introducir al menos un campo")
 
         return self.cleaned_data
+
+
+class DatosUsuarioModelForm(ModelForm):
+    class Meta:
+        model = DatosUsuario
+        fields = ["descripcion", "posicion", "ubicacion", "usuario", "partidos_jugados"]
+
+    def clean(self):
+        super().clean()
+        descripcion = self.cleaned_data.get("descripcion")
+        posicion = self.cleaned_data.get("posicion")
+        ubicacion = self.cleaned_data.get("ubicacion")
+        usuario = self.cleaned_data.get("usuario")
+        partidos_jugados = self.cleaned_data.get("partidos_jugados")
+
+        if (posicion is None):
+            self.add_error("posicion", "Error, seleccione una opción")
+
+        nombreUsuario = DatosUsuario.objects.filter(usuario=usuario).first()
+
+        if(not nombreUsuario is None):
+            if(not self.instance is None and nombreUsuario.id == self.instance.id):
+                pass
+            else:
+                self.add_error('usuario','Ya se registraron datos de este usuario')
+
+        return self.cleaned_data

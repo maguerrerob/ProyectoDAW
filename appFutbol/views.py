@@ -133,18 +133,10 @@ def media_partidos(request):
 
 # FORMULARIOS
 
-
-
-
-
 def partidos_realizados(request):
     QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
     object_list = QSpartidos.all()
     return render(request, "appFutbol/partido_list.html", {"object_list":object_list})
-
-
-
-
 
 
 def partido_create(request):
@@ -222,6 +214,45 @@ def partido_buscar_avanzado(request):
         
     return render(request, "partidos/busqueda_avanzada.html", {"formulario":formulario})
             
+
+# Datos Usuario
+
+def datos_usuario_create(request):
+    if request.method == "POST":
+        formulario = DatosUsuarioModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                # Guardamos el partido en la base de datos
+                formulario.save()
+                # Name de vista de automatic-crud
+                return redirect("appFutbol-datosusuario-list")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = DatosUsuarioModelForm()
+    
+    return render(request, "datosusuario/create.html", {"formulario":formulario})
+
+def datos_usuario_editar(request, datos_usuario_id):
+    datos_usuario = DatosUsuario.objects.get(id=datos_usuario_id)
+    
+    datosFormulario = None
+
+    if request.method == "POST":
+        datosFormulario = request.POST
+
+    formulario = DatosUsuarioModelForm(datosFormulario,instance = datos_usuario)
+
+    if request.method == "POST":
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("appFutbol-datosusuario-list")
+            except Exception as error:
+                pass
+
+    return render(request, "datosusuario/actualizar.html", {"formulario":formulario, "datos_usuario":datos_usuario})
+
 
     
 # Errores

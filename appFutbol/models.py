@@ -85,6 +85,9 @@ class DatosUsuario(BaseModel):
     # Para ver los partidos en los que ha estado el usuario
     partidos_jugados = models.ManyToManyField(Partido)
 
+    def __str__(self) -> str:
+        return self.descripcion
+
 
 class Post(BaseModel):
     contenido = models.TextField()

@@ -21,5 +21,7 @@ urlpatterns = [
     path("crear_partidos", views.partido_create, name="partido_create"),
     path("recintos", views.listar_recintos, name="listar_recintos"),
     path("recinto/buscar/", views.recinto_buscar, name="recinto_buscar"),
-    path("partido/buscar_avanzada", views.partido_buscar_avanzado, name="partido_buscar_avanzado")
+    path("partido/buscar_avanzada", views.partido_buscar_avanzado, name="partido_buscar_avanzado"),
+    path("datosusuarios/crear", views.datos_usuario_create, name="datos_usuario_create"),
+    path("datosusuarios/editar/<int:datos_usuario_id>", views.datos_usuario_editar, name="datos_usuario_editar")
 ]
