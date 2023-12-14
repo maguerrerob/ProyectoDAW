@@ -31,6 +31,20 @@
                     <li><a class="dropdown-item" href="{% url 'partido_buscar_avanzado' %}">Busqueda Avanzada de partidos</a></li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link link-dark dropdown-toggle" href="#" 
+                    id="accionesPromocionLink" 
+                    role="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                    Promociones
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accionesPromocionLink">
+                    <li><a class="dropdown-item" href="{% url 'promociones_realizadas' %}">Ver promociones</a></li>
+                    <li><a class="dropdown-item" href="{% url 'promocion_create' %}">Crear promocion</a></li>
+                    <li><a class="dropdown-item" href="{% url 'promocion_avanzada' %}">Busqueda Avanzada de promociones</a></li>
+                </ul>
+            </li>
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'listar_recintos' %}">Ver recintos</a>
             </li>

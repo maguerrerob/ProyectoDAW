@@ -18,3 +18,7 @@ Todo esto contará con perfiles de usuarios los cuales indicarán información d
 - Posición preferida, equipos profesionales donde jugó, tiempo de experiencia, etc.
 
 Se cuenta también con un apartado de posts en los cuales podrás compartir los resultados de partidos, crear alertas de partidos abiertos o contenido multimedia a gusto del usuario.
+
+# Examen
+
+- He usado automatic-crud en la eliminación, el template es "appFutbol/promocion_confirm_delete.html"

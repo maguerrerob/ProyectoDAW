@@ -115,3 +115,17 @@ class Cuenta_bancaria(BaseModel):
     banco = models.CharField(max_length=2, choices=BANCO)
     #--------Relaciones--------
     titular = models.OneToOneField(Usuario, on_delete=models.CASCADE, name="titular_cuenta")
+    
+    
+# EXAMEN FORMULARIOS
+
+class Promocion(BaseModel):
+    nombre = models.CharField(max_length=500)
+    descripcion = models.TextField()
+    descuento = models.IntegerField()
+    fecha_promocion = models.DateField(default=timezone.now)
+    #----Relaciones----
+    miusuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+        return self.nombre

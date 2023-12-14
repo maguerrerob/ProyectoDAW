@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Recinto, Partido, Jugador_partido, Resultado, DatosUsuario, Post, Votacion_partido, Cuenta_bancaria
+from .models import Usuario, Recinto, Partido, Jugador_partido, Resultado, DatosUsuario, Post, Votacion_partido, Cuenta_bancaria, Promocion
 from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
 from datetime import datetime
+from django.contrib import messages
 
 
 
@@ -253,6 +254,89 @@ def datos_usuario_editar(request, datos_usuario_id):
 
     return render(request, "datosusuario/actualizar.html", {"formulario":formulario, "datos_usuario":datos_usuario})
 
+
+# VISTAS EXAMEN_FORMULARIOS
+
+def promociones_realizadas(request):
+    QSpromociones = Promocion.objects.select_related("miusuario")
+    promociones = QSpromociones.all()
+    return render(request, "promocion/listado_promociones.html", {"promociones":promociones})
+
+def promocion_create(request):
+    if request.method == "POST":
+        formulario = PromocionModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                # Guardamos el partido en la base de datos
+                formulario.save()
+                # Name de vista
+                return redirect("promociones_realizadas")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = PromocionModelForm()
+    
+    return render(request, "promocion/create.html", {"formulario":formulario})
+
+def promocion_avanzada(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaPromocionForm(request.GET)
+        
+        if formulario.is_valid():
+            
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+            
+            QSpromocion = Promocion.objects.select_related("misusuario")
+
+            #Obtenemos los filtros
+
+            textoBusqueda = formulario.cleaned_data.get("textoBusqueda")
+            fecha_desde = formulario.cleaned_data.get("fecha_desde")
+            fecha_hasta = formulario.cleaned_data.get("fecha_hasta")
+
+            if(textoBusqueda != ""):
+                QSPromocion = QSPromocion.filter(Q(nombre__contains=textoBusqueda) | Q(descripcion__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o descripción que contengan la palabra "+textoBusqueda+"\n"
+                
+            if(not fecha_desde is None):
+                mensaje_busqueda +=" La fecha sea mayor a "+datetime.strftime(fecha_desde,'%d-%m-%Y')+"\n"
+                QSlibros = QSlibros.filter(fecha_publicacion__gte=fecha_desde)
+            
+            if(not fecha_hasta is None):
+                mensaje_busqueda +=" La fecha sea menor a "+datetime.strftime(fecha_hasta,'%d-%m-%Y')+"\n"
+                QSlibros = QSlibros.filter(fecha_publicacion__lte=fecha_hasta)
+            
+            
+            promociones = QSpromocion.all()
+
+            return render(request, "appFutbol/listado_promociones.html", {"promociones":promociones, "texto_busqueda":mensaje_busqueda})
+    else:
+        formulario = BusquedaAvanzadaPromocionForm(None)
+        
+    return render(request, "promocion/busqueda_avanzada.html", {"formulario":formulario})
+
+def promocion_editar(request,promo_id):
+    promo = Promocion.objects.get(id=promo_id)
+    
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    
+    formulario = PromocionModelForm(datosFormulario,instance = promo)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                messages.success(request, 'Se ha editado el libro'+formulario.cleaned_data.get('nombre')+" correctamente")
+                return redirect('libro_lista')  
+            except Exception as error:
+                print(error)
+    return render(request, 'promocion/actualizar.html',{"formulario":formulario,"promo":promo})
+    
 
     
 # Errores

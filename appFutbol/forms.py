@@ -129,3 +129,64 @@ class DatosUsuarioModelForm(ModelForm):
                 self.add_error('usuario','Ya se registraron datos de este usuario')
 
         return self.cleaned_data
+    
+# FORMULARIOS EXAMEN
+
+class PromocionModelForm(ModelForm):
+    class Meta:
+        model = Promocion
+        fields = ["nombre", "descripcion", "descuento", "fecha_promocion", "miusuario"]
+        
+    def clean(self):
+        super().clean()
+        nombre = self.cleaned_data.get("nombre")
+        descripcion = self.cleaned_data.get("descripcion")
+        descuento = self.cleaned_data.get("descuento")
+        fecha_promocion = self.cleaned_data.get("fecha_promocion")
+        miusuario = self.cleaned_data.get("miusuario")
+        
+      
+        
+        if len(descripcion) < 50:
+            self.add_error('descripcion','Al menos debes indicar 50 caracteres')
+            
+
+class BusquedaAvanzadaPromocionForm(forms.Form):
+    textoBusqueda = forms.CharField(required=False)
+
+    fecha_desde = forms.DateField(label="Fecha Desde",
+                                required=False,
+                                widget= forms.SelectDateWidget(years=range(1990,2024))
+                                )
+    
+    fecha_hasta = forms.DateField(label="Fecha Hasta",
+                                  required=False,
+                                  widget= forms.SelectDateWidget(years=range(1990,2024))
+                                  )
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        #Obtenemos los campos
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        
+        fecha_desde = forms.DateField(label="Fecha Desde",
+                                required=False,
+                                widget= forms.SelectDateWidget(years=range(1990,2023))
+                                )
+        
+        fecha_hasta = forms.DateField(label="Fecha Desde",
+                                  required=False,
+                                  widget= forms.SelectDateWidget(years=range(1990,2023))
+                                  )
+
+        if (textoBusqueda == ""
+            and fecha_desde is None
+            and fecha_hasta is None):
+            self.add_error("textoBusqueda", "Error, introduce algo en la búsqueda")
+            self.add_error("fecha_desde", "Error, introduce algo en la búsqueda")
+            self.add_error("fecha_hasta", "Error, introduce algo en la búsqueda")
+
+        return self.cleaned_data

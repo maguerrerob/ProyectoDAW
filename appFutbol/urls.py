@@ -23,5 +23,9 @@ urlpatterns = [
     path("recinto/buscar/", views.recinto_buscar, name="recinto_buscar"),
     path("partido/buscar_avanzada", views.partido_buscar_avanzado, name="partido_buscar_avanzado"),
     path("datosusuarios/crear", views.datos_usuario_create, name="datos_usuario_create"),
-    path("datosusuarios/editar/<int:datos_usuario_id>", views.datos_usuario_editar, name="datos_usuario_editar")
+    path("datosusuarios/editar/<int:datos_usuario_id>", views.datos_usuario_editar, name="datos_usuario_editar"),
+    path("promociones/listado", views.promociones_realizadas, name="promociones_realizadas"),
+    path("promociones/crear", views.promocion_create, name="promocion_create"),
+    path("promociones/busquedaAvanzada", views.promocion_avanzada, name="promocion_avanzada"),
+    path("promociones/editar/<int:promo_id>", views.promocion_editar, name="promocion_editar")
 ]
