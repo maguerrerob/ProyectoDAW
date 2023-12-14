@@ -21,4 +21,14 @@ Se cuenta también con un apartado de posts en los cuales podrás compartir los 
 
 # Examen
 
+- He comentado en las vistas y en los formularios EXAMEN y todo lo que he hecho es apartir de ahi hacia abajo. Está todo añadido al final
+
 - He usado automatic-crud en la eliminación, el template es "appFutbol/promocion_confirm_delete.html"
+
+- La vista "promociones_realizadas" es la lista de promociones
+
+- La vista "promocion_create" es para crear
+
+- La vista "promocion_avanzada" para busqueda avanzada
+
+- La vista "promocion_editar" para actualizar
