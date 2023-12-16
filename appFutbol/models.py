@@ -34,7 +34,7 @@ class Recinto(BaseModel):
 
 
 class Partido(BaseModel):
-    hora = models.DateTimeField(default=timezone.now)
+    hora = models.TimeField(default=timezone.now)
     ESTADO = [
         ("F", "Completo"),
         ("A", "Disponible")

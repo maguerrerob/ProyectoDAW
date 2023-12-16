@@ -162,7 +162,6 @@ def listar_recintos(request):
 
 
 # Uso el mismo template de "listado_recintos.html" y pongo un if si llega un mensaje_busqueda ya que son el mismo template sin eso.
-
 def recinto_buscar(request):
     formulario = BusquedaRecintoForm(request.GET)
     

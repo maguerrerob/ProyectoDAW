@@ -2,10 +2,16 @@ from django import forms
 from django.forms import ModelForm
 from .models import *
 
+horas_choices = [(f'{i}:00', f'{i}:00') for i in range(0, 24)]
+
 class PartidoModelForm(ModelForm):
+    hora= forms.ChoiceField(choices=horas_choices,
+                            widget=forms.Select(),
+                            label="Escoja una hora")
+    
     class Meta:
         model = Partido
-        fields = ["tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
+        fields = ["hora","tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
         labels = {
             "estado": ("Completa o disponible"),
             "tipo": ("Pública o privada")
@@ -15,9 +21,11 @@ class PartidoModelForm(ModelForm):
             "tipo": ("Selecciona alguna opción"),
         }
 
+
     def clean(self):
         super().clean()
         #Obtenemos los datos de los campos
+        hora = self.cleaned_data.get("hora")
         estado = self.cleaned_data.get("estado")
         tipo = self.cleaned_data.get("tipo")
         estilo = self.cleaned_data.get("estilo")
@@ -26,6 +34,9 @@ class PartidoModelForm(ModelForm):
         usuarios_jugadores = self.cleaned_data.get("usuarios_jugadores")
 
         #Aplicamos las restricciones a los campos
+        if hora < "7:00":
+            self.add_error("hora", "Error, no puedes seleccionar esa hora")
+        
         if estado == "F":
             self.add_error("estado", "Error, no puedes crear una reserva completa")
 
