@@ -1,12 +1,12 @@
 {% extends "principal.html" %}
 
 {% block cabecera %}
-    <h1>Búsqueda avanzada de partidos</h1>
+    <h1>Crear usuario</h1>
 {% endblock %}
 
 {% block contenido %}
     {% load bootstrap5 %}
-    <form action="" method="get" class="m-3">
+    <form action="" method="post">
         {% csrf_token %}
         {% bootstrap_form formulario %}
         <button type="submit">Enviar</button>

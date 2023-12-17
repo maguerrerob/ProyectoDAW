@@ -32,3 +32,37 @@ Se cuenta también con un apartado de posts en los cuales podrás compartir los 
 - La vista "promocion_avanzada" para busqueda avanzada
 
 - La vista "promocion_editar" para actualizar
+
+# Creación Aplicación Web Parte IV - CRUD
+
+### Validaciones
+
+#### Usuarios
+
+- El email del usuario es único
+- El nivel de un usuario no puede ser superior a 10.
+- He usado el widget "forms.TextInput" para crear un placeholder
+
+#### Partido
+
+- Advertencia!! No puse el campo Estado queriendo ya que un partido, se sobreentiende que cuando se crea siempre estará disponible y nunca completa.
+- hora: no puedes crear un partido con la hora antes de las 7:00
+- tipo + estilo: No se pueden crear partidos de fútbol sala con la creación de partidos públicos.
+- usuarios jugadores: si selecciono más jugadores del total de un estilo de juego (sala=10 jugadores en total, 7=14 jugadores o 11=22 jugadores), nos retorna error
+- Uso el widget "forms.Select()" para sacar un desplegable de un campo TimeField() y poder seleccionar una hora. He creado una lista "horas_choices" para el deplegable del Select y en la validación paso los datos a objeto datetime para que compare bien las horas.
+
+#### Recinto
+
+- nombre: debe ser único
+- teléfono: no puede tener menos de 9 carácteres
+
+# Creación Aplicación Web Parte V - Sesiones y Autenticación
+
+### Usuario
+
+- Mis usuarios son el dueño del recinto que podrá crear recintos y el cliente que usará la aplicación para crear partidos
+
+#### Permisos
+- Los usuarios "cliente" son los únicos que podrán hacer búsqueda avanzada de partidos, eliminar, editar y crear
+- Los usuarios "dueñorecinto" son los únicos que pueden añadir, editar y borrar recintos.
+- NOTA: no me deja añadir ni un recinto nuevo ni un partido, los cree con el superusuario en admin, sorry

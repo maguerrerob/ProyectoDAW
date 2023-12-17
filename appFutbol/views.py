@@ -4,8 +4,9 @@ from django.db.models import Q, Prefetch, Count, F,Avg
 from .forms import *
 from datetime import datetime
 from django.contrib import messages
-
-
+from django.contrib.auth import login
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
@@ -134,12 +135,120 @@ def media_partidos(request):
 
 # FORMULARIOS
 
+# Usuario - CRUD
+def usuarios_creados(request):
+    usuarios = Usuario.objects.all()
+    return render(request, "usuarios/listado_usuarios.html",  {"usuarios":usuarios})
+
+
+#def usuarios_create(request):
+    if request.method == "POST":
+        formulario = UsuarioModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                # Guardamos el partido en la base de datos
+                formulario.save()
+                return redirect("usuarios_creados")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = UsuarioModelForm()
+    
+    return render(request, "usuarios/create.html", {"formulario":formulario})
+
+
+def usuario_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaUsuarioForm(request.GET)
+        
+        if formulario.is_valid():
+            
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+
+            #Obtenemos los filtros
+
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            nivel = formulario.cleaned_data.get("nivel")
+
+            if(textoBusqueda != ""):
+                QSUsuario = Usuario.objects.filter(Q(nombre__contains=textoBusqueda) | Q(apellidos__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o apellido que contengan los datos " + textoBusqueda+"\n"
+
+            if (nivel != 0,0):
+                QSUsuario = QSUsuario.filter(nivel__gte=nivel)
+                mensaje_busqueda +=" y su nivel sea igual o mayor de " + str(nivel)+"\n"
+            
+            usuarios = QSUsuario.all()
+
+            return render(request, "usuarios/listado_usuarios.html", {"usuarios":usuarios, "texto_busqueda":mensaje_busqueda})
+    else:
+        formulario = BusquedaAvanzadaUsuarioForm(None)
+        
+    return render(request, "usuarios/busqueda_avanzada.html", {"formulario":formulario})
+
+
+#def usuario_editar(request, usuario_id):
+    usuario = Usuario.objects.get(id=usuario_id)
+    
+    datosFormulario = None
+
+    if request.method == "POST":
+        datosFormulario = request.POST
+
+    formulario = UsuarioModelForm(datosFormulario,instance = usuario)
+
+    if request.method == "POST":
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("usuarios_creados")
+            except Exception as error:
+                pass
+
+    return render(request, "usuarios/actualizar.html", {"formulario":formulario, "usuario":usuario})
+
+
+#def usuario_eliminar(request,usuario_id):
+    usuario = Usuario.objects.get(id=usuario_id)
+    try:
+        usuario.delete()
+        messages.success(request, "Se ha elimnado el usuario " + usuario.nombre + " correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('usuarios_creados')
+
+
+def registrar_usuario(request):
+    if request.method == 'POST':
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            user = formulario.save()
+            rol = int(formulario.cleaned_data.get('rol'))
+            if(rol == Usuario.CLIENTE):
+                grupo = Group.objects.get(name='cliente') 
+                grupo.user_set.add(user)
+                cliente = Cliente.objects.create( usuario = user)
+                cliente.save()
+            elif(rol == Usuario.DUEÑORECINTO):
+                grupo = Group.objects.get(name='dueñorecinto') 
+                grupo.user_set.add(user)
+                dueñorecinto = Dueñorecinto.objects.create(usuario = user)
+                dueñorecinto.save()
+            
+            login(request, user)
+            return redirect('index')
+    else:
+        formulario = RegistroForm()
+    return render(request, 'registration/signup.html', {'formulario': formulario})
+
+
+# Partido - CRUD
 def partidos_realizados(request):
     QSpartidos = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
-    object_list = QSpartidos.all()
-    return render(request, "appFutbol/partido_list.html", {"object_list":object_list})
+    partidos = QSpartidos.all()
+    return render(request, "partidos/listado_partidos.html", {"partidos":partidos})
 
-
+@permission_required("appFutbol.add_partido")
 def partido_create(request):
     if request.method == "POST":
         formulario = PartidoModelForm(request.POST)
@@ -155,28 +264,7 @@ def partido_create(request):
     
     return render(request, "partidos/create.html", {"formulario":formulario})
 
-
-def listar_recintos(request):
-    recintos = Recinto.objects.all()
-    return render(request, "recintos/listado_recintos.html", {"recintos":recintos})
-
-
-# Uso el mismo template de "listado_recintos.html" y pongo un if si llega un mensaje_busqueda ya que son el mismo template sin eso.
-def recinto_buscar(request):
-    formulario = BusquedaRecintoForm(request.GET)
-    
-    if formulario.is_valid():
-        texto = formulario.cleaned_data.get("textoBusqueda")
-        recintos = Recinto.objects.filter(ubicacion__contains=texto).all()
-        mensaje_busqueda = "Recintos con ubicación: " + texto
-        return render(request, "recintos/listado_recintos.html", {"recintos":recintos, "texto_busqueda":mensaje_busqueda})
-
-    if ("HTTP_REFERER" in request.META):
-        return redirect(request.META["HTTP_REFERER"])
-    else:
-        return redirect("index")
-
-
+@permission_required("appFutbol.view_partido")
 def partido_buscar_avanzado(request):
     if(len(request.GET) > 0):
         formulario = BusquedaAvanzadaPartidoForm(request.GET)
@@ -206,52 +294,143 @@ def partido_buscar_avanzado(request):
                 mensaje_busqueda += "\n"
                 QSpartido =  QSpartido.filter(filtroOR)
             
-            object_list = QSpartido.all()
+            partidos = QSpartido.all()
 
-            return render(request, "appFutbol/partido_list.html", {"object_list":object_list, "texto_busqueda":mensaje_busqueda})
+            return render(request, "partidos/listado_partidos.html", {"partidos":partidos, "texto_busqueda":mensaje_busqueda})
     else:
         formulario = BusquedaAvanzadaPartidoForm(None)
         
     return render(request, "partidos/busqueda_avanzada.html", {"formulario":formulario})
-            
 
-# Datos Usuario
-
-def datos_usuario_create(request):
-    if request.method == "POST":
-        formulario = DatosUsuarioModelForm(request.POST)
-        if formulario.is_valid():
-            try:
-                # Guardamos el partido en la base de datos
-                formulario.save()
-                # Name de vista de automatic-crud
-                return redirect("appFutbol-datosusuario-list")
-            except Exception as error:
-                print(error)
-    else:
-        formulario = DatosUsuarioModelForm()
-    
-    return render(request, "datosusuario/create.html", {"formulario":formulario})
-
-def datos_usuario_editar(request, datos_usuario_id):
-    datos_usuario = DatosUsuario.objects.get(id=datos_usuario_id)
+@permission_required("appFutbol.change_partido")
+def partido_editar(request, partido_id):
+    partido = Partido.objects.get(id=partido_id)
     
     datosFormulario = None
 
     if request.method == "POST":
         datosFormulario = request.POST
 
-    formulario = DatosUsuarioModelForm(datosFormulario,instance = datos_usuario)
+    formulario = PartidoModelForm(datosFormulario,instance = partido)
 
     if request.method == "POST":
         if formulario.is_valid():
             try:
                 formulario.save()
-                return redirect("appFutbol-datosusuario-list")
+                return redirect("partidos_realizados")
             except Exception as error:
                 pass
 
-    return render(request, "datosusuario/actualizar.html", {"formulario":formulario, "datos_usuario":datos_usuario})
+    return render(request, "partidos/actualizar.html", {"formulario":formulario, "partido":partido})
+
+@permission_required("appFutbol.delete_partido")
+def partido_eliminar(request,partido_id):
+    partido = Partido.objects.get(id=partido_id)
+    try:
+        partido.delete()
+        messages.success(request, "Se ha elimnado el partido de estilo " + partido.estilo + " correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('partidos_realizados')
+
+
+# Recinto - CRUD
+def listar_recintos(request):
+    recintos = Recinto.objects.all()
+    return render(request, "recintos/listado_recintos.html", {"recintos":recintos})
+
+
+@permission_required("appFutbol.add_recinto")
+def recinto_create(request):
+    if request.method == "POST":
+        formulario = RecintoModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                # Guardamos el partido en la base de datos
+                formulario.save()
+                return redirect("listar_recintos")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = RecintoModelForm()
+    
+    return render(request, "recintos/create.html", {"formulario":formulario})
+
+
+# Uso el mismo template de "listado_recintos.html" y pongo un if si llega un mensaje_busqueda ya que son el mismo template sin eso.
+def recinto_buscar(request):
+    formulario = BusquedaRecintoForm(request.GET)
+    
+    if formulario.is_valid():
+        texto = formulario.cleaned_data.get("textoBusqueda")
+        recintos = Recinto.objects.filter(ubicacion__contains=texto).all()
+        mensaje_busqueda = "Recintos con ubicación: " + texto
+        return render(request, "recintos/listado_recintos.html", {"recintos":recintos, "texto_busqueda":mensaje_busqueda})
+
+    if ("HTTP_REFERER" in request.META):
+        return redirect(request.META["HTTP_REFERER"])
+    else:
+        return redirect("index")
+
+
+def recinto_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaRecintoForm(request.GET)
+        
+        if formulario.is_valid():
+            
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+
+            #Obtenemos los filtros
+            nombre = formulario.cleaned_data.get("nombre")
+            telefono = formulario.cleaned_data.get("telefono")
+
+            if(nombre != ""
+               and telefono != ""):
+                QSrecinto = Recinto.objects.filter(Q(nombre__contains=nombre) | Q(telefono=telefono))
+                mensaje_busqueda += "Nombre que contenga: " + nombre + " y teléfono que corresponda a " + telefono +"\n"
+            
+            recintos = QSrecinto.all()
+
+            return render(request, "recintos/listado_recintos.html", {"recintos":recintos, "texto_busqueda":mensaje_busqueda})
+    else:
+        formulario = BusquedaAvanzadaRecintoForm(None)
+        
+    return render(request, "recintos/busqueda_avanzada.html", {"formulario":formulario})
+
+
+@permission_required("appFutbol.change_recinto")
+def recinto_editar(request, recinto_id):
+    recinto = Recinto.objects.get(id=recinto_id)
+    
+    datosFormulario = None
+
+    if request.method == "POST":
+        datosFormulario = request.POST
+
+    formulario = RecintoModelForm(datosFormulario,instance = recinto)
+
+    if request.method == "POST":
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("listar_recintos")
+            except Exception as error:
+                pass
+
+    return render(request, "recintos/actualizar.html", {"formulario":formulario, "recinto":recinto})
+
+
+@permission_required("appFutbol.delete_recinto")
+def recinto_eliminar(request,recinto_id):
+    recinto = Recinto.objects.get(id=recinto_id)
+    try:
+        recinto.delete()
+        messages.success(request, "Se ha elimnado el recinto " + recinto.nombre + " correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('listar_recintos')
+
 
 
 # VISTAS EXAMEN_FORMULARIOS

@@ -1,39 +1,49 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from automatic_crud.models import BaseModel
-from django import forms
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class Usuario(BaseModel):
-    nombre = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=100)
-    email = models.CharField(max_length=200, unique=True)
+class Usuario(AbstractUser):
+    ADMINISTRADOR = 1
+    CLIENTE = 2
+    DUEÑORECINTO = 3
+    ROLES = (
+        (ADMINISTRADOR, 'administardor'),
+        (CLIENTE, 'cliente'),
+        (DUEÑORECINTO, 'dueñorecinto'),
+    )
+    
+    rol  = models.PositiveSmallIntegerField(
+        choices=ROLES,default=1
+    )
+
+
+class Cliente(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     nivel = models.FloatField(default=0.0, db_column="puntos_usuario")
     telefono = models.CharField(max_length=9)
 
-    def __str__(self) -> str:
-        return self.nombre
+    
+    
+
+class Dueñorecinto(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    telefono = models.CharField(max_length=9)
 
 
-class Recinto(BaseModel):
+class Recinto(models.Model):
     nombre = models.TextField()
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
-    
-    def get_create_form(self,form = None):
-        from .forms import RecintoForm
-        self.create_form = RecintoForm
-        return self.create_form
+    dueño_recinto = models.OneToOneField(Dueñorecinto, on_delete = models.CASCADE)
     
     def __str__(self) -> str:
         return self.nombre
 
 
-
-
-class Partido(BaseModel):
+class Partido(models.Model):
     hora = models.TimeField(default=timezone.now)
     ESTADO = [
         ("F", "Completo"),
@@ -52,25 +62,25 @@ class Partido(BaseModel):
     ]
     estilo = models.CharField(max_length=2, choices=ESTILO)
     #--------Relaciones--------
-    creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_partido")
+    creador = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="creador_partido")
     campo_reservado = models.ForeignKey(Recinto, on_delete=models.CASCADE, related_name="campo_reservadoo")
-    usuarios_jugadores = models.ManyToManyField(Usuario, through="Jugador_partido", related_name="jugadores_partido")
+    usuarios_jugadores = models.ManyToManyField(Cliente, through="Jugador_partido", related_name="jugadores_partido")
 
 
-class Jugador_partido(BaseModel):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+class Jugador_partido(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)
     ganar = models.BooleanField(default=False)
 
 
-class Resultado(BaseModel):
+class Resultado(models.Model):
     goles_local = models.IntegerField(verbose_name="Goles local")
     goles_visitante = models.IntegerField(verbose_name="Goles visitante")
     #--------Relaciones--------
     resultado_partido = models.OneToOneField(Partido, on_delete=models.CASCADE, related_name="resultado_partido")
 
 
-class DatosUsuario(BaseModel):
+class DatosUsuario(models.Model):
     descripcion = models.TextField()
     POSICION = [
         ("GOA","Portero"),
@@ -81,7 +91,7 @@ class DatosUsuario(BaseModel):
     posicion = models.CharField(max_length=3, choices=POSICION)
     ubicacion = models.TextField()
     #--------Relaciones--------
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name="datos_usuario")
+    cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, related_name="datos_usuario")
     # Para ver los partidos en los que ha estado el usuario
     partidos_jugados = models.ManyToManyField(Partido)
 
@@ -89,22 +99,22 @@ class DatosUsuario(BaseModel):
         return self.descripcion
 
 
-class Post(BaseModel):
+class Post(models.Model):
     contenido = models.TextField()
     #--------Relaciones--------
-    creador_post = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador_post")
+    creador_post = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="creador_post")
 
 
-class Votacion_partido(BaseModel):
+class Votacion_partido(models.Model):
     puntuacion_numerica = models.IntegerField()
     comentario = models.TextField()
     fecha_votacion = models.DateTimeField(default=timezone.now)
     #--------Relaciones--------
     partido_votado = models.ForeignKey(Partido, on_delete=models.CASCADE, related_name="votacion_partido")
-    creador_votacion = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="votacion_usuario")
+    creador_votacion = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="votacion_usuario")
     
 
-class Cuenta_bancaria(BaseModel):
+class Cuenta_bancaria(models.Model):
     numero_cuenta = models.IntegerField()
     BANCO = [
         ("CA", "Caixa"),
@@ -114,18 +124,18 @@ class Cuenta_bancaria(BaseModel):
     ]
     banco = models.CharField(max_length=2, choices=BANCO)
     #--------Relaciones--------
-    titular = models.OneToOneField(Usuario, on_delete=models.CASCADE, name="titular_cuenta")
+    titular = models.OneToOneField(Cliente, on_delete=models.CASCADE, name="titular_cuenta")
     
     
 # EXAMEN FORMULARIOS
 
-class Promocion(BaseModel):
+class Promocion(models.Model):
     nombre = models.CharField(max_length=500)
     descripcion = models.TextField()
     descuento = models.IntegerField()
     fecha_promocion = models.DateField(default=timezone.now)
     #----Relaciones----
-    miusuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    miusuario = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
         return self.nombre

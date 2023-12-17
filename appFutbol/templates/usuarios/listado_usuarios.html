@@ -2,14 +2,14 @@
 
 {% block cabecera_extra %}
     {% load static %}
-    <script type="text/javascript" src="{% static 'js/eliminarrecinto.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/eliminarusuario.js' %}"></script>
 {% endblock %}
 
 {% block cabecera %}
     {% if not texto_busqueda is None %}
-        <h1>{{ texto_busqueda }}</h1>
+        <h4>{{ texto_busqueda }}</h4>
     {% else %}
-        <h1>Listado de recintos</h1>
+        <h1>Listado de usuarios</h1>
     {% endif %}
 {% endblock %}
 
@@ -22,22 +22,24 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% for recinto in recintos %}
-    <ul>
-        <li>
-            <h4>{{ recinto.nombre }}</h4>
-            <p>Ubicación: {{ recinto.ubicacion }}</p>
-            <p>Teléfono: {{ recinto.telefono }}</p>
-            <a href="{% url 'recinto_editar' recinto.id %}">EDITAR</a>
-                <form action="{% url 'recinto_eliminar' recinto.id %}" method="post">
+    {% for usuario in usuarios %}
+        <ul>
+            <li>
+                <h4> {{ usuario.nombre }}</h4>
+                <p>{{ usuario.apellidos }}</p>
+                <p>Email: {{ usuario.email }}</p>
+                <p>Nivel: {{ usuario.nivel }}</p>
+                <p>Teléfono: {{ usuario.telefono }}</p>
+                <!--<a href="{% url 'usuario_editar' usuario.id %}">EDITAR</a>
+                <form action="{% url 'usuario_eliminar' usuario.id %}" method="post">
                     {% csrf_token %}
                     <button onclick="return eliminar();" type="submit">
                         ELIMINAR
                     </button>
-                </form>
-        </li>
-    </ul>
+                </form>-->
+            </li>
+        </ul>
     {% empty %}
-        <p>Lo sentimos pero no hay recintos</p>
+        <p>No se ha encontrado ningún usuario</p>
     {% endfor %}
 {% endblock %}

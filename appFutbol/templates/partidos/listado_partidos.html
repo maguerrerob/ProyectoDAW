@@ -1,5 +1,10 @@
 {% extends "principal.html" %}
 
+{% block cabecera_extra %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/eliminarpartido.js' %}"></script>
+{% endblock %}
+
 {% block cabecera %}
     {% if not texto_busqueda is None %}
         <h4>{{ texto_busqueda }}</h4>
@@ -9,6 +14,14 @@
 {% endblock %}
 
 {% block contenido %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
     {% for partido in partidos %}
         <ul>
             <li>
@@ -20,10 +33,15 @@
                 <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
                 <h5>Jugadores:</h5>
                 {% for usu in partido.usuarios_jugadores.all %}
-                    <p>{{ usu.nombre }}</p>
+                    <p>{{ usu.id }}</p>
                 {% endfor %}
-                <a href="{% url 'appFutbol-partido-update' partido.id %}">EDITAR</a>
-                <a href="{% url 'appFutbol-partido-logic-delete' partido.id %}">ELIMINAR</a>
+                <a href="{% url 'partido_editar' partido.id %}">EDITAR</a>
+                <form action="{% url 'partido_eliminar' partido.id %}" method="post">
+                    {% csrf_token %}
+                    <button onclick="return eliminar();" type="submit">
+                        ELIMINAR
+                    </button>
+                </form>
             </li>
         </ul>
     {% empty %}

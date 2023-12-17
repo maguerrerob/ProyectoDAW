@@ -19,6 +19,34 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link link-dark dropdown-toggle" href="#" 
+                    id="accionesUsuariosLink" 
+                    role="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                    Usuarios
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accionesUsuariosLink">
+                    <li><a class="dropdown-item" href="{% url 'usuarios_creados' %}">Ver usuarios</a></li>
+                    <li><a class="dropdown-item" href="#">Crear usuario</a></li>
+                    <li><a class="dropdown-item" href="{% url 'usuario_buscar_avanzado' %}">Busqueda Avanzada de usuarios</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link link-dark dropdown-toggle" href="#" 
+                    id="accionesRecintoLink" 
+                    role="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                    Recinto
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accionesRecintoLink">
+                    <li><a class="dropdown-item" href="{% url 'listar_recintos' %}">Ver recintos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'recinto_create' %}">Crear recinto</a></li>
+                    <li><a class="dropdown-item" href="{% url 'recinto_buscar_avanzado' %}">Busqueda Avanzada de recintos</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link link-dark dropdown-toggle" href="#" 
                     id="accionesPartidosLink" 
                     role="button" 
                     data-bs-toggle="dropdown" 
@@ -48,29 +76,21 @@
             <li class="nav-item">
                 <a class="nav-link link-dark active" href="{% url 'listar_recintos' %}">Ver recintos</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'datos_usuario_create' %}">Crear Datos Usuario</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'appFutbol-datosusuario-list' %}">Listar datos usuarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'ganados_locales' %}">Partidos locales ganados</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-dark active" href="{% url 'appFutbol-usuario-list' %}">lista usuarios crud-automatic</a>
-            </li>
-            <li class="login nav-item ms-lg-5">
-                <a class="acceder nav-link link-primary" href="#">ACCEDER</a>
-                <div class="submenu">
-                    <form action="" method="post">
-                        <input type="text" placeholder="Usuario"><br>
-                        <input type="password" placeholder="Contraseña"><br>
-                        <input type="submit">
-                    </form>
-                    <a href="">Registrarse</a>
-                </div>
-            </li>
+            {% if not request.user.is_authenticated %}
+                <li class="login nav-item ms-lg-5">
+                    <a class="acceder nav-link link-primary" href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}
+            {% if not request.user.is_authenticated %}
+                <li class="login nav-item ms-lg-5">
+                    <a class="acceder nav-link link-primary" href="{% url 'registrar_usuario' %}">Registrarse</a>
+                </li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+                <li class="login nav-item ms-lg-5">
+                    <a class="acceder nav-link link-primary" href="{% url 'logout' %}">Desconectarse</a>
+                </li>
+            {% endif %}
         </ul>
         <form action="{% url 'recinto_buscar' %}" class="d-flex mt-3" role="search" method="GET">
             <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Buscar recintos (ubicación)" aria-label="Search">

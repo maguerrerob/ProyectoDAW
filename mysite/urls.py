@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", include("appFutbol.urls")),
-    path('automatic-crud/', include('automatic_crud.urls'))
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 from django.conf.urls import handler400,handler404,handler403,handler500

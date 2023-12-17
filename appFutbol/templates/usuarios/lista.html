@@ -1,6 +1,11 @@
 {% extends "principal.html" %}
+
 {% block cabecera %}
-    <h1>Lista de usuarios</h1>
+    {% if not texto_busqueda is None %}
+        <h4>{{ texto_busqueda }}</h4>
+    {% else %}
+        <h1>Listado de Usuarios</h1>
+    {% endif %}
 {% endblock %}
 
 {% block contenido %}
@@ -23,7 +28,7 @@
                         </li>
                     </ul>
                 {% empty %}
-                <p>Lo siento el usuario no ha creado ningún post.</p>
+                <p>Lo siento el usuario no ha creado ningún post</p>
                 {% endfor %}
                 <h3>Reservas realizadas del usuario</h3>
                 {% for res in usuario.creador_reserva.all %}
