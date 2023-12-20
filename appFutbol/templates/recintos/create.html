@@ -8,6 +8,11 @@
     {% load bootstrap5 %}
     <form action="" method="post">
         {% csrf_token %}
+
+        {% for error in formulario.dueño_recinto.errors %}
+                {{ error }}
+        {% endfor %}
+
         {% bootstrap_form formulario %}
         <button type="submit">Enviar</button>
     </form>

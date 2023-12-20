@@ -18,16 +18,19 @@ class Usuario(AbstractUser):
     rol  = models.PositiveSmallIntegerField(
         choices=ROLES,default=1
     )
+    
+    def __str__(self) -> str:
+        return self.username
 
 
 class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     nivel = models.FloatField(default=0.0, db_column="puntos_usuario")
     telefono = models.CharField(max_length=9)
-
     
+    def __str__(self):
+        return self.usuario.username
     
-
 class Dueñorecinto(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     telefono = models.CharField(max_length=9)
@@ -37,7 +40,7 @@ class Recinto(models.Model):
     nombre = models.TextField()
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
-    dueño_recinto = models.OneToOneField(Dueñorecinto, on_delete = models.CASCADE)
+    dueño_recinto = models.ForeignKey(Dueñorecinto, on_delete = models.CASCADE)
     
     def __str__(self) -> str:
         return self.nombre

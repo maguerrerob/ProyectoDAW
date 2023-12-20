@@ -8,6 +8,9 @@
     {% load bootstrap5 %}
     <form action="" method="post">
         {% csrf_token %}
+        {% for error in formulario.usuarios_jugadores.errors %}
+            {{ error }}
+        {% endfor %}
         {% bootstrap_form formulario %}
         <button type="submit">Enviar</button>
     </form>

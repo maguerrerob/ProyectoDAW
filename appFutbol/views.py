@@ -13,7 +13,7 @@ from django.contrib.auth.models import Group
 #1. Crear un index que contenga todas las urls
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {"usuario":request.user})
 
 #2. Mostrar datos de los usuarios
 
@@ -260,7 +260,7 @@ def partido_create(request):
             except Exception as error:
                 print(error)
     else:
-        formulario = PartidoModelForm()
+        formulario = PartidoModelForm(initial={"creador":request.user.cliente})
     
     return render(request, "partidos/create.html", {"formulario":formulario})
 
@@ -352,7 +352,7 @@ def recinto_create(request):
             except Exception as error:
                 print(error)
     else:
-        formulario = RecintoModelForm()
+        formulario = RecintoModelForm(initial={"dueño_recinto":request.user.dueñorecinto})
     
     return render(request, "recintos/create.html", {"formulario":formulario})
 

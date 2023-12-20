@@ -33,7 +33,7 @@
                 <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
                 <h5>Jugadores:</h5>
                 {% for usu in partido.usuarios_jugadores.all %}
-                    <p>{{ usu.id }}</p>
+                    <p>{{ usu }}</p>
                 {% endfor %}
                 <a href="{% url 'partido_editar' partido.id %}">EDITAR</a>
                 <form action="{% url 'partido_eliminar' partido.id %}" method="post">
