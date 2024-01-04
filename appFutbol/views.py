@@ -432,6 +432,21 @@ def recinto_eliminar(request,recinto_id):
     return redirect('listar_recintos')
 
 
+# Resultado - CRUD
+def resultado_create(request):
+    if request.method == "POST":
+        formulario = ResultadoModelForm(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("partidos_realizados")
+            except Exception as error:
+                print(error)
+    else:
+        formulario = ResultadoModelForm()
+    
+    return render(request, "resultados/create.html", {"formulario":formulario})
+
 
 # VISTAS EXAMEN_FORMULARIOS
 

@@ -29,19 +29,27 @@
                 <p>Estado: {{ partido.get_estado_display }}</p>
                 <p>Tipo: {{ partido.get_tipo_display }}</p>
                 <p>Estilo: {{ partido.get_estilo_display }}</p>
-                <p>Creador de la campo_reservado: {{ partido.creador.nombre }}</p> 
+                <p>Creador del partido: {{ partido.creador.nombre }}</p> 
                 <p>Campo reservado: {{ partido.campo_reservado.nombre }}</p>
                 <h5>Jugadores:</h5>
                 {% for usu in partido.usuarios_jugadores.all %}
                     <p>{{ usu }}</p>
                 {% endfor %}
-                <a href="{% url 'partido_editar' partido.id %}">EDITAR</a>
+                <form action="{% url 'partido_editar' partido.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        EDITAR
+                    </button>
+                </form>
                 <form action="{% url 'partido_eliminar' partido.id %}" method="post">
                     {% csrf_token %}
                     <button onclick="return eliminar();" type="submit">
                         ELIMINAR
                     </button>
                 </form>
+                <p class="mt-3">Equipo Local: {{ partido.resultado_partido.goles_local }}</p>
+                <p>Equipo Visitante: {{ partido.resultado_partido.goles_visitante }}</p>
+                <h5 class="mt-2"><a href="{% url 'resultado_create' %}">Añadir resultado del partido</a></h5>
             </li>
         </ul>
     {% empty %}

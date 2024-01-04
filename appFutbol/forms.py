@@ -211,7 +211,27 @@ class BusquedaAvanzadaRecintoForm(ModelForm):
             self.add_error("telefono", "Debe introducir al menos un campo")
 
         return self.cleaned_data
+    
 
+# FORMULARIOS - RESULTADO
+
+class ResultadoModelForm(ModelForm):
+    class Meta:
+        model = Resultado
+        fields = ['goles_local', 'goles_visitante']
+    
+    def clean(self):
+        super().clean()
+        
+        goles_local = self.cleaned_data.get("goles_local")
+        goles_visitante = self.cleaned_data.get("goles_visitante")
+
+        if goles_local < 0:
+            self.add_error("goles_local", "Error de resultado")
+        if goles_visitante < 0:
+            self.add_error("goles_visitante" "Error de resultado")
+
+        return self.cleaned_data
 
 
 

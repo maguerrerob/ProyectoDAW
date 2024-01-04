@@ -45,7 +45,7 @@ Se cuenta también con un apartado de posts en los cuales podrás compartir los 
 
 #### Partido
 
-- Advertencia!! No puse el campo Estado queriendo ya que un partido, se sobreentiende que cuando se crea siempre estará disponible y nunca completa.
+- Advertencia!! No puse el campo Estado queriendo ya que un partido, se sobreentiende que cuando se crea siempre estará disponible y nunca completo.
 - hora: no puedes crear un partido con la hora antes de las 7:00
 - tipo + estilo: No se pueden crear partidos de fútbol sala con la creación de partidos públicos.
 - usuarios jugadores: si selecciono más jugadores del total de un estilo de juego (sala=10 jugadores en total, 7=14 jugadores o 11=22 jugadores), nos retorna error
@@ -55,6 +55,10 @@ Se cuenta también con un apartado de posts en los cuales podrás compartir los 
 
 - nombre: debe ser único
 - teléfono: no puede tener menos de 9 carácteres
+
+#### Resultado
+
+- Si el creador del partido es el mismo que el usuario logueado aparecerá un botón para crear el resultado del partido.
 
 # Creación Aplicación Web Parte V - Sesiones y Autenticación
 
