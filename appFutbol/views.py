@@ -448,6 +448,32 @@ def resultado_create(request):
     return render(request, "resultados/create.html", {"formulario":formulario})
 
 
+def resultado_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaResultadoForm(request.GET)
+        
+        if formulario.is_valid():
+            
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+
+            #Obtenemos los filtros
+            goles_local = formulario.cleaned_data.get("goles_local")
+            goles_visitante = formulario.cleaned_data.get("goles_visitante")
+
+            if(goles_local != ""
+               and goles_visitante != ""):
+                QSrecinto = Resultado.objects.filter(Q(goles_local__gte=1) | Q(telefono=telefono))
+                mensaje_busqueda += "Nombre que contenga: " + nombre + " y teléfono que corresponda a " + telefono +"\n"
+            
+            recintos = QSrecinto.all()
+
+            return render(request, "recintos/listado_recintos.html", {"recintos":recintos, "texto_busqueda":mensaje_busqueda})
+    else:
+        formulario = BusquedaAvanzadaRecintoForm(None)
+        
+    return render(request, "recintos/busqueda_avanzada.html", {"formulario":formulario})
+
+
 # VISTAS EXAMEN_FORMULARIOS
 
 def promociones_realizadas(request):
