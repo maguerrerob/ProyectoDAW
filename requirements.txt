@@ -9,3 +9,4 @@ django-bootstrap-datepicker-plus~=5.0.4
 django-staticfiles-moment~=2.0.0
 django-crispy-forms~=2.0
 crispy-bootstrap5~=2023.10
+djangorestframework~=3.14.0

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-odz_g0^j+r@(r(oio-v2t7i@19)$g8w4_ckjv(q8ot20t@2d5$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0', "192.168.129.38"]
 
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'crispy_forms',
     'crispy_bootstrap5',
+    'rest_framework',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

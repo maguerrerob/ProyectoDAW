@@ -21,6 +21,7 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", include("appFutbol.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("api/v1/", include("appFutbol.api_urls"))
 ]
 
 from django.conf.urls import handler400,handler404,handler403,handler500
