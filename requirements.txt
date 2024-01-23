@@ -10,3 +10,4 @@ django-staticfiles-moment~=2.0.0
 django-crispy-forms~=2.0
 crispy-bootstrap5~=2023.10
 djangorestframework~=3.14.0
+django-oauth-toolkit~=2.3.0
