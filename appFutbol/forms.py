@@ -99,7 +99,7 @@ class PartidoModelForm(ModelForm):
 
         #Especificamos si devuelve bien los todos los datos (si hay alguno  mal devulve False)
         return self.cleaned_data
-    
+
 
 class PartidoModelFormRequest(forms.Form):
     
