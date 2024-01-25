@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from .forms import *
 from rest_framework import status
 from django.db.models import Q,Prefetch
+from django.shortcuts import render,redirect
 
 @api_view(["GET"])
 def partido_list(request):
@@ -29,3 +30,31 @@ def recinto_busqueda_simple(request):
         return Response(serializer.data)
     else:
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def recinto_buscar_avanzado(request):
+    if(len(request.query_params) > 0):
+        formulario = BusquedaAvanzadaRecintoFormGen(request.GET)
+        if formulario.is_valid():
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+
+            #Obtenemos los filtros
+            nombre = formulario.cleaned_data.get("nombre")
+            ubicacion = formulario.cleaned_data.get("ubicacion")
+            telefono = formulario.cleaned_data.get("telefono")
+
+            if(nombre != ""
+               and telefono != ""
+               and ubicacion != ""):
+                QSrecinto = Recinto.objects.filter(Q(nombre__contains=nombre) | Q(telefono=telefono) | Q(ubicacion=ubicacion))
+                mensaje_busqueda += "Nombre que contenga: " + nombre + ", ubicación que corresponda a " + ubicacion + " y teléfono: " + telefono + "\n"
+
+            recintos = QSrecinto.all()
+            
+            serializer = RecintoSerializer(recintos, many=True)
+
+            return Response(serializer.data)
+        else:
+            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)

@@ -188,7 +188,33 @@ class RecintoModelFormRequest(forms.Form):
 class BusquedaRecintoForm(forms.Form):
     textoBusqueda = forms.CharField(required=True)
 
+# Formulario genérico
+class BusquedaAvanzadaRecintoFormGen(forms.Form):
+    nombre = forms.CharField(required=True)
+    ubicacion = forms.CharField(required=True)
+    telefono = forms.CharField(required=True)
 
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        #Obtenemos los campos
+
+        nombre = self.cleaned_data.get("nombre")
+        ubicacion = self.cleaned_data.get("ubicacion")
+        telefono = self.cleaned_data.get("telefono")
+
+        if (nombre == ""
+            and ubicacion == ""
+            and telefono == ""):
+            self.add_error("nombre", "Debe introducir al menos un campo")
+            self.add_error("ubicacion", "Debe introducir al menos un campo")
+            self.add_error("telefono", "Debe introducir al menos un campo")
+
+        return self.cleaned_data
+
+# Formulario de modelos
 class BusquedaAvanzadaRecintoForm(ModelForm):
     class Meta:
         model = Recinto
