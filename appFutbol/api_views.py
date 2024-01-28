@@ -7,10 +7,18 @@ from rest_framework import status
 from django.db.models import Q,Prefetch
 from django.shortcuts import render,redirect
 
+# Consulta sencilla a modelo principal
 @api_view(["GET"])
 def partido_list(request):
     partidos = Partido.objects.all()
     serializer = PartidoSerializer(partidos, many=True)
+    return Response(serializer.data)
+
+# Consulta mejorada
+@api_view(["GET"])
+def partido_list_mejorada(request):
+    partidos = Partido.objects.all()
+    serializer = PartidoSerializerMejorada(partidos, many=True)
     return Response(serializer.data)
 
 @api_view(["GET"])

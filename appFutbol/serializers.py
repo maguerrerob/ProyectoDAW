@@ -29,13 +29,18 @@ class JugadorPartidoSerializer(serializers.ModelSerializer):
         
 
 class PartidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partido
+        fields = "__all__"
+
+class PartidoSerializerMejorada(serializers.ModelSerializer):
     # Para la relación Many To One con Recinto
     campo_reservado = RecintoSerializer()
     
     # Para la relación Many to One con Cliente
     creador = ClienteSerializer()
     
-    # Para la relacion Many To One con 
+    # Para la relacion Many To One con jugador_partido (tabla intermedia)
     usuarios_jugadores = JugadorPartidoSerializer(read_only=True, source="jugador_partido_set",many=True)
     
     # Para los choices
