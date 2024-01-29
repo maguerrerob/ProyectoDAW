@@ -13,10 +13,27 @@ class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
         fields = "__all__"
+        
+class DuenyoRecintoSerializer(serializers.ModelSerializer):
+    # Para la relación One To One con Usuario
+    usuario = UsuarioSerializer()
+    
+    class Meta:
+        model = Dueñorecinto
+        fields = "__all__"
 
 class RecintoSerializer(serializers.ModelSerializer):
+    dueño_recinto = DuenyoRecintoSerializer()
+    
     class Meta:
         model = Recinto
+        fields = "__all__"
+
+class Postsserializer(serializers.ModelSerializer):
+    creador_post = ClienteSerializer()
+
+    class Meta:
+        model = Post
         fields = "__all__"
 
          
@@ -55,6 +72,7 @@ class PartidoSerializerMejorada(serializers.ModelSerializer):
 class DatosUsuariosSerializar(serializers.ModelSerializer):
     cliente = ClienteSerializer()
     
+    posicion = serializers.CharField(source="get_posicion_display")
     class Meta:
         model = DatosUsuario
         fields = "__all__"

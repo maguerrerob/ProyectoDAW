@@ -21,10 +21,24 @@ def partido_list_mejorada(request):
     serializer = PartidoSerializerMejorada(partidos, many=True)
     return Response(serializer.data)
 
+# Consultas mejoradas con oauth2
+@api_view(['GET'])
+def datosusuarios_list(request):
+    datosuaurios = DatosUsuario.objects.all()
+    serializer = DatosUsuariosSerializar(datosuaurios, many=True)
+    return Response(serializer.data)
+
 @api_view(["GET"])
 def recintos_list(request):
     recintos = Recinto.objects.all()
     serializer = RecintoSerializer(recintos, many=True)
+    return Response(serializer.data)
+
+# Consulta con JWT
+@api_view(["GET"])
+def posts_listar(request):
+    posts = Post.objects.all()
+    serializer = Postsserializer(posts, many=True)
     return Response(serializer.data)
 
 @api_view(["GET"])
@@ -66,9 +80,3 @@ def recinto_buscar_avanzado(request):
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
-    
-@api_view(['GET'])
-def datosusuarios_list(request):
-    datosuaurios = DatosUsuario.objects.all()
-    serializer = DatosUsuariosSerializar(datosuaurios, many=True)
-    return Response(serializer.data)
