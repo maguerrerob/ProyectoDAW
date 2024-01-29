@@ -35,5 +35,5 @@ urlpatterns = [
     path("promociones/busquedaAvanzada", views.promocion_avanzada, name="promocion_avanzada"),
     path("promociones/editar/<int:promo_id>", views.promocion_editar, name="promocion_editar"),
     path("registrar", views.registrar_usuario, name="registrar_usuario"),
-    path("añadir_resultado", views.resultado_create, name="resultado_create")
+    path("añadir_resultado", views.resultado_create, name="resultado_create"),
 ]

@@ -52,4 +52,9 @@ class PartidoSerializerMejorada(serializers.ModelSerializer):
         model = Partido
         fields = "__all__"
 
-
+class DatosUsuariosSerializar(serializers.ModelSerializer):
+    cliente = ClienteSerializer()
+    
+    class Meta:
+        model = DatosUsuario
+        fields = "__all__"

@@ -7,5 +7,7 @@ urlpatterns = [
     # Consulta mejorada
     path("partidos_mejorada", partido_list_mejorada),
     path("recintos/busqueda_simple", recinto_busqueda_simple),
-    path("recintos/busqueda_avanzada", recinto_buscar_avanzado)
+    path("recintos/busqueda_avanzada", recinto_buscar_avanzado),
+    # URL JWT mejorada
+    path("datosusuarios", datosusuarios_list)
 ]

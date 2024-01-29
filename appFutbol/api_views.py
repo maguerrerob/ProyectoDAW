@@ -66,3 +66,9 @@ def recinto_buscar_avanzado(request):
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def datosusuarios_list(request):
+    datosuaurios = DatosUsuario.objects.all()
+    serializer = DatosUsuariosSerializar(datosuaurios, many=True)
+    return Response(serializer.data)
