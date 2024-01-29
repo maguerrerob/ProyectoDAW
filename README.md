@@ -71,7 +71,7 @@ Se cuenta también con un apartado de posts en los cuales podrás compartir los 
 - Los usuarios "dueñorecinto" son los únicos que pueden añadir, editar y borrar recintos.
 - NOTA: no me deja añadir ni un recinto nuevo ni un partido, los cree con el superusuario en admin, sorry
 
-#### API REST I
+# API REST I
 En el index principal, las vistas que he manejado están:
 - Consulta sencilla: Desplegable de "Partido" (Ver partidos_api)
 - Consulta mejorada: Desplegable de "Partido" (Ver partidos_api_mejorada)
