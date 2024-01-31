@@ -80,3 +80,24 @@ def recinto_buscar_avanzado(request):
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+# Listar clientes
+@api_view(['GET'])
+def clientes_list(request):
+    clientes = Cliente.objects.all()
+    serializer = ClienteSerializer(clientes, many=True)
+    return Response(serializer.data)
+
+# Create partido API
+@api_view(['POST'])
+def partido_create(request):
+    serializers = PartidoSerializerCreate(data=request.data)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Partido CREADO")
+        except Exception as error:
+            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

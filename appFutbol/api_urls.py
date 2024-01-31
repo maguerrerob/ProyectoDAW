@@ -13,4 +13,6 @@ urlpatterns = [
     path("posts/listar", posts_listar),
     path("recintos/busqueda_simple", recinto_busqueda_simple),
     path("recintos/busqueda_avanzada", recinto_buscar_avanzado),
+    path("partido/crear", partido_create),
+    path("clientes/listar", clientes_list)
 ]
