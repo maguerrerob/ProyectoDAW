@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'rest_framework',
     "oauth2_provider",
-    'rest_framework_simplejwt',
+    #'rest_framework_simplejwt',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
