@@ -15,4 +15,5 @@ urlpatterns = [
     path("recintos/busqueda_avanzada", recinto_buscar_avanzado),
     path("partido/crear", partido_create),
     path("clientes/listar", clientes_list)
+    path("clientes/listar", clientes_list)
 ]

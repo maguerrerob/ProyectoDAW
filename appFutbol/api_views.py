@@ -82,6 +82,7 @@ def recinto_buscar_avanzado(request):
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
     
 
+<<<<<<< HEAD
 # Listar clientes
 @api_view(['GET'])
 def clientes_list(request):
@@ -101,3 +102,11 @@ def partido_create(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+=======
+# POST
+@api_view(["GET"])
+def clientes_list(request):
+    clientes = Cliente.objects.all()
+    serializer = ClienteSerializer(clientes, many=True)
+    return Response(serializer.data)
+>>>>>>> b16c0c75edd108cc1ce83d05ebfd8aed36025a84
