@@ -108,3 +108,5 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
         if len(campo_reservado) < 1:
             raise serializers.ValidationError("Debe seleccionar al menos 1 campo")
         return campo_reservado
+    
+    # self.initial_data obtiene los datos sin serializar(string)

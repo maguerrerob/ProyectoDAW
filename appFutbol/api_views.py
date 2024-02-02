@@ -43,15 +43,20 @@ def posts_listar(request):
 
 @api_view(["GET"])
 def recinto_busqueda_simple(request):
-    formulario = BusquedaRecintoForm(request.query_params)
-    if(formulario.is_valid()):
-        texto = formulario.data.get('textoBusqueda')
-        QSrecintos = Recinto.objects.select_related("dueño_recinto")
-        recintos = QSrecintos.filter(Q(nombre__contains=texto) | Q(ubicacion__contains=texto)).all()
-        serializer = RecintoSerializer(recintos, many=True)
-        return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.view_recinto")):
+        formulario = BusquedaRecintoForm(request.query_params)
+        if(formulario.is_valid()):
+            texto = formulario.data.get('textoBusqueda')
+            QSrecintos = Recinto.objects.select_related("dueño_recinto")
+            recintos = QSrecintos.filter(Q(nombre__contains=texto) | Q(ubicacion__contains=texto)).all()
+            serializer = RecintoSerializer(recintos, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+        print("Sin permisooooos")
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+        
 
 @api_view(['GET'])
 def recinto_buscar_avanzado(request):
@@ -82,7 +87,6 @@ def recinto_buscar_avanzado(request):
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
     
 
-<<<<<<< HEAD
 # Listar clientes
 @api_view(['GET'])
 def clientes_list(request):
@@ -102,11 +106,3 @@ def partido_create(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-=======
-# POST
-@api_view(["GET"])
-def clientes_list(request):
-    clientes = Cliente.objects.all()
-    serializer = ClienteSerializer(clientes, many=True)
-    return Response(serializer.data)
->>>>>>> b16c0c75edd108cc1ce83d05ebfd8aed36025a84
