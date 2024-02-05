@@ -80,6 +80,7 @@ En el index principal, las vistas que he manejado están:
 - Consulta mejorada con token JWT: Barra de navegación superior (Lsta posts api)
 
 # API REST II
+NOTA: está hecho el fixtures para los dos tipos de usuarios con autenticaciones
 En el index principal, las vistas que he manejado están:
 - Búsqueda sencilla modelo principal y avanzada (no es el principal pero lo he hecho de ese): barra de búsqueda
 - Búsqueda avanzada modelo principal: desplegable de "Recinto"
