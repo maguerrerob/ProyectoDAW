@@ -52,6 +52,227 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2024-01-29T09:56:41.754Z",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "1",
+        "object_repr": "Datos usuario api",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2024-01-29T09:56:46.595Z",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "1",
+        "object_repr": "Datos usuario api",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2024-01-29T16:32:41.852Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "2",
+        "object_repr": "usuariocliente",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2024-01-29T16:33:03.429Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "3",
+        "object_repr": "pruebaduenyorecinto",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2024-01-29T17:54:42.393Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "1",
+        "object_repr": "Post object (1)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2024-01-29T17:55:55.953Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "4",
+        "object_repr": "usuariocliente2",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2024-01-29T17:56:16.115Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "2",
+        "object_repr": "Post object (2)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2024-02-03T16:33:20.124Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "2",
+        "object_repr": "usuariocliente",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Password\", \"Last login\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2024-02-03T16:34:28.001Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "6",
+        "object_repr": "duenyoreinto",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2024-02-03T16:34:39.673Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "2",
+        "object_repr": "cliente",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Username\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2024-02-03T16:34:58.261Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "1",
+        "object_repr": "cliente",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Nivel\", \"Telefono\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2024-02-03T16:35:18.915Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Dueñorecinto object (1)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Usuario\", \"Telefono\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2024-02-03T16:38:03.429Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "6",
+        "object_repr": "duenyorecinto",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Username\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2024-02-03T16:38:09.924Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Dueñorecinto object (1)",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2024-02-05T15:57:51.353Z",
+        "user": 1,
+        "content_type": 3,
+        "object_id": "2",
+        "object_repr": "dueñorecinto",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2024-02-05T17:27:10.432Z",
+        "user": 1,
+        "content_type": 3,
+        "object_id": "1",
+        "object_repr": "cliente",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2024-02-05T17:30:48.938Z",
+        "user": 1,
+        "content_type": 3,
+        "object_id": "1",
+        "object_repr": "cliente",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -849,6 +1070,10 @@
     "fields": {
         "name": "cliente",
         "permissions": [
+            61,
+            62,
+            63,
+            64,
             37,
             38,
             39,
@@ -864,7 +1089,8 @@
         "permissions": [
             49,
             50,
-            51
+            51,
+            52
         ]
     }
 },
@@ -1046,10 +1272,26 @@
 },
 {
     "model": "sessions.session",
-    "pk": "13bkux67a0h6kuxyl2wcvja4a63pqxa4",
+    "pk": "2bcsxaj8nr33cibsqbqrvsnnuivr9kfa",
     "fields": {
-        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rSBUL:0gVm3Jvn-MdY7QIjRDmt4aaTKM4bjcvJEXchFcWuJtI",
-        "expire_date": "2024-02-06T07:46:29.918Z"
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUUbY:C2FLBJSHg-9mDAKsSk2dcKoj4a9GCGbZ0z-3kV9B8Kg",
+        "expire_date": "2024-02-12T16:35:28.994Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "3w7roo1782pr7d2mbvtatmz0h552zvh1",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rX2u1:MLMmuZKnFK3P59Vxho_2xZg_9LbrzcD6Lblck-WBOCU",
+        "expire_date": "2024-02-19T17:37:05.963Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "5zxfteso58tfhzvkowafefpxmkld4hmj",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rX1LL:hjvZlCkUlwHnDBbvrN4IZd6pvkNpftTU1LOPSiZchxI",
+        "expire_date": "2024-02-19T15:57:11.050Z"
     }
 },
 {
@@ -1062,10 +1304,18 @@
 },
 {
     "model": "sessions.session",
-    "pk": "aum7zs9e9kbhir58ennh2cif2rj3h68w",
+    "pk": "d9x1i7itlxu0bcirc7el1fsat07h6e8c",
     "fields": {
-        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rScI8:qTieU5-kQNyNl8VSfNbIbwx8hou6p3PTY2Qz4V8hr6w",
-        "expire_date": "2024-02-07T12:23:40.781Z"
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUtIK:pSsoedNplLp2cTKzvbzddEvM8n4M7pLHncowNcLH3b4",
+        "expire_date": "2024-02-13T18:57:16.294Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "e6evfvvddjdrl3jqpeaz9uhoiyvupa7e",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rWJ07:tYI1SIpM8bidTXjD6LzMQkvm77LMH7FevgdTJ8YXCYU",
+        "expire_date": "2024-02-17T16:36:19.212Z"
     }
 },
 {
@@ -1078,10 +1328,98 @@
 },
 {
     "model": "sessions.session",
-    "pk": "zw1zqr0ynlpploqvsfin62zn3g3xesd9",
+    "pk": "fshoi2thicnsqhfcxihaxfia8swptgjc",
     "fields": {
-        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rV9VJ:qDsxfSFF5YYdWrVS_xsR1qDrxQDtWlWw_wWl3oDvF4Y",
-        "expire_date": "2024-02-14T12:15:45.572Z"
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rWKbQ:D6R2mXjkau0kthuEDMr7Za_K3-rMSOIxFbL27hO21WA",
+        "expire_date": "2024-02-17T18:18:56.380Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "gwde5zi5pkpjm8prw4tkjt9mtio06zha",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUDS9:J5QiYE0v29OQKfPc_QRaz7NVSwiY9Tx6kHtyVAUWMqE",
+        "expire_date": "2024-02-11T22:16:37.362Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "jib7otvtyaoawt82bskiw0eyo7pcb45o",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUOxx:9zIATesAMfNERkiFoyxhoaofNZD_9bL9pCZ1yvnnDA8",
+        "expire_date": "2024-02-12T10:34:13.422Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "jphe5jgau2rq3coppsz9flg47bcgwhta",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rWKRE:ZkyeoTcAFpqmkhUvfSIWUdpyCxVphqNi6ESj1zcw0do",
+        "expire_date": "2024-02-17T18:08:24.957Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ksrkdco06sht67t8rvky04jeoq3scsoy",
+    "fields": {
+        "session_data": ".eJxVjEsOwjAMRO-SNYoax3UoS_acIUpjmxRQKvWzQtydVuoCdqN5b-ZtYlqXEtdZpjiwuRgwp9-uT_kpdQf8SPU-2jzWZRp6uyv2oLO9jSyv6-H-HZQ0l21NjlppEIMXAlYScKgSwAFoC6iBm-Apn5m2oIgeXOd1k7jDRhXN5wu4Gja5:1rLLL2:Paqh8GYzVeSAYz0zTfWCxSmvXVBkfi0opNN4EFNM3LM",
+        "expire_date": "2024-01-18T10:52:36.804Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "miivl4nkipd5wfkhdj1a2sdvybsarej2",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rX2hX:EqXAihXilge6XcInZf6Qhv9XRwO2ph2uYpqKS3JGNng",
+        "expire_date": "2024-02-19T17:24:11.393Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ovh09n0gjndz5imylrgiecb59ipp5w6h",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUONH:9MiGDZFHHxAeOfZx3EbowvpodBG8GrzgEaOY375PtUk",
+        "expire_date": "2024-02-12T09:56:19.430Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "roylt81f5s7cbqwr36okkc5lsjsfwhzq",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUVq1:bI9qaDtAkd5bk4-3xKdiBFsXq-2txxhzOOMcxO1XpfM",
+        "expire_date": "2024-02-12T17:54:29.163Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "sn3nv6rl25tvipjg0x5zbth9394nvzbg",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rX2je:TrCWSpzL8EDLyRWQGfeZJdq8l7NtJCxl8ZV_qqUX7xI",
+        "expire_date": "2024-02-19T17:26:22.077Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "t2a5qpgw5srshcvhya2iaua3kjn13z8g",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rUUUV:V-6doEjtDIitk3rkSTUMDRJHu3xNTS5d67UAd9u0Arw",
+        "expire_date": "2024-02-12T16:28:11.057Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uqnfpoiyihi1uzl0jlv9y3hcnycp3b7f",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rWKC4:9wmMnsdRwZhvfewmsdQRPoaE8131FpPSLhqmBR8uzM8",
+        "expire_date": "2024-02-17T17:52:44.692Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "xyx30o09wkw09u4pg2kacf31xjniwz0h",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlfc5g7a43OIAcKU4qxN1JpBTQvpl5b5FgW0vaGi9pyuIqtLj8bgj05HqA_IB6nyXNdV0mlIciT9rkMGd-3U7376BAK3vNxL0PwRmVRwiGXADqbAidtX60Lvoec1TOkzaUMSqtCRUSscdIeyY-X9zlN9U:1rVFID:7w0Sq94jJzmeVVa2XzcvrDL_WMkEolEt8cvX7E6y2h0",
+        "expire_date": "2024-02-14T18:26:37.638Z"
     }
 },
 {
@@ -1089,7 +1427,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$600000$AI4F3r90oOe3TGfbkTULYz$jOZwgf6nPGzTFpzWNJO1mrtVhzsGAtfP6KvWoTgSzso=",
-        "last_login": "2024-01-31T12:15:45.517Z",
+        "last_login": "2024-02-05T17:37:05.906Z",
         "is_superuser": true,
         "username": "manuel",
         "first_name": "",
@@ -1107,16 +1445,16 @@
     "model": "appFutbol.usuario",
     "pk": 2,
     "fields": {
-        "password": "pbkdf2_sha256$600000$BxVlxNlXjdcwkPmU8Uva97$K2j6F9/AVks4D8uu8jWW4YNQNuh+xL3Dz2X0BMw94Gk=",
-        "last_login": "2023-12-17T22:46:57.194Z",
+        "password": "pbkdf2_sha256$600000$AI4F3r90oOe3TGfbkTULYz$jOZwgf6nPGzTFpzWNJO1mrtVhzsGAtfP6KvWoTgSzso=",
+        "last_login": "2024-02-03T16:33:10Z",
         "is_superuser": false,
-        "username": "usuariocliente",
+        "username": "cliente",
         "first_name": "",
         "last_name": "",
         "email": "cliente@gmail.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2023-12-17T22:44:14.677Z",
+        "date_joined": "2023-12-17T22:44:14Z",
         "rol": 2,
         "groups": [
             1
@@ -1188,12 +1526,33 @@
     }
 },
 {
+    "model": "appFutbol.usuario",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$AI4F3r90oOe3TGfbkTULYz$jOZwgf6nPGzTFpzWNJO1mrtVhzsGAtfP6KvWoTgSzso=",
+        "last_login": "2024-02-03T16:33:30Z",
+        "is_superuser": false,
+        "username": "duenyorecinto",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-02-03T16:33:24Z",
+        "rol": 3,
+        "groups": [
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
     "model": "appFutbol.cliente",
     "pk": 1,
     "fields": {
         "usuario": 2,
-        "nivel": 0.0,
-        "telefono": ""
+        "nivel": 8.0,
+        "telefono": "661666666"
     }
 },
 {
@@ -1209,8 +1568,8 @@
     "model": "appFutbol.dueñorecinto",
     "pk": 1,
     "fields": {
-        "usuario": 3,
-        "telefono": ""
+        "usuario": 6,
+        "telefono": "661555555"
     }
 },
 {
@@ -1315,39 +1674,246 @@
     }
 },
 {
-    "model": "oauth2_provider.application",
-    "pk": 4,
+    "model": "appFutbol.datosusuario",
+    "pk": 1,
     "fields": {
-        "client_id": "cliente_id",
-        "user": 1,
-        "redirect_uris": "",
-        "post_logout_redirect_uris": "",
-        "client_type": "confidential",
-        "authorization_grant_type": "password",
-        "client_secret": "pbkdf2_sha256$600000$I0gynbMODv7sJHUiy2TinX$bl0RgaXzj16HP673rj+w8OeLbnBkxeaSESUzVwnBgMo=",
-        "name": "cliente",
-        "skip_authorization": false,
-        "created": "2024-01-31T12:17:18.460Z",
-        "updated": "2024-01-31T12:17:18.461Z",
-        "algorithm": ""
+        "descripcion": "Datos usuario api",
+        "posicion": "GOA",
+        "ubicacion": "La oliva",
+        "cliente": 1,
+        "partidos_jugados": [
+            1
+        ]
+    }
+},
+{
+    "model": "appFutbol.post",
+    "pk": 1,
+    "fields": {
+        "contenido": "Post de prueba para API",
+        "creador_post": 1
+    }
+},
+{
+    "model": "appFutbol.post",
+    "pk": 2,
+    "fields": {
+        "contenido": "Contenido post segundo para api",
+        "creador_post": 1
     }
 },
 {
     "model": "oauth2_provider.application",
-    "pk": 5,
+    "pk": 6,
     "fields": {
-        "client_id": "duenyorecinto_id",
+        "client_id": "client_id",
         "user": 1,
         "redirect_uris": "",
         "post_logout_redirect_uris": "",
         "client_type": "confidential",
         "authorization_grant_type": "password",
-        "client_secret": "pbkdf2_sha256$600000$lxA1vNnLg8H3xgnOyFMIfN$EYnmhb3qIgRdyVGmJlUFqChOUAd5O3UJFhih4dhB+i0=",
-        "name": "duenyorecinto",
+        "client_secret": "pbkdf2_sha256$600000$1HjMetBJBi9aAppwYepYju$/DV1yV7JPYnaYHi5kOG8ha8AHEbqrUszzwq+Vf1AMVA=",
+        "name": "appFutbol",
         "skip_authorization": false,
-        "created": "2024-01-31T12:17:41.244Z",
-        "updated": "2024-01-31T12:17:41.244Z",
+        "created": "2024-02-03T16:37:02.227Z",
+        "updated": "2024-02-03T16:37:02.227Z",
         "algorithm": ""
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 9,
+    "fields": {
+        "user": 6,
+        "source_refresh_token": null,
+        "token": "3yThv7zQsS6gf6xbDMqwEtJDluYnGU",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-04T02:38:25.525Z",
+        "scope": "read write groups",
+        "created": "2024-02-03T16:38:25.526Z",
+        "updated": "2024-02-03T16:38:25.526Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 10,
+    "fields": {
+        "user": 2,
+        "source_refresh_token": null,
+        "token": "yM9Fc7MU2Y5zAorc7h5MQjuiKT2qtV",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-04T02:38:47.367Z",
+        "scope": "read write groups",
+        "created": "2024-02-03T16:38:47.368Z",
+        "updated": "2024-02-03T16:38:47.368Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 11,
+    "fields": {
+        "user": 2,
+        "source_refresh_token": null,
+        "token": "bHDjJBLaIQh4QmFJ3jLv31ZcwNvnrx",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-05T20:23:49.541Z",
+        "scope": "read write groups",
+        "created": "2024-02-05T10:23:49.542Z",
+        "updated": "2024-02-05T10:23:49.542Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 12,
+    "fields": {
+        "user": 6,
+        "source_refresh_token": null,
+        "token": "HAa8vZJNQamHnE9INR1ctP5JSUeODo",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-05T20:24:08.594Z",
+        "scope": "read write groups",
+        "created": "2024-02-05T10:24:08.595Z",
+        "updated": "2024-02-05T10:24:08.595Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 13,
+    "fields": {
+        "user": 2,
+        "source_refresh_token": null,
+        "token": "SgWfqRMTdCgPPTJrhI7F6cRYnE9FTv",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-05T20:28:49.019Z",
+        "scope": "read write groups",
+        "created": "2024-02-05T10:28:49.020Z",
+        "updated": "2024-02-05T10:28:49.020Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 14,
+    "fields": {
+        "user": 6,
+        "source_refresh_token": null,
+        "token": "NBW9jxjQlwyT1LaggKGjGJUVDmIKuU",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-05T20:32:18.993Z",
+        "scope": "read write groups",
+        "created": "2024-02-05T10:32:18.994Z",
+        "updated": "2024-02-05T10:32:18.994Z"
+    }
+},
+{
+    "model": "oauth2_provider.accesstoken",
+    "pk": 15,
+    "fields": {
+        "user": 6,
+        "source_refresh_token": null,
+        "token": "5O1hWoTEiokdSUyREN5AUiDTllL67N",
+        "id_token": null,
+        "application": 6,
+        "expires": "2024-02-06T01:58:46.733Z",
+        "scope": "read write groups",
+        "created": "2024-02-05T15:58:46.734Z",
+        "updated": "2024-02-05T15:58:46.734Z"
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 9,
+    "fields": {
+        "user": 6,
+        "token": "Iz9BxNCAg4emC0OapiBLkdR9R4b3Pv",
+        "application": 6,
+        "access_token": 9,
+        "created": "2024-02-03T16:38:25.528Z",
+        "updated": "2024-02-03T16:38:25.528Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 10,
+    "fields": {
+        "user": 2,
+        "token": "WFDHxJKb77QtV9Pttu5xYqVLdOumJG",
+        "application": 6,
+        "access_token": 10,
+        "created": "2024-02-03T16:38:47.370Z",
+        "updated": "2024-02-03T16:38:47.370Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 11,
+    "fields": {
+        "user": 2,
+        "token": "kT8Qh4syiFMSUZ6fjp8embY1V5xiUW",
+        "application": 6,
+        "access_token": 11,
+        "created": "2024-02-05T10:23:49.546Z",
+        "updated": "2024-02-05T10:23:49.546Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 12,
+    "fields": {
+        "user": 6,
+        "token": "KncXmYDmACh2DACBmNmvG6t8CSsC6y",
+        "application": 6,
+        "access_token": 12,
+        "created": "2024-02-05T10:24:08.597Z",
+        "updated": "2024-02-05T10:24:08.597Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 13,
+    "fields": {
+        "user": 2,
+        "token": "Nn0h35fuiHwVKXQm2Oi3IULeilJz0H",
+        "application": 6,
+        "access_token": 13,
+        "created": "2024-02-05T10:28:49.022Z",
+        "updated": "2024-02-05T10:28:49.022Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 14,
+    "fields": {
+        "user": 6,
+        "token": "8JtIwO4k2fu7rsDc9WiSRNCDY4asD9",
+        "application": 6,
+        "access_token": 14,
+        "created": "2024-02-05T10:32:18.996Z",
+        "updated": "2024-02-05T10:32:18.996Z",
+        "revoked": null
+    }
+},
+{
+    "model": "oauth2_provider.refreshtoken",
+    "pk": 15,
+    "fields": {
+        "user": 6,
+        "token": "uPFX8JVFWQXlvE24SylmMfrAAsnFDy",
+        "application": 6,
+        "access_token": 15,
+        "created": "2024-02-05T15:58:46.736Z",
+        "updated": "2024-02-05T15:58:46.736Z",
+        "revoked": null
     }
 }
 ]
