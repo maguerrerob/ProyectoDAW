@@ -63,7 +63,6 @@ def recinto_buscar_avanzado(request):
     if(len(request.query_params) > 0):
         formulario = BusquedaAvanzadaRecintoFormGen(request.GET)
         if formulario.is_valid():
-            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
 
             #Obtenemos los filtros
             nombre = formulario.cleaned_data.get("nombre")
@@ -74,7 +73,6 @@ def recinto_buscar_avanzado(request):
                and telefono != ""
                and ubicacion != ""):
                 QSrecinto = Recinto.objects.filter(Q(nombre__contains=nombre) | Q(telefono=telefono) | Q(ubicacion=ubicacion))
-                mensaje_busqueda += "Nombre que contenga: " + nombre + ", ubicación que corresponda a " + ubicacion + " y teléfono: " + telefono + "\n"
 
             recintos = QSrecinto.all()
             
@@ -85,6 +83,71 @@ def recinto_buscar_avanzado(request):
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def datosusuario_busqueda_avanzada(request):
+    if(len(request.query_params) > 0):
+        formulario = BusquedaAvanzadaDatosusuarioFormGen(request.GET)
+        if formulario.is_valid():
+
+            #Obtenemos los filtros
+            descripcion = formulario.cleaned_data.get("descripcion")
+            posiciones = formulario.cleaned_data.get("posiciones")
+            ubicacion = formulario.cleaned_data.get("ubicacion")
+
+            if(descripcion != "" and ubicacion != ""):
+                QSdatosusuario = DatosUsuario.objects.filter(Q(descripcion__contains=descripcion) | Q(ubicacion=ubicacion))
+
+            if(len(posiciones) > 0):
+                filtroOR = Q(posicion=posiciones[0])
+                for pos in posiciones[1:]:
+                    filtroOR |= Q(posicion=pos)
+                
+                QSdatosusuario =  QSdatosusuario.filter(filtroOR)
+
+            datosusuarios = QSdatosusuario.all()
+            
+            serializer = DatosUsuariosSerializar(datosusuarios, many=True)
+
+            return Response(serializer.data)
+        else:
+            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET'])
+def partido_buscar_avanzado(request):
+    if(len(request.query_params) > 0):
+        formulario = BusquedaAvanzadaPartidoForm(request.query_params)
+        if formulario.is_valid():
+            QSpartido = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+
+            #Obtenemos los filtros
+            estado_form = formulario.cleaned_data.get("estado_form")
+            estilos_form = formulario.cleaned_data.get("estilos_form")
+
+            if (not estado_form is None):
+                QSpartido = QSpartido.filter(estado=estado_form)
+
+            if(len(estilos_form) > 0):
+                mensaje_busqueda +=" El estilos sea "+estilos_form[0]
+                filtroOR = Q(estilos=estilos_form[0])
+                for est in estilos_form[1:]:
+                    mensaje_busqueda += " o "+estilos_form[1]
+                    filtroOR |= Q(estilos=est)
+                mensaje_busqueda += "\n"
+                QSpartido =  QSpartido.filter(filtroOR)
+            
+            partidos = QSpartido.all()
+            serializer = PartidoSerializer(partidos, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
     
 
 # Listar clientes

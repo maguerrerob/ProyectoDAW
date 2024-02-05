@@ -52,7 +52,7 @@ class PartidoModelForm(ModelForm):
     hora= forms.ChoiceField(choices=horas_choices,
                             widget=forms.Select(),
                             label="Escoja una hora")
-    
+
     class Meta:
         model = Partido
         fields = ["hora","tipo", "estilo", "creador", "campo_reservado", "usuarios_jugadores"]
@@ -89,12 +89,12 @@ class PartidoModelForm(ModelForm):
 
         if len(usuarios_jugadores) > 10 and estilo == "5":
             self.cleaned_data("usuarios_jugadores", "Error, has elegido más jugadores de la cuenta")
-        
+
         if len(usuarios_jugadores) > 14 and estilo == "7":
-            self.cleaned_data("usuarios_jugadores", "Error, has elegido más jugadores de la cuenta")         
-        
+            self.cleaned_data("usuarios_jugadores", "Error, has elegido más jugadores de la cuenta")
+
         if len(usuarios_jugadores) > 22 and estilo == "11":
-            self.cleaned_data("usuarios_jugadores", "Error, has elegido más jugadores de la cuenta")   
+            self.cleaned_data("usuarios_jugadores", "Error, has elegido más jugadores de la cuenta")
 
 
         #Especificamos si devuelve bien los todos los datos (si hay alguno  mal devulve False)
@@ -102,7 +102,7 @@ class PartidoModelForm(ModelForm):
 
 
 class PartidoModelFormRequest(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(PartidoModelFormRequest, self).__init__(*args, **kwargs)
@@ -113,7 +113,7 @@ class PartidoModelFormRequest(forms.Form):
             required=True,
             empty_label="Ninguna"
         )
-    
+
 
 class BusquedaAvanzadaPartidoForm(forms.Form):
     estado_form = forms.ChoiceField(choices=Partido.ESTADO,
@@ -125,10 +125,10 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
                                        )
 
     def clean(self):
- 
+
         #Validamos con el modelo actual
         super().clean()
-        
+
         #Obtenemos los campos
 
         estado_form = self.cleaned_data.get("estado_form")
@@ -151,13 +151,13 @@ class RecintoModelForm(ModelForm):
             "nombre": forms.TextInput(attrs={"placeholder": "Introduce nombre del recinto"}),
             "dueño_recinto": forms.HiddenInput()
         }
-    
+
     def clean(self):
         super().clean()
-        
+
         nombre = self.cleaned_data.get("nombre")
         telefono = self.cleaned_data.get("telefono")
-        
+
         recintoNombre = Recinto.objects.filter(nombre=nombre).first()
         if(not recintoNombre is None):
             if(not self.instance is None and recintoNombre.id == self.instance.id):
@@ -167,12 +167,12 @@ class RecintoModelForm(ModelForm):
 
         if len(telefono) < 9:
             self.add_error("telefono", "Error, formato de teléfono incorrecto")
-            
+
         return self.cleaned_data
 
 
 class RecintoModelFormRequest(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(RecintoModelFormRequest, self).__init__(*args, **kwargs)
@@ -183,8 +183,8 @@ class RecintoModelFormRequest(forms.Form):
             required=True,
             empty_label="Ninguna"
         )
-    
-    
+
+
 class BusquedaRecintoForm(forms.Form):
     textoBusqueda = forms.CharField(required=True)
 
@@ -195,10 +195,10 @@ class BusquedaAvanzadaRecintoFormGen(forms.Form):
     telefono = forms.CharField(required=True)
 
     def clean(self):
- 
+
         #Validamos con el modelo actual
         super().clean()
-        
+
         #Obtenemos los campos
 
         nombre = self.cleaned_data.get("nombre")
@@ -226,7 +226,7 @@ class BusquedaAvanzadaRecintoForm(ModelForm):
     def clean(self):
         #Validamos con el modelo actual
         super().clean()
-        
+
         #Obtenemos los campos
         nombre = self.cleaned_data.get("nombre")
         telefono = self.cleaned_data.get("telefono")
@@ -237,7 +237,7 @@ class BusquedaAvanzadaRecintoForm(ModelForm):
             self.add_error("telefono", "Debe introducir al menos un campo")
 
         return self.cleaned_data
-    
+
 
 # FORMULARIOS - RESULTADO
 
@@ -245,10 +245,10 @@ class ResultadoModelForm(ModelForm):
     class Meta:
         model = Resultado
         fields = ['goles_local', 'goles_visitante']
-    
+
     def clean(self):
         super().clean()
-        
+
         goles_local = self.cleaned_data.get("goles_local")
         goles_visitante = self.cleaned_data.get("goles_visitante")
 
@@ -287,7 +287,39 @@ class DatosUsuarioModelForm(ModelForm):
                 self.add_error('cliente','Ya se registraron datos de este usuario')
 
         return self.cleaned_data
-    
+
+
+class BusquedaAvanzadaDatosusuarioFormGen(forms.Form):
+    descripcion = forms.CharField(required=True)
+    posiciones = forms.MultipleChoiceField(choices=DatosUsuario.POSICION,
+                                required=False,
+                                widget=forms.CheckboxSelectMultiple())
+    ubicacion = forms.CharField(required=True)
+
+    def clean(self):
+
+        #Validamos con el modelo actual
+        super().clean()
+
+        #Obtenemos los campos
+
+        descripcion = self.cleaned_data.get("descripcion")
+        posiciones = self.cleaned_data.get("posiciones")
+        ubicacion = self.cleaned_data.get("ubicacion")
+
+        if (descripcion == ""
+            and len(posiciones) == ""
+            and ubicacion == ""):
+            self.add_error("nombre", "Debe introducir al menos un campo")
+            self.add_error("posiciones", "Debe introducir al menos un campo")
+            self.add_error("ubicacion", "Debe introducir al menos un campo")
+        else:
+            if (descripcion != "" and len(descripcion) < 3):
+                self.add_error("descripcion", "Error, mínimo debe contener 3 carácteres")
+
+        return self.cleaned_data
+
+
 
 # FORMULARIOS EXAMEN
 class PromocionModelForm(ModelForm):
@@ -297,7 +329,7 @@ class PromocionModelForm(ModelForm):
         widgets = {
             "miusuario": forms.HiddenInput()
         }
-        
+
     def clean(self):
         super().clean()
         nombre = self.cleaned_data.get("nombre")
@@ -305,12 +337,12 @@ class PromocionModelForm(ModelForm):
         descuento = self.cleaned_data.get("descuento")
         fecha_promocion = self.cleaned_data.get("fecha_promocion")
         miusuario = self.cleaned_data.get("miusuario")
-        
-      
-        
+
+
+
         if len(descripcion) < 50:
             self.add_error('descripcion','Al menos debes indicar 50 caracteres')
-            
+
 
 class BusquedaAvanzadaPromocionForm(forms.Form):
     textoBusqueda = forms.CharField(required=False)
@@ -319,25 +351,25 @@ class BusquedaAvanzadaPromocionForm(forms.Form):
                                 required=False,
                                 widget= forms.SelectDateWidget(years=range(1990,2024))
                                 )
-    
+
     fecha_hasta = forms.DateField(label="Fecha Hasta",
                                   required=False,
                                   widget= forms.SelectDateWidget(years=range(1990,2024))
                                   )
 
     def clean(self):
- 
+
         #Validamos con el modelo actual
         super().clean()
-        
+
         #Obtenemos los campos
         textoBusqueda = self.cleaned_data.get('textoBusqueda')
-        
+
         fecha_desde = forms.DateField(label="Fecha Desde",
                                 required=False,
                                 widget= forms.SelectDateWidget(years=range(1990,2023))
                                 )
-        
+
         fecha_hasta = forms.DateField(label="Fecha Desde",
                                   required=False,
                                   widget= forms.SelectDateWidget(years=range(1990,2023))
