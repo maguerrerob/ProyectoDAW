@@ -85,11 +85,16 @@ def recinto_buscar_avanzado(request):
                 ubicacion = formulario.cleaned_data.get("ubicacion")
                 telefono = formulario.cleaned_data.get("telefono")
 
-                if(nombre != ""
-                and telefono != ""
-                and ubicacion != ""):
-                    QSrecinto = Recinto.objects.filter(Q(nombre__contains=nombre) | Q(telefono=telefono) | Q(ubicacion=ubicacion))
-
+                QSrecinto = Recinto.objects.all()
+                
+                if(nombre != ""):
+                    QSrecinto = QSrecinto.filter(nombre__contains=nombre)
+                    print("se metioooooooooooooooooooo")
+                if (ubicacion != ""):
+                    QSrecinto = QSrecinto.filter(ubicacion__contains=ubicacion)
+                if (telefono != ""):
+                    QSrecinto = QSrecinto.filter(telefono__contains=telefono)
+                    
                 recintos = QSrecinto.all()
                 
                 serializer = RecintoSerializer(recintos, many=True)
@@ -113,18 +118,18 @@ def datosusuario_busqueda_avanzada(request):
 
                 #Obtenemos los filtros
                 descripcion = formulario.cleaned_data.get("descripcion")
-                posiciones = formulario.cleaned_data.get("posiciones")
+                posicion = formulario.cleaned_data.get("posicion")
                 ubicacion = formulario.cleaned_data.get("ubicacion")
 
                 if(descripcion != "" and ubicacion != ""):
                     QSdatosusuario = DatosUsuario.objects.filter(Q(descripcion__contains=descripcion) | Q(ubicacion=ubicacion))
-
-                if(len(posiciones) > 0):
-                    filtroOR = Q(posicion=posiciones[0])
-                    for pos in posiciones[1:]:
+                
+                if(len(posicion) > 0):
+                    filtroOR = Q(posicion=posicion[0])
+                    for pos in posicion[1:]:
                         filtroOR |= Q(posicion=pos)
                     
-                    QSdatosusuario =  QSdatosusuario.filter(filtroOR)
+                    QSdatosusuario =  DatosUsuario.objects.filter(filtroOR)
 
                 datosusuarios = QSdatosusuario.all()
                 
@@ -148,23 +153,20 @@ def partido_buscar_avanzado(request):
                 QSpartido = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
 
                 #Obtenemos los filtros
-                estado_form = formulario.cleaned_data.get("estado_form")
-                estilos_form = formulario.cleaned_data.get("estilos_form")
+                estado = formulario.cleaned_data.get("estado")
+                estilo = formulario.cleaned_data.get("estilo")
 
-                if (not estado_form is None):
-                    QSpartido = QSpartido.filter(estado=estado_form)
+                if (not estado is None):
+                    QSpartido = QSpartido.filter(estado=estado)
 
-                if(len(estilos_form) > 0):
-                    mensaje_busqueda +=" El estilos sea "+estilos_form[0]
-                    filtroOR = Q(estilos=estilos_form[0])
-                    for est in estilos_form[1:]:
-                        mensaje_busqueda += " o "+estilos_form[1]
-                        filtroOR |= Q(estilos=est)
-                    mensaje_busqueda += "\n"
+                if(len(estilo) > 0):
+                    filtroOR = Q(estilo=estilo[0])
+                    for est in estilo[1:]:
+                        filtroOR |= Q(estilo=est)
                     QSpartido =  QSpartido.filter(filtroOR)
                 
                 partidos = QSpartido.all()
-                serializer = PartidoSerializer(partidos, many=True)
+                serializer = PartidoSerializerMejorada(partidos, many=True)
                 return Response(serializer.data)
             else:
                 return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)

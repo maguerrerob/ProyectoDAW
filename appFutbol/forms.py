@@ -116,10 +116,10 @@ class PartidoModelFormRequest(forms.Form):
 
 
 class BusquedaAvanzadaPartidoForm(forms.Form):
-    estado_form = forms.ChoiceField(choices=Partido.ESTADO,
+    estado = forms.ChoiceField(choices=Partido.ESTADO,
                                   required=False)
 
-    estilos_form = forms.MultipleChoiceField(choices=Partido.ESTILO,
+    estilo = forms.MultipleChoiceField(choices=Partido.ESTILO,
                                        required=False,
                                        widget=forms.CheckboxSelectMultiple()
                                        )
@@ -131,13 +131,13 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
 
         #Obtenemos los campos
 
-        estado_form = self.cleaned_data.get("estado_form")
-        estilos_form = self.cleaned_data.get("estilos_form")
+        estado = self.cleaned_data.get("estado")
+        estilo = self.cleaned_data.get("estilo")
 
-        if (len(estilos_form) == 0
-            and estado_form is None):
+        if (len(estilo) == 0
+            and estado is None):
             self.add_error("estados", "Debe introducir al menos un campo")
-            self.add_error("estilos_form", "Debe introducir al menos un campo")
+            self.add_error("estilo", "Debe introducir al menos un campo")
 
         return self.cleaned_data
 
@@ -190,9 +190,9 @@ class BusquedaRecintoForm(forms.Form):
 
 # Formulario genérico
 class BusquedaAvanzadaRecintoFormGen(forms.Form):
-    nombre = forms.CharField(required=True)
-    ubicacion = forms.CharField(required=True)
-    telefono = forms.CharField(required=True)
+    nombre = forms.CharField(required=False)
+    ubicacion = forms.CharField(required=False)
+    telefono = forms.CharField(required=False)
 
     def clean(self):
 
@@ -290,11 +290,11 @@ class DatosUsuarioModelForm(ModelForm):
 
 
 class BusquedaAvanzadaDatosusuarioFormGen(forms.Form):
-    descripcion = forms.CharField(required=True)
-    posiciones = forms.MultipleChoiceField(choices=DatosUsuario.POSICION,
+    descripcion = forms.CharField(required=False)
+    posicion = forms.MultipleChoiceField(choices=DatosUsuario.POSICION,
                                 required=False,
                                 widget=forms.CheckboxSelectMultiple())
-    ubicacion = forms.CharField(required=True)
+    ubicacion = forms.CharField(required=False)
 
     def clean(self):
 
@@ -304,18 +304,15 @@ class BusquedaAvanzadaDatosusuarioFormGen(forms.Form):
         #Obtenemos los campos
 
         descripcion = self.cleaned_data.get("descripcion")
-        posiciones = self.cleaned_data.get("posiciones")
+        posicion = self.cleaned_data.get("posicion")
         ubicacion = self.cleaned_data.get("ubicacion")
 
         if (descripcion == ""
-            and len(posiciones) == ""
+            and len(posicion) == ""
             and ubicacion == ""):
             self.add_error("nombre", "Debe introducir al menos un campo")
-            self.add_error("posiciones", "Debe introducir al menos un campo")
+            self.add_error("posicion", "Debe introducir al menos un campo")
             self.add_error("ubicacion", "Debe introducir al menos un campo")
-        else:
-            if (descripcion != "" and len(descripcion) < 3):
-                self.add_error("descripcion", "Error, mínimo debe contener 3 carácteres")
 
         return self.cleaned_data
 
