@@ -121,15 +121,20 @@ def datosusuario_busqueda_avanzada(request):
                 posicion = formulario.cleaned_data.get("posicion")
                 ubicacion = formulario.cleaned_data.get("ubicacion")
 
-                if(descripcion != "" and ubicacion != ""):
-                    QSdatosusuario = DatosUsuario.objects.filter(Q(descripcion__contains=descripcion) | Q(ubicacion=ubicacion))
+                QSdatosusuario = DatosUsuario.objects.all()
+
+                if(descripcion != ""):
+                    QSdatosusuario = QSdatosusuario.filter(descripcion__contains=descripcion)
+
+                if (ubicacion != ""):
+                    QSdatosusuario = QSdatosusuario.filter(ubicacion__contains=ubicacion)
                 
                 if(len(posicion) > 0):
                     filtroOR = Q(posicion=posicion[0])
                     for pos in posicion[1:]:
                         filtroOR |= Q(posicion=pos)
                     
-                    QSdatosusuario =  DatosUsuario.objects.filter(filtroOR)
+                    QSdatosusuario =  QSdatosusuario.filter(filtroOR)
 
                 datosusuarios = QSdatosusuario.all()
                 
@@ -180,12 +185,12 @@ def partido_buscar_avanzado(request):
 # Listar clientes
 @api_view(['GET'])
 def clientes_list(request):
-    if (request.user.has_perm("appFutbol.view_cliente")):
-        clientes = Cliente.objects.all()
-        serializer = ClienteSerializer(clientes, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+    # if (request.user.has_perm("appFutbol.view_cliente")):
+    clientes = Cliente.objects.all()
+    serializer = ClienteSerializer(clientes, many=True)
+    return Response(serializer.data)
+    # else:
+    #     return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 # Create partido API
 @api_view(['POST'])
