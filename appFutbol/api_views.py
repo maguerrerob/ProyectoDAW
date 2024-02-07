@@ -39,12 +39,9 @@ def datosusuarios_list(request):
 
 @api_view(["GET"])
 def recintos_list(request):
-    if (request.user.has_perm("appFutbol.view_recinto")):
-        recintos = Recinto.objects.all()
-        serializer = RecintoSerializer(recintos, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+    recintos = Recinto.objects.all()
+    serializer = RecintoSerializer(recintos, many=True)
+    return Response(serializer.data)
 
 # Consulta con JWT
 @api_view(["GET"])
@@ -185,12 +182,9 @@ def partido_buscar_avanzado(request):
 # Listar clientes
 @api_view(['GET'])
 def clientes_list(request):
-    # if (request.user.has_perm("appFutbol.view_cliente")):
     clientes = Cliente.objects.all()
     serializer = ClienteSerializer(clientes, many=True)
     return Response(serializer.data)
-    # else:
-    #     return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 # Create partido API
 @api_view(['POST'])
