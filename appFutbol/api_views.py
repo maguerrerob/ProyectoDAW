@@ -198,3 +198,19 @@ def partido_create(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['PUT'])
+def partido_editar_api(request,partido_id):
+    partido = Partido.objects.get(id=partido_id)
+    partidoCreateSerializer = PartidoSerializerCreate(data=request.data,instance=partido)
+    if partidoCreateSerializer.is_valid():
+        try:
+            partidoCreateSerializer.save()
+            return Response("Partido EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(partidoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from datetime import datetime
+from datetime import time
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,6 +89,16 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
                   "creador", "campo_reservado", "usuarios_jugadores"
                   ]
         
+    def validate_hora(self,hora):
+        hora_reserva = self.initial_data["hora"]
+        hora_datetime = datetime.strptime(hora_reserva, "%H:%M")
+        hora_siete_datetime = datetime.strptime("7:00", "%H:%M")
+        print(type(hora_siete_datetime))
+        print(hora_datetime)
+        if hora_datetime < hora_siete_datetime:
+            raise serializers.ValidationError("Error, no puedes seleccionar esa hora")
+        return hora
+
     def validate_campo_reservado(self,campo_reservado):
         horareserva = self.initial_data["hora"]
         hora_datetime = datetime.strptime(horareserva, "%H:%M")
@@ -98,18 +109,6 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError('Ya existe una reserva a esa hora en ese campo')
 
         return campo_reservado
-    
-    def validate_hora(self,hora):
-        print(type(hora))
-        hora_siete_datetime = datetime.strptime("7:00", "%H:%M")
-        print(type(hora_siete_datetime))
-        if hora < hora_siete_datetime:
-            raise serializers.ValidationError("Error, no puedes seleccionar esa hora")
-        return hora
         
-    # def validate_campo_reservado(self,campo_reservado):
-    #     if len(campo_reservado) < 1:
-    #         raise serializers.ValidationError("Debe seleccionar al menos 1 campo")
-    #     return campo_reservado
     
     # self.initial_data obtiene los datos sin serializar(string)

@@ -17,4 +17,5 @@ urlpatterns = [
     path("partidos/busqueda_avanzada", partido_buscar_avanzado),
     path("partido/crear", partido_create),
     path("clientes/listar", clientes_list),
+    path("partido/editar", partido_editar_api)
 ]
