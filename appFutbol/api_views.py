@@ -189,15 +189,12 @@ def clientes_list(request):
 # Create partido API
 @api_view(['POST'])
 def partido_create(request):
-    if (request.user.has_perm("appFutbol.add_partido")):
-        serializers = PartidoSerializerCreate(data=request.data)
-        if serializers.is_valid():
-            try:
-                serializers.save()
-                return Response("Partido CREADO")
-            except Exception as error:
-                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializers = PartidoSerializerCreate(data=request.data)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Partido CREADO")
+        except Exception as error:
+            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
