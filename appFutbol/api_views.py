@@ -186,6 +186,16 @@ def clientes_list(request):
     serializer = ClienteSerializer(clientes, many=True)
     return Response(serializer.data)
 
+
+# Obtener un partido (para poder hacer PUT y PATCH)
+@api_view(['GET'])
+def partido_obtener(request,partido_id):
+    partido = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+    partido = partido.get(id=partido_id)
+    serializer = PartidoSerializerMejorada(partido)
+    return Response(serializer.data)
+
+
 # Create partido API
 @api_view(['POST'])
 def partido_create(request):

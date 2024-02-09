@@ -6,6 +6,8 @@ urlpatterns = [
     path('partidos', partido_list),
     # Consulta mejorada
     path("partidos_mejorada", partido_list_mejorada),
+    path('partido/<int:partido_id>',partido_obtener),
+    path("partido/editar/<int:partido_id>", partido_editar_api),
     # URLs token oauth2 mejorada
     path("datosusuarios", datosusuarios_list),
     path("recintos/listar", recintos_list),
@@ -17,5 +19,4 @@ urlpatterns = [
     path("partidos/busqueda_avanzada", partido_buscar_avanzado),
     path("partido/crear", partido_create),
     path("clientes/listar", clientes_list),
-    path("partido/editar", partido_editar_api)
 ]
