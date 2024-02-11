@@ -19,4 +19,10 @@ urlpatterns = [
     path("partidos/busqueda_avanzada", partido_buscar_avanzado),
     path("partido/crear", partido_create),
     path("clientes/listar", clientes_list),
+    path("duenyosrecintos/listar", duenyosrecintos_list),
+    path("recinto/create", recinto_create),
+    path("datosusuario/create", datosusuario_create),
+    path("datosusuario/eliminar/<int:datosusuario_id>", datosusuario_eliminar),
+    path("recinto/eliminar/<int:recinto_id>", recinto_eliminar),
+    path("partido/eliminar/<int:partido_id>", partido_eliminar)
 ]

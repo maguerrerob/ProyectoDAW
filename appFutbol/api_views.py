@@ -186,17 +186,23 @@ def clientes_list(request):
     serializer = ClienteSerializer(clientes, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def duenyosrecintos_list(request):
+    duenyosrecintos = Dueñorecinto.objects.all()
+    serializer = DuenyoRecintoSerializer(duenyosrecintos, many=True)
+    return Response(serializer.data)
+
 
 # Obtener un partido (para poder hacer PUT y PATCH)
 @api_view(['GET'])
 def partido_obtener(request,partido_id):
-    partido = Partido.objects.select_related("creador", "campo_reservado").prefetch_related("usuarios_jugadores")
+    partido = Partido.objects.all()
     partido = partido.get(id=partido_id)
     serializer = PartidoSerializerMejorada(partido)
     return Response(serializer.data)
 
 
-# Create partido API
+# Create Partido API
 @api_view(['POST'])
 def partido_create(request):
     serializers = PartidoSerializerCreate(data=request.data)
@@ -213,14 +219,74 @@ def partido_create(request):
 @api_view(['PUT'])
 def partido_editar_api(request,partido_id):
     partido = Partido.objects.get(id=partido_id)
-    partidoCreateSerializer = PartidoSerializerCreate(data=request.data,instance=partido)
-    if partidoCreateSerializer.is_valid():
+    serializers = PartidoSerializerCreate(data=request.data,instance=partido)
+    print("Print de partido \n")
+    print(partido)
+    print("\n Print de serializers \n")
+    print(serializers)
+    if serializers.is_valid():
         try:
-            partidoCreateSerializer.save()
+            PartidoSerializerCreate.save()
             return Response("Partido EDITADO")
         except serializers.ValidationError as error:
             return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
-        return Response(partidoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(PartidoSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['DELETE'])
+def partido_eliminar(request, partido_id):
+    partido = Partido.objects.get(id=partido_id)
+    try:
+        partido.delete()
+        return Response("Partido eliminado")
+    except Exception as error:
+        return Response(error, status=status)
+
+
+# CRUD Recinto API
+@api_view(['POST'])
+def recinto_create(request):
+    serializers = RecintoSerializerCreate(data=request.data)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Recinto CREADO")
+        except Exception as error:
+            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['DELETE'])
+def recinto_eliminar(request, recinto_id):
+    datosusuario = Recinto.objects.get(id=recinto_id)
+    try:
+        datosusuario.delete()
+        return Response("Recinto eliminado")
+    except Exception as error:
+        return Response(error, status=status)
+
+    
+
+# CRUD Datosusuario API
+@api_view(['POST'])
+def datosusuario_create(request):
+    serializers = DatosUsuarioSerializerCreate(data=request.data)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Datos usuario CREADO")
+        except Exception as error:
+            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['DELETE'])
+def datosusuario_eliminar(request, datosusuario_id):
+    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+    try:
+        datosusuario.delete()
+        return Response("Dato de usuario eliminado")
+    except Exception as error:
+        return Response(error, status=status)

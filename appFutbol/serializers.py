@@ -112,3 +112,47 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
         
     
     # self.initial_data obtiene los datos sin serializar(string)
+
+class RecintoSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Recinto
+        fields = [
+            "nombre", "ubicacion",
+            "telefono", "dueño_recinto"
+        ]
+
+    def validate_telefono(self, telefono):
+        if len(telefono) < 9:
+            raise serializers.ValidationError("Error, el teléfono debe tener min 9 numeros")
+        
+        return telefono
+    
+class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = DatosUsuario
+        fields = [
+            "descripcion", "posicion",
+            "ubicacion", "cliente"
+        ]
+
+    def validate_descripcion(self, descripcion):
+        if len(descripcion) > 150:
+            raise serializers.ValidationError("Error, la descripcion pasa de los 150 carácteres")
+        
+        return descripcion
+    
+    def validate_posicion(self, posicion):
+        print("posicionnnnnnnnnnnn")
+        print(type(posicion))
+        print(self.initial_data["posicion"])
+        # Pongo mayor de 3 porque posición devuelve la clave del diccionario posición (DEF o STR, etc)
+        if len(posicion) > 3:
+            raise serializers.ValidationError("Error, no puedes tener más de 3 posiciones")
+        
+        return posicion
+    
+    def validate_ubicacion(self, ubicacion):
+        if len(ubicacion) > 80:
+            raise serializers.ValidationError("Error, ubicación con más de 80 carácteres")
+        
+        return ubicacion
