@@ -391,3 +391,21 @@ class FileDownload(APIView):
         else:
             # Si el archivo no existe, devolver una respuesta de error
             return Response("El archivo solicitado no existe", status=404)
+        
+class DeleteFile(APIView):
+    def delete(self, request, nombre_archivo):
+        # Ruta al directorio de medios
+        media_dir = settings.MEDIA_ROOT
+
+        # Ruta al archivo solicitado
+        ruta_archivo = os.path.join(media_dir, nombre_archivo)
+
+        # Verificar si el archivo existe
+        if os.path.exists(ruta_archivo):
+            try:
+                os.remove(ruta_archivo)
+                return Response({"mensaje": f"El archivo {nombre_archivo} ha sido eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
+            except Exception as e:
+                return Response({"detalle": f"No se pudo eliminar el archivo: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({"detalle": "El archivo solicitado no existe"}, status=status.HTTP_404_NOT_FOUND)

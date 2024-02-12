@@ -31,4 +31,5 @@ urlpatterns = [
     path("datosusuario/eliminar/<int:datosusuario_id>", datosusuario_eliminar),
     path('upload-file/', FileUploadAPIView.as_view(), name='upload-file'),
     path('descargar/<str:nombre_archivo>/', FileDownload.as_view(), name='descargar_archivo'),
+    path('eliminar-archivo/<str:nombre_archivo>/', DeleteFile.as_view(), name='eliminar_archivo'),
 ]
