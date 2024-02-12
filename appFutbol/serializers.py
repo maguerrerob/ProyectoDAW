@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from datetime import datetime
 from datetime import time
+from .models import UploadedFile
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -156,3 +157,9 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("Error, ubicación con más de 80 carácteres")
         
         return ubicacion
+    
+
+class FileUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadedFile
+        fields = ('file', 'uploaded_on',)

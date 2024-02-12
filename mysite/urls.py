@@ -19,6 +19,8 @@ from django.urls import path, include
 #     TokenObtainPairView,
 #     TokenRefreshView,
 # )
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +32,8 @@ urlpatterns = [
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 from django.conf.urls import handler400,handler404,handler403,handler500
 handler404 = "appFutbol.views.mi_error_400"

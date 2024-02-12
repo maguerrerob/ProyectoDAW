@@ -6,6 +6,12 @@ from .forms import *
 from rest_framework import status
 from django.db.models import Q,Prefetch
 from django.shortcuts import render,redirect
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.views import APIView
+import os
+from django.conf import settings
+from django.http import HttpResponse
+
 
 # Consulta sencilla a modelo principal
 @api_view(["GET"])
@@ -193,15 +199,6 @@ def duenyosrecintos_list(request):
     return Response(serializer.data)
 
 
-# Obtener un partido (para poder hacer PUT y PATCH)
-@api_view(['GET'])
-def partido_obtener(request,partido_id):
-    partido = Partido.objects.all()
-    partido = partido.get(id=partido_id)
-    serializer = PartidoSerializerMejorada(partido)
-    return Response(serializer.data)
-
-
 # Create Partido API
 @api_view(['POST'])
 def partido_create(request):
@@ -215,15 +212,18 @@ def partido_create(request):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+# Obtener un partido (para poder hacer PUT y PATCH)
+@api_view(['GET'])
+def partido_obtener(request,partido_id):
+    partido = Partido.objects.select_related("creador", "campo_reservado")
+    partido = partido.get(id=partido_id)
+    serializer = PartidoSerializerMejorada(partido)
+    return Response(serializer.data)
+    
 @api_view(['PUT'])
-def partido_editar_api(request,partido_id):
+def partido_put(request,partido_id):
     partido = Partido.objects.get(id=partido_id)
     serializers = PartidoSerializerCreate(data=request.data,instance=partido)
-    print("Print de partido \n")
-    print(partido)
-    print("\n Print de serializers \n")
-    print(serializers)
     if serializers.is_valid():
         try:
             PartidoSerializerCreate.save()
@@ -234,7 +234,7 @@ def partido_editar_api(request,partido_id):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(PartidoSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['DELETE'])
 def partido_eliminar(request, partido_id):
     partido = Partido.objects.get(id=partido_id)
@@ -257,6 +257,29 @@ def recinto_create(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET']) 
+def recinto_obtener(request,recinto_id):
+    recinto = Recinto.objects.select_related("dueño_recinto")
+    recinto = recinto.get(id=recinto_id)
+    serializer = RecintoSerializer(recinto)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def recinto_put(request,recinto_id):
+    recinto = Recinto.objects.get(id=recinto_id)
+    serializers = RecintoSerializerCreate(data=request.data,instance=recinto)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Recinto EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 @api_view(['DELETE'])
 def recinto_eliminar(request, recinto_id):
@@ -282,6 +305,28 @@ def datosusuario_create(request):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
+@api_view(['GET']) 
+def datosusuario_obtener(request,datosusuario_id):
+    datosusuario = DatosUsuario.objects.select_related("cliente")
+    datosusuario = datosusuario.get(id=datosusuario_id)
+    serializer = DatosUsuariosSerializar(datosusuario)
+    return Response(serializer.data)
+    
+@api_view(['PUT'])
+def datosusuario_put(request,datosusuario_id):
+    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+    serializers = DatosUsuarioSerializerCreate(data=request.data,instance=datosusuario)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Datos usuario EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['DELETE'])
 def datosusuario_eliminar(request, datosusuario_id):
     datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
@@ -290,3 +335,59 @@ def datosusuario_eliminar(request, datosusuario_id):
         return Response("Dato de usuario eliminado")
     except Exception as error:
         return Response(error, status=status)
+    
+
+# FileUpload
+class FileUploadAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = FileUploadSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # you can access the file like this from serializer
+            # uploaded_file = serializer.validated_data["file"]
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+# FileDownload
+class FileDownload(APIView):
+    def get(self, request, nombre_archivo):
+        # Ruta al directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        
+        # Ruta al archivo solicitado
+        ruta_archivo = os.path.join(media_dir, nombre_archivo)
+        
+        # Verificar si el archivo existe
+        if os.path.exists(ruta_archivo) and nombre_archivo.lower().endswith('.txt'):
+            # Abrir el archivo en modo de lectura binaria
+            with open(ruta_archivo, 'rb') as archivo:
+                # Leer el contenido del archivo
+                contenido = archivo.read()
+            
+            # Crear una respuesta HTTP con el contenido del archivo
+            response = Response(contenido, content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+            return response
+        if os.path.exists(ruta_archivo) and nombre_archivo.lower().endswith('.pdf'):
+            # Abrir el archivo en modo de lectura binaria
+            with open(ruta_archivo, 'rb') as archivo:
+                # Leer el contenido del archivo
+                contenido = archivo.read()
+            
+            # Crear una respuesta HTTP con el contenido del archivo
+            response = HttpResponse(contenido, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+            return response
+        else:
+            # Si el archivo no existe, devolver una respuesta de error
+            return Response("El archivo solicitado no existe", status=404)
