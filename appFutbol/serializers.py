@@ -144,6 +144,7 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
     
     def validate_posicion(self, posicion):
         print("posicionnnnnnnnnnnn")
+        print(posicion)
         print(type(posicion))
         print(self.initial_data["posicion"])
         # Pongo mayor de 3 porque posición devuelve la clave del diccionario posición (DEF o STR, etc)

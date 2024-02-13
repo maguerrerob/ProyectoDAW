@@ -305,7 +305,8 @@ def datosusuario_create(request):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['GET']) 
+    
+@api_view(['GET'])
 def datosusuario_obtener(request,datosusuario_id):
     datosusuario = DatosUsuario.objects.select_related("cliente")
     datosusuario = datosusuario.get(id=datosusuario_id)
