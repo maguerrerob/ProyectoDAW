@@ -159,6 +159,16 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
         
         return ubicacion
     
+class DatosUsuarioSerializerActualizarNombre(serializers.ModelSerializer):
+    class Meta:
+        model = DatosUsuario
+        fields = ['ubicacion']
+    
+    def validate_ubicacion(self,ubicacion):
+        if len(ubicacion) > 200:
+            raise serializers.ValidationError("Error, esa ubicación es muy extensa")
+        return ubicacion
+    
 
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:

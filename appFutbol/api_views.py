@@ -328,6 +328,19 @@ def datosusuario_put(request,datosusuario_id):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
+@api_view(['PATCH'])
+def datosusuario_patch_ubicacion(request, datosusuario_id):
+    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+    serializers = DatosUsuarioSerializerActualizarNombre(data=request.data,instance=datosusuario)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Ubicacion datos usuario EDITADO")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['DELETE'])
 def datosusuario_eliminar(request, datosusuario_id):
     datosusuario = DatosUsuario.objects.get(id=datosusuario_id)

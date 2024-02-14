@@ -29,6 +29,7 @@ urlpatterns = [
     path("datosusuario/<int:datosusuario_id>", datosusuario_obtener),
     path("datosusuario/put/<int:datosusuario_id>", datosusuario_put),
     path("datosusuario/eliminar/<int:datosusuario_id>", datosusuario_eliminar),
+    path("datosusuario/actualizar_ubicacion/ubicacion/<int:datosusuario_id>", datosusuario_patch_ubicacion),
     path('upload-file/', FileUploadAPIView.as_view(), name='upload-file'),
     path('descargar/<str:nombre_archivo>/', FileDownload.as_view(), name='descargar_archivo'),
     path('eliminar-archivo/<str:nombre_archivo>/', DeleteFile.as_view(), name='eliminar_archivo'),
