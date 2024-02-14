@@ -87,7 +87,7 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
         model = Partido
         fields = ["hora", "estado",
                   "tipo", "estilo",
-                  "creador", "campo_reservado", "usuarios_jugadores"
+                  "creador", "campo_reservado"
                   ]
         
     def validate_hora(self,hora):
@@ -114,6 +114,27 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
     
     # self.initial_data obtiene los datos sin serializar(string)
 
+class PartidoSerializerActualizarHora(serializers.ModelSerializer):
+    class Meta:
+        model = Partido
+        fields = ["hora"] #campo_reservado
+
+    def validate_hora(self,hora):
+        # campo_reservado = self.initial_data["campo_reservado"]
+        # QSocupado = Partido.objects.filter(hora=hora).filter(campo_reservado=campo_reservado).first()
+        # if (QSocupado is not None):
+        #     raise serializers.ValidationError("No puedes cambiar a esa hora, ya está reservado")
+        print(type(hora))
+        hora_reserva = self.initial_data["hora"]
+        print(type(hora_reserva))
+        hora_datetime = datetime.strptime(hora_reserva, "%H:%M")
+        print(type(hora_datetime))
+        hora_siete_datetime = datetime.strptime("7:00", "%H:%M")
+
+        if hora_datetime < hora_siete_datetime:
+            raise serializers.ValidationError("Error, no puedes seleccionar esa hora")
+        return hora
+
 class RecintoSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Recinto
@@ -127,6 +148,17 @@ class RecintoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("Error, el teléfono debe tener min 9 numeros")
         
         return telefono
+    
+class RecintoSerializerActualizarNombre(serializers.ModelSerializer):
+    class Meta:
+        model = Recinto
+        fields = ["nombre"]
+
+    def validate_nombre(self, nombre):
+        QSnombre = Recinto.objects.filter(nombre=nombre).first()
+        if (QSnombre is not None):
+            raise serializers.ValidationError("Error, ese nombre de recinto ya existe en la BD")
+        return nombre
     
 class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
     class Meta:
@@ -159,7 +191,7 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
         
         return ubicacion
     
-class DatosUsuarioSerializerActualizarNombre(serializers.ModelSerializer):
+class DatosUsuarioSerializerActualizarUbicacion(serializers.ModelSerializer):
     class Meta:
         model = DatosUsuario
         fields = ['ubicacion']
@@ -174,3 +206,19 @@ class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = UploadedFile
         fields = ('file', 'uploaded_on',)
+
+
+#----Registro----
+class UsuarioSerializerRegistro(serializers.Serializer):
+ 
+    username = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+    email = serializers.EmailField()
+    rol = serializers.IntegerField()
+    
+    def validate_username(self,username):
+        usuario = Usuario.objects.filter(username=username).first()
+        if(not usuario is None):
+            raise serializers.ValidationError('Ya existe un usuario con ese nombre')
+        return username

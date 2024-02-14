@@ -217,6 +217,7 @@ def partido_create(request):
 def partido_obtener(request,partido_id):
     partido = Partido.objects.select_related("creador", "campo_reservado")
     partido = partido.get(id=partido_id)
+    print(partido)
     serializer = PartidoSerializerMejorada(partido)
     return Response(serializer.data)
     
@@ -234,6 +235,19 @@ def partido_put(request,partido_id):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(PartidoSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def partido_patch_hora(request, partido_id):
+    partido = Partido.objects.get(id=partido_id)
+    serializers = PartidoSerializerActualizarHora(data=request.data,instance=partido)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Hora del partido EDITADA")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 def partido_eliminar(request, partido_id):
@@ -280,6 +294,19 @@ def recinto_put(request,recinto_id):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PATCH'])
+def recinto_patch_ubicacion(request, recinto_id):
+    recinto = Recinto.objects.get(id=recinto_id)
+    serializers = RecintoSerializerActualizarNombre(data=request.data,instance=recinto)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Nombre del recinto EDITADO")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 @api_view(['DELETE'])
 def recinto_eliminar(request, recinto_id):
@@ -289,7 +316,6 @@ def recinto_eliminar(request, recinto_id):
         return Response("Recinto eliminado")
     except Exception as error:
         return Response(error, status=status)
-
     
 
 # CRUD Datosusuario API
@@ -331,7 +357,7 @@ def datosusuario_put(request,datosusuario_id):
 @api_view(['PATCH'])
 def datosusuario_patch_ubicacion(request, datosusuario_id):
     datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
-    serializers = DatosUsuarioSerializerActualizarNombre(data=request.data,instance=datosusuario)
+    serializers = DatosUsuarioSerializerActualizarUbicacion(data=request.data,instance=datosusuario)
     if serializers.is_valid():
         try:
             serializers.save()
@@ -423,3 +449,41 @@ class DeleteFile(APIView):
                 return Response({"detalle": f"No se pudo eliminar el archivo: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"detalle": "El archivo solicitado no existe"}, status=status.HTTP_404_NOT_FOUND)
+        
+#----Registro----
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import Group
+
+class registrar_usuario(generics.CreateAPIView):
+    serializer_class = UsuarioSerializerRegistro
+    permission_classes = [AllowAny]
+    
+    def create(self, request, *args, **kwargs):
+        serializers = UsuarioSerializerRegistro(data=request.data)
+        if serializers.is_valid():
+            try:
+                rol = request.data.get('rol')
+                user = Usuario.objects.create_user(
+                        username = serializers.data.get("username"), 
+                        email = serializers.data.get("email"), 
+                        password = serializers.data.get("password1"),
+                        rol = rol,
+                        )
+                if(rol == Usuario.CLIENTE):
+                    grupo = Group.objects.get(name='Clientes') 
+                    grupo.user_set.add(user)
+                    cliente = Cliente.objects.create( usuario = user)
+                    cliente.save()
+                elif(rol == Usuario.BIBLIOTECARIO):
+                    grupo = Group.objects.get(name='Bibliotecarios') 
+                    grupo.user_set.add(user)
+                    bibliotecario = Bibliotecario.objects.create(usuario = user)
+                    bibliotecario.save()
+                usuarioSerializado = UsuarioSerializer(user)
+                return Response(usuarioSerializado.data)
+            except Exception as error:
+                print(repr(error))
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
