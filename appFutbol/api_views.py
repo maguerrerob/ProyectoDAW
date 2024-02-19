@@ -471,15 +471,16 @@ class registrar_usuario(generics.CreateAPIView):
                         rol = rol,
                         )
                 if(rol == Usuario.CLIENTE):
-                    grupo = Group.objects.get(name='Clientes') 
+                    grupo = Group.objects.get(name='Cliente')
                     grupo.user_set.add(user)
+                    print(grupo)
                     cliente = Cliente.objects.create( usuario = user)
                     cliente.save()
-                elif(rol == Usuario.BIBLIOTECARIO):
-                    grupo = Group.objects.get(name='Bibliotecarios') 
+                elif(rol == Usuario.DUEÑORECINTO):
+                    grupo = Group.objects.get(name='Dueñorecinto')
                     grupo.user_set.add(user)
-                    bibliotecario = Bibliotecario.objects.create(usuario = user)
-                    bibliotecario.save()
+                    duenyorecinto = Dueñorecinto.objects.create(usuario = user)
+                    duenyorecinto.save()
                 usuarioSerializado = UsuarioSerializer(user)
                 return Response(usuarioSerializado.data)
             except Exception as error:
@@ -487,3 +488,14 @@ class registrar_usuario(generics.CreateAPIView):
                 return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+#----Login----
+from oauth2_provider.models import AccessToken
+
+@api_view(['GET'])
+def obtener_usuario_token(request,token):
+    ModeloToken = AccessToken.objects.get(token=token)
+    usuario = Usuario.objects.get(id=ModeloToken.id)
+    print(usuario)
+    serializer = UsuarioSerializer(usuario)
+    return Response(serializer.data)
