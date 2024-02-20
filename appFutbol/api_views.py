@@ -1,7 +1,7 @@
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import *
 from rest_framework import status
 from django.db.models import Q,Prefetch
@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 import os
 from django.conf import settings
 from django.http import HttpResponse
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 # Consulta sencilla a modelo principal
@@ -470,13 +472,14 @@ class registrar_usuario(generics.CreateAPIView):
                         password = serializers.data.get("password1"),
                         rol = rol,
                         )
-                if(rol == Usuario.CLIENTE):
+                print(rol)
+                if(rol == 2):
                     grupo = Group.objects.get(name='Cliente')
                     grupo.user_set.add(user)
                     print(grupo)
                     cliente = Cliente.objects.create( usuario = user)
                     cliente.save()
-                elif(rol == Usuario.DUEÑORECINTO):
+                elif(rol == 3):
                     grupo = Group.objects.get(name='Dueñorecinto')
                     grupo.user_set.add(user)
                     duenyorecinto = Dueñorecinto.objects.create(usuario = user)
