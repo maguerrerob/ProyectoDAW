@@ -473,14 +473,14 @@ class registrar_usuario(generics.CreateAPIView):
                         rol = rol,
                         )
                 print(rol)
-                if(rol == 2):
-                    grupo = Group.objects.get(name='Cliente')
+                if (rol == str(Usuario.CLIENTE)):
+                    grupo = Group.objects.get(name='cliente')
                     grupo.user_set.add(user)
                     print(grupo)
                     cliente = Cliente.objects.create( usuario = user)
                     cliente.save()
-                elif(rol == 3):
-                    grupo = Group.objects.get(name='Dueñorecinto')
+                elif (rol == str(Usuario.DUEÑORECINTO)):
+                    grupo = Group.objects.get(name='dueñorecinto')
                     grupo.user_set.add(user)
                     duenyorecinto = Dueñorecinto.objects.create(usuario = user)
                     duenyorecinto.save()
