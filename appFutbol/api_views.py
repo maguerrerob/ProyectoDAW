@@ -497,8 +497,24 @@ from oauth2_provider.models import AccessToken
 
 @api_view(['GET'])
 def obtener_usuario_token(request,token):
-    ModeloToken = AccessToken.objects.get(token=token)
-    usuario = Usuario.objects.get(id=ModeloToken.id)
-    print(usuario)
-    serializer = UsuarioSerializer(usuario)
-    return Response(serializer.data)
+    try:
+        # Buscar el token de acceso en la base de datos
+        access_token_obj = AccessToken.objects.get(token=token)
+
+        # Obtener el usuario asociado con el token de acceso
+        user = access_token_obj.user
+        print(user)
+        # Serializar el usuario
+        serializer = UsuarioSerializer(user)
+        # Devolver el usuario
+        return Response(serializer.data)
+    except AccessToken.DoesNotExist:
+        # Manejar el caso en el que el token de acceso no existe en la base de datos
+        return None
+    
+    # print(token)
+    # ModeloToken = AccessToken.objects.get(token=token)
+    # print(ModeloToken.id)
+    # usuario = Usuario.objects.get(id=ModeloToken.id)
+    # serializer = UsuarioSerializer(usuario)
+    # return Response(serializer.data)
