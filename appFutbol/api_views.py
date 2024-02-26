@@ -219,6 +219,7 @@ def partido_create(request):
 def partido_obtener(request,partido_id):
     partido = Partido.objects.select_related("creador", "campo_reservado")
     partido = partido.get(id=partido_id)
+    print(type(partido.hora))
     print(partido)
     serializer = PartidoSerializerMejorada(partido)
     return Response(serializer.data)
@@ -229,14 +230,14 @@ def partido_put(request,partido_id):
     serializers = PartidoSerializerCreate(data=request.data,instance=partido)
     if serializers.is_valid():
         try:
-            PartidoSerializerCreate.save()
+            serializers.save()
             return Response("Partido EDITADO")
         except serializers.ValidationError as error:
             return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
-        return Response(PartidoSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
 def partido_patch_hora(request, partido_id):

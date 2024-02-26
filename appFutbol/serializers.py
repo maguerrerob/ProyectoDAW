@@ -92,8 +92,8 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
         
     def validate_hora(self,hora):
         hora_reserva = self.initial_data["hora"]
-        hora_datetime = datetime.strptime(hora_reserva, "%H:%M")
-        hora_siete_datetime = datetime.strptime("7:00", "%H:%M")
+        hora_datetime = datetime.strptime(hora_reserva, "%H:%M:%S")
+        hora_siete_datetime = datetime.strptime("7:00:00", "%H:%M:%S")
         print(type(hora_siete_datetime))
         print(hora_datetime)
         if hora_datetime < hora_siete_datetime:
@@ -102,7 +102,7 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
 
     def validate_campo_reservado(self,campo_reservado):
         horareserva = self.initial_data["hora"]
-        hora_datetime = datetime.strptime(horareserva, "%H:%M")
+        hora_datetime = datetime.strptime(horareserva, "%H:%M:%S")
         print(type(hora_datetime))
         QScampoReservado = Partido.objects.filter(campo_reservado=campo_reservado).filter(hora=hora_datetime).first()
         print(QScampoReservado)
@@ -127,12 +127,12 @@ class PartidoSerializerActualizarHora(serializers.ModelSerializer):
         print(type(hora))
         hora_reserva = self.initial_data["hora"]
         print(type(hora_reserva))
-        hora_datetime = datetime.strptime(hora_reserva, "%H:%M")
+        hora_datetime = datetime.strptime(hora_reserva, "%H:%M:%S")
         print(type(hora_datetime))
-        hora_siete_datetime = datetime.strptime("7:00", "%H:%M")
+        hora_siete_datetime = datetime.strptime("7:00:00", "%H:%M:%S")
 
         if hora_datetime < hora_siete_datetime:
-            raise serializers.ValidationError("Error, no puedes seleccionar esa hora")
+            raise serializers.ValidationError("Error, no puedes seleccionar una hora antes de las 7:00:00")
         return hora
 
 class RecintoSerializerCreate(serializers.ModelSerializer):
