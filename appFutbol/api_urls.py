@@ -3,7 +3,6 @@ from  .api_views import *
 
 urlpatterns = [
     # Consulta sencilla a modelo principal
-    path('partidos', partido_list),
     # Consulta mejorada
     path("partidos_mejorada", partido_list_mejorada),
     # URLs token oauth2 mejorada

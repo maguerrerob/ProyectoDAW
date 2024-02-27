@@ -86,3 +86,7 @@ En el index principal, las vistas que he manejado están:
 - Búsqueda avanzada modelo principal: desplegable de "Recinto"
 - Búsqueda avanzada partidos: desplegable de "Partidos"
 - Búsqueda avanzada datos usuarios: desplegable "Datos Usuarios"
+
+# API REST IV: Gestión de Usuarios
+- Clientes: DatosUsuario -> listar, búsqueda avanzada, crear, obtener dato de usuario, editar y patch(ubicacion) . Partido -> búsqueda avanzada, crear, obtener partido, editar, patch(hora), eliminar . Cliente -> listar, . Dueñorecinto -> listar . Recinto -> obtener recinto
+- Dueñosrecintos: Recinto -> crear, obtener, 

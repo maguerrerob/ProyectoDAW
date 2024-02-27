@@ -13,22 +13,26 @@ from django.conf import settings
 from django.http import HttpResponse
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import Group
 
 
 # Consulta sencilla a modelo principal
-@api_view(["GET"])
-def partido_list(request):
-    if (request.user.has_perm("appFutbol.view_partido")):
-        partidos = Partido.objects.all()
-        serializer = PartidoSerializer(partidos, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(["GET"])
+# def partido_list(request):
+#     if (request.user.has_perm("appFutbol.view_partido")):
+#         partidos = Partido.objects.all()
+#         serializer = PartidoSerializer(partidos, many=True)
+#         return Response(serializer.data)
+#     else:
+#         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 # Consulta mejorada
 @api_view(["GET"])
 def partido_list_mejorada(request):
-    if (request.user.has_perm("appFutbol.view_partido")):
+    if (request.user.has_perm("appFutbol.view_datosusuario")):
         partidos = Partido.objects.all()
         serializer = PartidoSerializerMejorada(partidos, many=True)
         return Response(serializer.data)
@@ -46,6 +50,7 @@ def datosusuarios_list(request):
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def recintos_list(request):
     recintos = Recinto.objects.all()
     serializer = RecintoSerializer(recintos, many=True)
@@ -62,56 +67,50 @@ def posts_listar(request):
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def recinto_busqueda_simple(request):
-    if (request.user.has_perm("appFutbol.view_recinto")):
-        formulario = BusquedaRecintoForm(request.query_params)
-        if(formulario.is_valid()):
-            texto = formulario.data.get('textoBusqueda')
-            QSrecintos = Recinto.objects.select_related("dueño_recinto")
-            recintos = QSrecintos.filter(Q(nombre__contains=texto) | Q(ubicacion__contains=texto)).all()
+    formulario = BusquedaRecintoForm(request.query_params)
+    if(formulario.is_valid()):
+        texto = formulario.data.get('textoBusqueda')
+        QSrecintos = Recinto.objects.select_related("dueño_recinto")
+        recintos = QSrecintos.filter(Q(nombre__contains=texto) | Q(ubicacion__contains=texto)).all()
+        serializer = RecintoSerializer(recintos, many=True)
+        return Response(serializer.data)
+    else:
+        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def recinto_buscar_avanzado(request):
+    if(len(request.query_params) > 0):
+        formulario = BusquedaAvanzadaRecintoFormGen(request.GET)
+        if formulario.is_valid():
+
+            #Obtenemos los filtros
+            nombre = formulario.cleaned_data.get("nombre")
+            ubicacion = formulario.cleaned_data.get("ubicacion")
+            telefono = formulario.cleaned_data.get("telefono")
+
+            QSrecinto = Recinto.objects.all()
+            
+            if(nombre != ""):
+                QSrecinto = QSrecinto.filter(nombre__contains=nombre)
+                print("se metioooooooooooooooooooo")
+            if (ubicacion != ""):
+                QSrecinto = QSrecinto.filter(ubicacion__contains=ubicacion)
+            if (telefono != ""):
+                QSrecinto = QSrecinto.filter(telefono__contains=telefono)
+                
+            recintos = QSrecinto.all()
+            
             serializer = RecintoSerializer(recintos, many=True)
+
             return Response(serializer.data)
         else:
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        print("Sin permisooooos")
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-        
-
-@api_view(['GET'])
-def recinto_buscar_avanzado(request):
-    if (request.user.has_perm("appFutbol.view_recinto")):
-        if(len(request.query_params) > 0):
-            formulario = BusquedaAvanzadaRecintoFormGen(request.GET)
-            if formulario.is_valid():
-
-                #Obtenemos los filtros
-                nombre = formulario.cleaned_data.get("nombre")
-                ubicacion = formulario.cleaned_data.get("ubicacion")
-                telefono = formulario.cleaned_data.get("telefono")
-
-                QSrecinto = Recinto.objects.all()
-                
-                if(nombre != ""):
-                    QSrecinto = QSrecinto.filter(nombre__contains=nombre)
-                    print("se metioooooooooooooooooooo")
-                if (ubicacion != ""):
-                    QSrecinto = QSrecinto.filter(ubicacion__contains=ubicacion)
-                if (telefono != ""):
-                    QSrecinto = QSrecinto.filter(telefono__contains=telefono)
-                    
-                recintos = QSrecinto.all()
-                
-                serializer = RecintoSerializer(recintos, many=True)
-
-                return Response(serializer.data)
-            else:
-                return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        print("Sin permisooooos")
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -190,194 +189,246 @@ def partido_buscar_avanzado(request):
 # Listar clientes
 @api_view(['GET'])
 def clientes_list(request):
-    clientes = Cliente.objects.all()
-    serializer = ClienteSerializer(clientes, many=True)
-    return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.view_cliente")):
+        clientes = Cliente.objects.all()
+        serializer = ClienteSerializer(clientes, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def duenyosrecintos_list(request):
-    duenyosrecintos = Dueñorecinto.objects.all()
-    serializer = DuenyoRecintoSerializer(duenyosrecintos, many=True)
-    return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.view_dueñorecinto")):
+        duenyosrecintos = Dueñorecinto.objects.all()
+        serializer = DuenyoRecintoSerializer(duenyosrecintos, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Create Partido API
 @api_view(['POST'])
 def partido_create(request):
-    serializers = PartidoSerializerCreate(data=request.data)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Partido CREADO")
-        except Exception as error:
-            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.add_partido")):
+        serializers = PartidoSerializerCreate(data=request.data)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Partido CREADO")
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 # Obtener un partido (para poder hacer PUT y PATCH)
 @api_view(['GET'])
 def partido_obtener(request,partido_id):
-    partido = Partido.objects.select_related("creador", "campo_reservado")
-    partido = partido.get(id=partido_id)
-    print(type(partido.hora))
-    print(partido)
-    serializer = PartidoSerializerMejorada(partido)
-    return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.change_partido")):
+        partido = Partido.objects.select_related("creador", "campo_reservado")
+        partido = partido.get(id=partido_id)
+        print(type(partido.hora))
+        print(partido)
+        serializer = PartidoSerializerMejorada(partido)
+        return Response(serializer.data)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT'])
 def partido_put(request,partido_id):
-    partido = Partido.objects.get(id=partido_id)
-    serializers = PartidoSerializerCreate(data=request.data,instance=partido)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Partido EDITADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_partido")):
+        partido = Partido.objects.get(id=partido_id)
+        serializers = PartidoSerializerCreate(data=request.data,instance=partido)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Partido EDITADO")
+            except serializers.ValidationError as error:
+                return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
 def partido_patch_hora(request, partido_id):
-    partido = Partido.objects.get(id=partido_id)
-    serializers = PartidoSerializerActualizarHora(data=request.data,instance=partido)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Hora del partido EDITADA")
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_partido")):
+        partido = Partido.objects.get(id=partido_id)
+        serializers = PartidoSerializerActualizarHora(data=request.data,instance=partido)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Hora del partido EDITADA")
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 def partido_eliminar(request, partido_id):
-    partido = Partido.objects.get(id=partido_id)
-    try:
-        partido.delete()
-        return Response("Partido eliminado")
-    except Exception as error:
-        return Response(error, status=status)
+    if (request.user.has_perm("appFutbol.delete_partido")):
+        partido = Partido.objects.get(id=partido_id)
+        try:
+            partido.delete()
+            return Response("Partido eliminado")
+        except Exception as error:
+            return Response(error, status=status)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 # CRUD Recinto API
 @api_view(['POST'])
 def recinto_create(request):
-    serializers = RecintoSerializerCreate(data=request.data)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Recinto CREADO")
-        except Exception as error:
-            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.add_recinto")):
+        serializers = RecintoSerializerCreate(data=request.data)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Recinto CREADO")
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['GET']) 
+@api_view(['GET'])
 def recinto_obtener(request,recinto_id):
-    recinto = Recinto.objects.select_related("dueño_recinto")
-    recinto = recinto.get(id=recinto_id)
-    serializer = RecintoSerializer(recinto)
-    return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.change_recinto") or request.user.has_perm("appFutbol.view_recinto")):
+        recinto = Recinto.objects.select_related("dueño_recinto")
+        recinto = recinto.get(id=recinto_id)
+        serializer = RecintoSerializer(recinto)
+        return Response(serializer.data)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def recinto_put(request,recinto_id):
-    recinto = Recinto.objects.get(id=recinto_id)
-    serializers = RecintoSerializerCreate(data=request.data,instance=recinto)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Recinto EDITADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_recinto")):
+        recinto = Recinto.objects.get(id=recinto_id)
+        serializers = RecintoSerializerCreate(data=request.data,instance=recinto)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Recinto EDITADO")
+            except serializers.ValidationError as error:
+                return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
 def recinto_patch_ubicacion(request, recinto_id):
-    recinto = Recinto.objects.get(id=recinto_id)
-    serializers = RecintoSerializerActualizarNombre(data=request.data,instance=recinto)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Nombre del recinto EDITADO")
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_recinto")):
+        recinto = Recinto.objects.get(id=recinto_id)
+        serializers = RecintoSerializerActualizarNombre(data=request.data,instance=recinto)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Nombre del recinto EDITADO")
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
     
 @api_view(['DELETE'])
 def recinto_eliminar(request, recinto_id):
-    datosusuario = Recinto.objects.get(id=recinto_id)
-    try:
-        datosusuario.delete()
-        return Response("Recinto eliminado")
-    except Exception as error:
-        return Response(error, status=status)
+    if (request.user.has_perm("appFutbol.delete_recinto")):
+        datosusuario = Recinto.objects.get(id=recinto_id)
+        try:
+            datosusuario.delete()
+            return Response("Recinto eliminado")
+        except Exception as error:
+            return Response(error, status=status)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 
 # CRUD Datosusuario API
 @api_view(['POST'])
 def datosusuario_create(request):
-    serializers = DatosUsuarioSerializerCreate(data=request.data)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Datos usuario CREADO")
-        except Exception as error:
-            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.add_datosusuario")):
+        serializers = DatosUsuarioSerializerCreate(data=request.data)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Datos usuario CREADO")
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
     
 @api_view(['GET'])
 def datosusuario_obtener(request,datosusuario_id):
-    datosusuario = DatosUsuario.objects.select_related("cliente")
-    datosusuario = datosusuario.get(id=datosusuario_id)
-    serializer = DatosUsuariosSerializar(datosusuario)
-    return Response(serializer.data)
+    if (request.user.has_perm("appFutbol.view_datosusuario")):
+        datosusuario = DatosUsuario.objects.select_related("cliente")
+        datosusuario = datosusuario.get(id=datosusuario_id)
+        serializer = DatosUsuariosSerializar(datosusuario)
+        return Response(serializer.data)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT'])
 def datosusuario_put(request,datosusuario_id):
-    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
-    serializers = DatosUsuarioSerializerCreate(data=request.data,instance=datosusuario)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Datos usuario EDITADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_datosusuario")):
+        datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+        serializers = DatosUsuarioSerializerCreate(data=request.data,instance=datosusuario)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Datos usuario EDITADO")
+            except serializers.ValidationError as error:
+                return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PATCH'])
 def datosusuario_patch_ubicacion(request, datosusuario_id):
-    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
-    serializers = DatosUsuarioSerializerActualizarUbicacion(data=request.data,instance=datosusuario)
-    if serializers.is_valid():
-        try:
-            serializers.save()
-            return Response("Ubicacion datos usuario EDITADO")
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if (request.user.has_perm("appFutbol.change_datosusuario")):
+        datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+        serializers = DatosUsuarioSerializerActualizarUbicacion(data=request.data,instance=datosusuario)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Ubicacion datos usuario EDITADO")
+            except Exception as error:
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['DELETE'])
 def datosusuario_eliminar(request, datosusuario_id):
-    datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
-    try:
-        datosusuario.delete()
-        return Response("Dato de usuario eliminado")
-    except Exception as error:
-        return Response(error, status=status)
+    if (request.user.has_perm("appFutbol.delete_datosusuario")):
+        datosusuario = DatosUsuario.objects.get(id=datosusuario_id)
+        try:
+            datosusuario.delete()
+            return Response("Dato de usuario eliminado")
+        except Exception as error:
+            return Response(error, status=status)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
     
 
 # FileUpload
@@ -454,9 +505,7 @@ class DeleteFile(APIView):
             return Response({"detalle": "El archivo solicitado no existe"}, status=status.HTTP_404_NOT_FOUND)
         
 #----Registro----
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
-from django.contrib.auth.models import Group
+
 
 class registrar_usuario(generics.CreateAPIView):
     serializer_class = UsuarioSerializerRegistro
