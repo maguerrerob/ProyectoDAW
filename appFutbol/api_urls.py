@@ -35,5 +35,8 @@ urlpatterns = [
     path('descargar/<str:nombre_archivo>/', FileDownload.as_view(), name='descargar_archivo'),
     path('eliminar-archivo/<str:nombre_archivo>/', DeleteFile.as_view(), name='eliminar_archivo'),
     path("registrar/usuario", registrar_usuario.as_view()),
-    path('usuario/token/<str:token>', obtener_usuario_token)
+    path('usuario/token/<str:token>', obtener_usuario_token),
+    #FUNCIONALIDADES
+    #Gabi
+    path("anyadir_jugador", jugador_partido_create),
 ]

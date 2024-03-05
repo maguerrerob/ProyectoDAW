@@ -222,3 +222,8 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         if(not usuario is None):
             raise serializers.ValidationError('Ya existe un usuario con ese nombre')
         return username
+    
+class JugadorPartidoSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Jugador_partido
+        fields = ["cliente", "partido"]

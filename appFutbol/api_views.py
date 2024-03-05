@@ -49,6 +49,7 @@ def datosusuarios_list(request):
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
+# La siguiente vista está disponible para cualquier persona para que cualquiera sin registrarse pueda ver un listado de recintos
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def recintos_list(request):
@@ -80,6 +81,7 @@ def recinto_busqueda_simple(request):
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
+# La siguiente vista está disponible para cualquier persona para que todo el mundo pueda buscar recintos sin loguearse
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def recinto_buscar_avanzado(request):
@@ -568,3 +570,19 @@ def obtener_usuario_token(request,token):
     # usuario = Usuario.objects.get(id=ModeloToken.id)
     # serializer = UsuarioSerializer(usuario)
     # return Response(serializer.data)
+    
+
+#----FUNCIONALIDADES----
+# Gabriela
+@api_view(['POST'])
+def jugador_partido_create(request):
+    serializers = JugadorPartidoSerializerCreate(data=request.data)
+    if serializers.is_valid():
+        try:
+            serializers.save()
+            return Response("Jugador partido CREADO")
+        except Exception as error:
+            return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
