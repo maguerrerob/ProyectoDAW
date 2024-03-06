@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group
+import folium
 
 # Create your views here.
 
@@ -556,7 +557,11 @@ def promocion_editar(request,promo_id):
                 print(error)
     return render(request, 'promocion/actualizar.html',{"formulario":formulario,"promo":promo})
     
-
+# Prueba mapa
+def home(request):
+    initialMap = folium.Map(location=[37.37742919500497, -5.934836071794303], zoom_start=9)
+    context = initialMap._repr_html_
+    return render(request, "appFutbol/home.html", {"context":context})
     
 # Errores
 

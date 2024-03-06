@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .import views
+from .import views, api_views
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -36,4 +36,6 @@ urlpatterns = [
     path("promociones/editar/<int:promo_id>", views.promocion_editar, name="promocion_editar"),
     path("registrar", views.registrar_usuario, name="registrar_usuario"),
     path("añadir_resultado", views.resultado_create, name="resultado_create"),
+    #Prueba mapa
+    path("mapa", views.home, name="home")
 ]

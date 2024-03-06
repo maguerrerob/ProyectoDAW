@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import Group
+import folium
 
 
 # Consulta sencilla a modelo principal
@@ -602,3 +603,5 @@ def anyadir_resultado(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# Alberto
