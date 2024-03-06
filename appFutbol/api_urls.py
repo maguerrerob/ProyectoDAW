@@ -39,4 +39,6 @@ urlpatterns = [
     #FUNCIONALIDADES
     #Gabi
     path("anyadir_jugador", jugador_partido_create),
+    #Irene
+    path("anyadir_resultado", anyadir_resultado)
 ]

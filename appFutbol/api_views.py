@@ -33,6 +33,7 @@ from django.contrib.auth.models import Group
 @api_view(["GET"])
 def partido_list_mejorada(request):
     if (request.user.has_perm("appFutbol.view_datosusuario")):
+        partidos = Partido.objects.select_related("resultado_partido")
         partidos = Partido.objects.all()
         serializer = PartidoSerializerMejorada(partidos, many=True)
         return Response(serializer.data)
@@ -576,13 +577,28 @@ def obtener_usuario_token(request,token):
 # Gabriela
 @api_view(['POST'])
 def jugador_partido_create(request):
-    serializers = JugadorPartidoSerializerCreate(data=request.data)
+    if (request.user.has_perm("appFutbol.change_partido")):
+        serializers = JugadorPartidoSerializerCreate(data=request.data)
+        if serializers.is_valid():
+            try:
+                serializers.save()
+                return Response("Jugador partido CREADO")
+            except Exception as error:
+                return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+    
+# Irene
+@api_view(['POST'])
+def anyadir_resultado(request):
+    serializers = ResultadoSerializerCreate(data=request.data)
     if serializers.is_valid():
         try:
             serializers.save()
-            return Response("Jugador partido CREADO")
+            return Response("Resultado CREADO")
         except Exception as error:
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-    

@@ -52,6 +52,11 @@ class PartidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partido
         fields = "__all__"
+        
+class ResultadoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resultado
+        fields = "__all__"
 
 class PartidoSerializerMejorada(serializers.ModelSerializer):
     # Para la relación Many To One con Recinto
@@ -59,6 +64,9 @@ class PartidoSerializerMejorada(serializers.ModelSerializer):
     
     # Para la relación Many to One con Cliente
     creador = ClienteSerializer()
+    
+    # Relación OneToOne con Resultado
+    resultado_partido = ResultadoSerializer()
     
     # Para la relacion Many To One con jugador_partido (tabla intermedia)
     usuarios_jugadores = JugadorPartidoSerializer(read_only=True, source="jugador_partido_set",many=True)
@@ -227,3 +235,9 @@ class JugadorPartidoSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Jugador_partido
         fields = ["cliente", "partido"]
+        
+class ResultadoSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Resultado
+        fields = ["goles_local", "goles_visitante",
+                  "resultado_partido"]
