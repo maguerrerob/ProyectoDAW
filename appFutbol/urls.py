@@ -37,5 +37,5 @@ urlpatterns = [
     path("registrar", views.registrar_usuario, name="registrar_usuario"),
     path("añadir_resultado", views.resultado_create, name="resultado_create"),
     #Prueba mapa
-    path("mapa", views.home, name="home")
+#    path("mapa", views.home, name="home")
 ]

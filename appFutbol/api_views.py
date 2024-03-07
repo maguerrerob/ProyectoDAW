@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import Group
-import folium
+#import folium
 
 
 # Consulta sencilla a modelo principal
