@@ -75,13 +75,13 @@ def recinto_busqueda_simple(request):
     formulario = BusquedaRecintoForm(request.query_params)
     if(formulario.is_valid()):
         texto = formulario.data.get('textoBusqueda')
-        QSrecintos = Recinto.objects.select_related("dueño_recinto")
+        QSrecintos = Recinto.objects.select_related("duenyo_recinto")
         recintos = QSrecintos.filter(Q(nombre__contains=texto) | Q(ubicacion__contains=texto)).all()
         serializer = RecintoSerializer(recintos, many=True)
         return Response(serializer.data)
     else:
         return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 # La siguiente vista está disponible para cualquier persona para que todo el mundo pueda buscar recintos sin loguearse
 @api_view(['GET'])
@@ -97,7 +97,7 @@ def recinto_buscar_avanzado(request):
             telefono = formulario.cleaned_data.get("telefono")
 
             QSrecinto = Recinto.objects.all()
-            
+
             if(nombre != ""):
                 QSrecinto = QSrecinto.filter(nombre__contains=nombre)
                 print("se metioooooooooooooooooooo")
@@ -105,9 +105,9 @@ def recinto_buscar_avanzado(request):
                 QSrecinto = QSrecinto.filter(ubicacion__contains=ubicacion)
             if (telefono != ""):
                 QSrecinto = QSrecinto.filter(telefono__contains=telefono)
-                
+
             recintos = QSrecinto.all()
-            
+
             serializer = RecintoSerializer(recintos, many=True)
 
             return Response(serializer.data)
@@ -136,16 +136,16 @@ def datosusuario_busqueda_avanzada(request):
 
                 if (ubicacion != ""):
                     QSdatosusuario = QSdatosusuario.filter(ubicacion__contains=ubicacion)
-                
+
                 if(len(posicion) > 0):
                     filtroOR = Q(posicion=posicion[0])
                     for pos in posicion[1:]:
                         filtroOR |= Q(posicion=pos)
-                    
+
                     QSdatosusuario =  QSdatosusuario.filter(filtroOR)
 
                 datosusuarios = QSdatosusuario.all()
-                
+
                 serializer = DatosUsuariosSerializar(datosusuarios, many=True)
 
                 return Response(serializer.data)
@@ -155,7 +155,7 @@ def datosusuario_busqueda_avanzada(request):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @api_view(['GET'])
 def partido_buscar_avanzado(request):
@@ -177,7 +177,7 @@ def partido_buscar_avanzado(request):
                     for est in estilo[1:]:
                         filtroOR |= Q(estilo=est)
                     QSpartido =  QSpartido.filter(filtroOR)
-                
+
                 partidos = QSpartido.all()
                 serializer = PartidoSerializerMejorada(partidos, many=True)
                 return Response(serializer.data)
@@ -188,7 +188,7 @@ def partido_buscar_avanzado(request):
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 
 # Listar clientes
 @api_view(['GET'])
@@ -202,8 +202,8 @@ def clientes_list(request):
 
 @api_view(['GET'])
 def duenyosrecintos_list(request):
-    if (request.user.has_perm("appFutbol.view_dueñorecinto")):
-        duenyosrecintos = Dueñorecinto.objects.all()
+    if (request.user.has_perm("appFutbol.view_duenyorecinto")):
+        duenyosrecintos = Duenyorecinto.objects.all()
         serializer = DuenyoRecintoSerializer(duenyosrecintos, many=True)
         return Response(serializer.data)
     else:
@@ -225,7 +225,7 @@ def partido_create(request):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 # Obtener un partido (para poder hacer PUT y PATCH)
 @api_view(['GET'])
 def partido_obtener(request,partido_id):
@@ -238,7 +238,7 @@ def partido_obtener(request,partido_id):
         return Response(serializer.data)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['PUT'])
 def partido_put(request,partido_id):
     if (request.user.has_perm("appFutbol.change_partido")):
@@ -302,11 +302,11 @@ def recinto_create(request):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['GET'])
 def recinto_obtener(request,recinto_id):
     if (request.user.has_perm("appFutbol.change_recinto") or request.user.has_perm("appFutbol.view_recinto")):
-        recinto = Recinto.objects.select_related("dueño_recinto")
+        recinto = Recinto.objects.select_related("duenyo_recinto")
         recinto = recinto.get(id=recinto_id)
         serializer = RecintoSerializer(recinto)
         return Response(serializer.data)
@@ -347,7 +347,7 @@ def recinto_patch_ubicacion(request, recinto_id):
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 @api_view(['DELETE'])
 def recinto_eliminar(request, recinto_id):
     if (request.user.has_perm("appFutbol.delete_recinto")):
@@ -359,7 +359,7 @@ def recinto_eliminar(request, recinto_id):
             return Response(error, status=status)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 # CRUD Datosusuario API
 @api_view(['POST'])
@@ -376,8 +376,8 @@ def datosusuario_create(request):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
+
 @api_view(['GET'])
 def datosusuario_obtener(request,datosusuario_id):
     if (request.user.has_perm("appFutbol.view_datosusuario")):
@@ -387,7 +387,7 @@ def datosusuario_obtener(request,datosusuario_id):
         return Response(serializer.data)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['PUT'])
 def datosusuario_put(request,datosusuario_id):
     if (request.user.has_perm("appFutbol.change_datosusuario")):
@@ -405,7 +405,7 @@ def datosusuario_put(request,datosusuario_id):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['PATCH'])
 def datosusuario_patch_ubicacion(request, datosusuario_id):
     if (request.user.has_perm("appFutbol.change_datosusuario")):
@@ -421,7 +421,7 @@ def datosusuario_patch_ubicacion(request, datosusuario_id):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['DELETE'])
 def datosusuario_eliminar(request, datosusuario_id):
     if (request.user.has_perm("appFutbol.delete_datosusuario")):
@@ -433,13 +433,13 @@ def datosusuario_eliminar(request, datosusuario_id):
             return Response(error, status=status)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 # FileUpload
 class FileUploadAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = FileUploadSerializer
-    
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -450,28 +450,28 @@ class FileUploadAPIView(APIView):
                 serializer.data,
                 status=status.HTTP_201_CREATED
             )
-        
+
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-    
+
 # FileDownload
 class FileDownload(APIView):
     def get(self, request, nombre_archivo):
         # Ruta al directorio de medios
         media_dir = settings.MEDIA_ROOT
-        
+
         # Ruta al archivo solicitado
         ruta_archivo = os.path.join(media_dir, nombre_archivo)
-        
+
         # Verificar si el archivo existe
         if os.path.exists(ruta_archivo) and nombre_archivo.lower().endswith('.txt'):
             # Abrir el archivo en modo de lectura binaria
             with open(ruta_archivo, 'rb') as archivo:
                 # Leer el contenido del archivo
                 contenido = archivo.read()
-            
+
             # Crear una respuesta HTTP con el contenido del archivo
             response = Response(contenido, content_type='application/octet-stream')
             response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
@@ -481,7 +481,7 @@ class FileDownload(APIView):
             with open(ruta_archivo, 'rb') as archivo:
                 # Leer el contenido del archivo
                 contenido = archivo.read()
-            
+
             # Crear una respuesta HTTP con el contenido del archivo
             response = HttpResponse(contenido, content_type='application/pdf')
             response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
@@ -489,7 +489,7 @@ class FileDownload(APIView):
         else:
             # Si el archivo no existe, devolver una respuesta de error
             return Response("El archivo solicitado no existe", status=404)
-        
+
 class DeleteFile(APIView):
     def delete(self, request, nombre_archivo):
         # Ruta al directorio de medios
@@ -507,22 +507,22 @@ class DeleteFile(APIView):
                 return Response({"detalle": f"No se pudo eliminar el archivo: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"detalle": "El archivo solicitado no existe"}, status=status.HTTP_404_NOT_FOUND)
-        
+
 #----Registro----
 
 
 class registrar_usuario(generics.CreateAPIView):
     serializer_class = UsuarioSerializerRegistro
     permission_classes = [AllowAny]
-    
+
     def create(self, request, *args, **kwargs):
         serializers = UsuarioSerializerRegistro(data=request.data)
         if serializers.is_valid():
             try:
                 rol = request.data.get('rol')
                 user = Usuario.objects.create_user(
-                        username = serializers.data.get("username"), 
-                        email = serializers.data.get("email"), 
+                        username = serializers.data.get("username"),
+                        email = serializers.data.get("email"),
                         password = serializers.data.get("password1"),
                         rol = rol,
                         )
@@ -533,10 +533,10 @@ class registrar_usuario(generics.CreateAPIView):
                     print(grupo)
                     cliente = Cliente.objects.create( usuario = user)
                     cliente.save()
-                elif (rol == str(Usuario.DUEÑORECINTO)):
-                    grupo = Group.objects.get(name='dueñorecinto')
+                elif (rol == str(Usuario.DUENYORECINTO)):
+                    grupo = Group.objects.get(name='duenyorecinto')
                     grupo.user_set.add(user)
-                    duenyorecinto = Dueñorecinto.objects.create(usuario = user)
+                    duenyorecinto = Duenyorecinto.objects.create(usuario = user)
                     duenyorecinto.save()
                 usuarioSerializado = UsuarioSerializer(user)
                 return Response(usuarioSerializado.data)
@@ -545,7 +545,7 @@ class registrar_usuario(generics.CreateAPIView):
                 return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
 #----Login----
 from oauth2_provider.models import AccessToken
 
@@ -565,14 +565,14 @@ def obtener_usuario_token(request,token):
     except AccessToken.DoesNotExist:
         # Manejar el caso en el que el token de acceso no existe en la base de datos
         return None
-    
+
     # print(token)
     # ModeloToken = AccessToken.objects.get(token=token)
     # print(ModeloToken.id)
     # usuario = Usuario.objects.get(id=ModeloToken.id)
     # serializer = UsuarioSerializer(usuario)
     # return Response(serializer.data)
-    
+
 
 #----FUNCIONALIDADES----
 # Gabriela
@@ -590,7 +590,7 @@ def jugador_partido_create(request):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 # Irene
 @api_view(['POST'])
 def anyadir_resultado(request):
@@ -603,5 +603,5 @@ def anyadir_resultado(request):
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 # Alberto

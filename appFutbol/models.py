@@ -8,17 +8,17 @@ from django.contrib.auth.models import AbstractUser
 class Usuario(AbstractUser):
     ADMINISTRADOR = 1
     CLIENTE = 2
-    DUEÑORECINTO = 3
+    DUENYORECINTO = 3
     ROLES = (
         (ADMINISTRADOR, 'administardor'),
         (CLIENTE, 'cliente'),
-        (DUEÑORECINTO, 'dueñorecinto'),
+        (DUENYORECINTO, 'duenyorecinto'),
     )
-    
+
     rol  = models.PositiveSmallIntegerField(
         choices=ROLES,default=1
     )
-    
+
     def __str__(self) -> str:
         return self.username
 
@@ -27,11 +27,11 @@ class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     nivel = models.FloatField(default=0.0, db_column="puntos_usuario")
     telefono = models.CharField(max_length=9)
-    
+
     def __str__(self):
         return self.usuario.username
-    
-class Dueñorecinto(models.Model):
+
+class Duenyorecinto(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     telefono = models.CharField(max_length=9)
 
@@ -40,8 +40,10 @@ class Recinto(models.Model):
     nombre = models.TextField()
     ubicacion = models.TextField()
     telefono = models.CharField(max_length=9)
-    dueño_recinto = models.ForeignKey(Dueñorecinto, on_delete = models.CASCADE)
-    
+    latitud = models.FloatField(default=0)
+    longitud =models.FloatField(default=0)
+    duenyo_recinto = models.ForeignKey(Duenyorecinto, on_delete = models.CASCADE)
+
     def __str__(self) -> str:
         return self.nombre
 
@@ -115,7 +117,7 @@ class Votacion_partido(models.Model):
     #--------Relaciones--------
     partido_votado = models.ForeignKey(Partido, on_delete=models.CASCADE, related_name="votacion_partido")
     creador_votacion = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="votacion_usuario")
-    
+
 
 class Cuenta_bancaria(models.Model):
     numero_cuenta = models.IntegerField()
@@ -128,8 +130,8 @@ class Cuenta_bancaria(models.Model):
     banco = models.CharField(max_length=2, choices=BANCO)
     #--------Relaciones--------
     titular = models.OneToOneField(Cliente, on_delete=models.CASCADE, name="titular_cuenta")
-    
-    
+
+
 # EXAMEN FORMULARIOS
 
 class Promocion(models.Model):
@@ -139,14 +141,14 @@ class Promocion(models.Model):
     fecha_promocion = models.DateField(default=timezone.now)
     #----Relaciones----
     miusuario = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    
+
     def __str__(self) -> str:
         return self.nombre
-    
-    
+
+
 class UploadedFile(models.Model):
     file = models.FileField()
     uploaded_on = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return self.uploaded_on.date()

@@ -12,22 +12,22 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class ClienteSerializer(serializers.ModelSerializer):
     # Para la relación One To One con Usuario
     usuario = UsuarioSerializer()
-    
+
     class Meta:
         model = Cliente
         fields = "__all__"
-        
+
 class DuenyoRecintoSerializer(serializers.ModelSerializer):
     # Para la relación One To One con Usuario
     usuario = UsuarioSerializer()
-    
+
     class Meta:
-        model = Dueñorecinto
+        model = Duenyorecinto
         fields = "__all__"
 
 class RecintoSerializer(serializers.ModelSerializer):
-    dueño_recinto = DuenyoRecintoSerializer()
-    
+    duenyo_recinto = DuenyoRecintoSerializer()
+
     class Meta:
         model = Recinto
         fields = "__all__"
@@ -39,20 +39,20 @@ class Postsserializer(serializers.ModelSerializer):
         model = Post
         fields = "__all__"
 
-         
+
 class JugadorPartidoSerializer(serializers.ModelSerializer):
     cliente = ClienteSerializer()
-    
+
     class Meta:
         model = Jugador_partido
         fields = "__all__"
-        
+
 
 class PartidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partido
         fields = "__all__"
-        
+
 class ResultadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resultado
@@ -61,28 +61,28 @@ class ResultadoSerializer(serializers.ModelSerializer):
 class PartidoSerializerMejorada(serializers.ModelSerializer):
     # Para la relación Many To One con Recinto
     campo_reservado = RecintoSerializer()
-    
+
     # Para la relación Many to One con Cliente
     creador = ClienteSerializer()
-    
+
     # Relación OneToOne con Resultado
     resultado_partido = ResultadoSerializer()
-    
+
     # Para la relacion Many To One con jugador_partido (tabla intermedia)
     usuarios_jugadores = JugadorPartidoSerializer(read_only=True, source="jugador_partido_set",many=True)
-    
+
     # Para los choices
     estado = serializers.CharField(source="get_estado_display")
     tipo = serializers.CharField(source="get_tipo_display")
     estilo = serializers.CharField(source="get_estilo_display")
-    
+
     class Meta:
         model = Partido
         fields = "__all__"
 
 class DatosUsuariosSerializar(serializers.ModelSerializer):
     cliente = ClienteSerializer()
-    
+
     posicion = serializers.CharField(source="get_posicion_display")
     class Meta:
         model = DatosUsuario
@@ -97,7 +97,7 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
                   "tipo", "estilo",
                   "creador", "campo_reservado"
                   ]
-        
+
     def validate_hora(self,hora):
         hora_reserva = self.initial_data["hora"]
         hora_datetime = datetime.strptime(hora_reserva, "%H:%M:%S")
@@ -118,8 +118,8 @@ class PartidoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError('Ya existe una reserva a esa hora en ese campo')
 
         return campo_reservado
-        
-    
+
+
     # self.initial_data obtiene los datos sin serializar(string)
 
 class PartidoSerializerActualizarHora(serializers.ModelSerializer):
@@ -148,15 +148,16 @@ class RecintoSerializerCreate(serializers.ModelSerializer):
         model = Recinto
         fields = [
             "nombre", "ubicacion",
-            "telefono", "dueño_recinto"
+            "telefono", "duenyo_recinto",
+            "latitud", "longitud"
         ]
 
     def validate_telefono(self, telefono):
         if len(telefono) < 9:
             raise serializers.ValidationError("Error, el teléfono debe tener min 9 numeros")
-        
+
         return telefono
-    
+
 class RecintoSerializerActualizarNombre(serializers.ModelSerializer):
     class Meta:
         model = Recinto
@@ -167,7 +168,7 @@ class RecintoSerializerActualizarNombre(serializers.ModelSerializer):
         if (QSnombre is not None):
             raise serializers.ValidationError("Error, ese nombre de recinto ya existe en la BD")
         return nombre
-    
+
 class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = DatosUsuario
@@ -179,9 +180,9 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
     def validate_descripcion(self, descripcion):
         if len(descripcion) > 150:
             raise serializers.ValidationError("Error, la descripcion pasa de los 150 carácteres")
-        
+
         return descripcion
-    
+
     def validate_posicion(self, posicion):
         print("posicionnnnnnnnnnnn")
         print(posicion)
@@ -190,25 +191,25 @@ class DatosUsuarioSerializerCreate(serializers.ModelSerializer):
         # Pongo mayor de 3 porque posición devuelve la clave del diccionario posición (DEF o STR, etc)
         if len(posicion) > 3:
             raise serializers.ValidationError("Error, no puedes tener más de 3 posiciones")
-        
+
         return posicion
-    
+
     def validate_ubicacion(self, ubicacion):
         if len(ubicacion) > 80:
             raise serializers.ValidationError("Error, ubicación con más de 80 carácteres")
-        
+
         return ubicacion
-    
+
 class DatosUsuarioSerializerActualizarUbicacion(serializers.ModelSerializer):
     class Meta:
         model = DatosUsuario
         fields = ['ubicacion']
-    
+
     def validate_ubicacion(self,ubicacion):
         if len(ubicacion) > 200:
             raise serializers.ValidationError("Error, esa ubicación es muy extensa")
         return ubicacion
-    
+
 
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -218,24 +219,24 @@ class FileUploadSerializer(serializers.ModelSerializer):
 
 #----Registro----
 class UsuarioSerializerRegistro(serializers.Serializer):
- 
+
     username = serializers.CharField()
     password1 = serializers.CharField()
     password2 = serializers.CharField()
     email = serializers.EmailField()
     rol = serializers.IntegerField()
-    
+
     def validate_username(self,username):
         usuario = Usuario.objects.filter(username=username).first()
         if(not usuario is None):
             raise serializers.ValidationError('Ya existe un usuario con ese nombre')
         return username
-    
+
 class JugadorPartidoSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Jugador_partido
         fields = ["cliente", "partido"]
-        
+
 class ResultadoSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Resultado

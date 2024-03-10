@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 class RegistroForm(UserCreationForm):
     roles = (
         (Usuario.CLIENTE, "cliente"),
-        (Usuario.DUEÑORECINTO, "dueñorecinto")
+        (Usuario.DUENYORECINTO, "duenyorecinto")
     )
     rol = forms.ChoiceField(choices=roles)
     class Meta:
@@ -146,10 +146,10 @@ class BusquedaAvanzadaPartidoForm(forms.Form):
 class RecintoModelForm(ModelForm):
     class Meta:
         model = Recinto
-        fields = ['nombre', 'ubicacion', 'telefono', 'dueño_recinto']
+        fields = ['nombre', 'ubicacion', 'telefono', 'duenyo_recinto']
         widgets = {
             "nombre": forms.TextInput(attrs={"placeholder": "Introduce nombre del recinto"}),
-            "dueño_recinto": forms.HiddenInput()
+            "duenyo_recinto": forms.HiddenInput()
         }
 
     def clean(self):

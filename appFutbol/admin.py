@@ -14,6 +14,6 @@ misModelos = [
     Votacion_partido,
     Cuenta_bancaria,
     Cliente,
-    Dueñorecinto
+    Duenyorecinto
     ]
 admin.site.register(misModelos)
