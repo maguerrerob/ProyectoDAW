@@ -99,6 +99,7 @@ class DatosUsuario(models.Model):
     cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, related_name="datos_usuario")
     # Para ver los partidos en los que ha estado el usuario
     partidos_jugados = models.ManyToManyField(Partido)
+    amigos = models.ManyToManyField(Cliente)
 
     def __str__(self) -> str:
         return self.descripcion

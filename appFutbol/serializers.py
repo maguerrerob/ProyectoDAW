@@ -83,6 +83,10 @@ class PartidoSerializerMejorada(serializers.ModelSerializer):
 class DatosUsuariosSerializar(serializers.ModelSerializer):
     cliente = ClienteSerializer()
 
+    #Para relaciones Many To Many
+    partidos_jugados = PartidoSerializerMejorada(read_only=True, many=True)
+    amigos = ClienteSerializer(read_only=True, many=True)
+
     posicion = serializers.CharField(source="get_posicion_display")
     class Meta:
         model = DatosUsuario
@@ -242,3 +246,7 @@ class ResultadoSerializerCreate(serializers.ModelSerializer):
         model = Resultado
         fields = ["goles_local", "goles_visitante",
                   "resultado_partido"]
+        
+
+class DatosUsuarioSerializerActualizarAmigos(serializers.ModelSerializer):
+    pass

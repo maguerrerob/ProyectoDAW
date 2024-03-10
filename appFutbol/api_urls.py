@@ -40,5 +40,8 @@ urlpatterns = [
     #Gabi
     path("anyadir_jugador", jugador_partido_create),
     #Irene
-    path("anyadir_resultado", anyadir_resultado)
+    path("anyadir_resultado", anyadir_resultado),
+    # Alberto(view:recintos_list)
+    # Luis
+    path("anyadir_amigo", anyadir_amigo),
 ]

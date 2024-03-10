@@ -43,13 +43,15 @@ def partido_list_mejorada(request):
 
 # Consultas mejoradas con oauth2
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def datosusuarios_list(request):
-    if (request.user.has_perm("appFutbol.view_datosusuario")):
-        datosuaurios = DatosUsuario.objects.all()
+    # if (request.user.has_perm("appFutbol.view_datosusuario")):
+        datosuaurios = DatosUsuario.objects.prefetch_related("amigos").all()
+        
         serializer = DatosUsuariosSerializar(datosuaurios, many=True)
         return Response(serializer.data)
-    else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+    # else:
+    #     return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
 
 # La siguiente vista está disponible para cualquier persona para que cualquiera sin registrarse pueda ver un listado de recintos
 @api_view(["GET"])
@@ -604,4 +606,8 @@ def anyadir_resultado(request):
     else:
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Alberto
+# Alberto(me ha servido la view: recintos_list())
+
+# Luis
+def anyadir_amigo(request,datosusuario_id):
+    serializers = DatosUsuarioSerializerActualizarAmigos()
