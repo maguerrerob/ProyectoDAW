@@ -20,12 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-odz_g0^j+r@(r(oio-v2t7i@19)$g8w4_ckjv(q8ot20t@2d5$'
+import environ
+import os
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0', "192.168.129.38"]
+ALLOWED_HOSTS = ['127.0.0.1', 'maguerrerob.pythonanywhere.com','0.0.0.0', "192.168.129.38"]
 
 INTERNAL_IPS = ["127.0.0.1"]
 
