@@ -90,3 +90,7 @@ En el index principal, las vistas que he manejado están:
 # API REST IV: Gestión de Usuarios
 - Clientes: DatosUsuario -> listar, búsqueda avanzada, crear, obtener dato de usuario, editar y patch(ubicacion) . Partido -> búsqueda avanzada, crear, obtener partido, editar, patch(hora), eliminar . Cliente -> listar, . Dueñorecinto -> listar . Recinto -> obtener recinto
 - Dueñosrecintos: Recinto -> crear, obtener, 
+
+# Trabajo Final
+- Se recomienda hacer fixtures en servidor para traer los usuarios testeados y probar funcionalidades.
+- Los usuarios que he usado son pruebaDAW15 "1234probando" y duenyorecinto15 "1234probando"
